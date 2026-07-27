@@ -220,10 +220,21 @@ async function doRegister(){
   const name=document.getElementById('regName').value.trim(),email=document.getElementById('regEmail').value.trim(),pass=document.getElementById('regPass').value,errEl=document.getElementById('regError');
   if(!name||!email||!pass){errEl.textContent='Semua field wajib diisi';errEl.classList.remove('hidden');return;}
   if(pass.length<6){errEl.textContent='Password minimal 6 karakter';errEl.classList.remove('hidden');return;}errEl.classList.add('hidden');
-  const{data,error}=await sb.auth.signUp({email,password:pass,options:{data:{name}}});
-  if(error){errEl.textContent=error.message;errEl.classList.remove('hidden');return;}
-  toast('Cek email untuk verifikasi, lalu login!','success');
-  setTimeout(()=>showScreen('login'),2000);
+  try{
+    const{data,error}=await sb.auth.signUp({email,password:pass,options:{data:{name}}});
+    if(error){
+      if(error.message?.includes('Database error')){errEl.textContent='Server error: jalankan SQL migration dulu (supabase_migration.sql)';errEl.classList.remove('hidden');return;}
+      errEl.textContent=error.message;errEl.classList.remove('hidden');return;
+    }
+    if(data.user){
+      try{await sb.from('profiles').insert({id:data.user.id,name,premium:false});}catch(e){console.log('Profiles table not ready, run migration');}
+    }
+    toast('Pendaftaran berhasil! Silakan login.','success');
+    setTimeout(()=>showScreen('login'),2000);
+  }catch(e){
+    errEl.textContent='Gagal mendaftar. Coba lagi.';errEl.classList.remove('hidden');
+    console.error(e);
+  }
 }
 async function doLogout(){
   await sb.auth.signOut();
