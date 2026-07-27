@@ -123,98 +123,142 @@ header.top{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============ SUPABASE CONFIG ============ */
-const SUPABASE_URL='https://YOUR_PROJECT.supabase.co';
-const SUPABASE_KEY='YOUR_ANON_KEY';
+const SUPABASE_URL='https://yhcizybaxhtohgmtlgpj.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloY2l6eWJheGh0b2hnbXRsZ3BqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NjM3OTIsImV4cCI6MjA5NTIzOTc5Mn0.OCB8kVEQg--Bfkh1gbz1XqdK1VOuQR9VHeXHsV9z4vY';
 let sb=null;
-try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){console.log('Supabase: not configured');}
+try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){console.log('Supabase: init failed');}
 
 /* ============ APP STATE ============ */
 let currentUser=null;
-let currentScreen='landing';
 const FREE_MAX=5, FREE_SOAL=5;
-function loadUser(){try{const u=localStorage.getItem('cpns_user');if(u)currentUser=JSON.parse(u);}catch(e){}}
-function saveUser(){if(currentUser)localStorage.setItem('cpns_user',JSON.stringify(currentUser));}
-function isPremium(){return currentUser&&currentUser.premium===true;}
 function getToday(){return new Date().toISOString().split('T')[0];}
 function getAttempts(){try{const a=JSON.parse(localStorage.getItem('cpns_att')||'{}');if(a.date!==getToday())return{date:getToday(),count:0};return a;}catch(e){return{date:getToday(),count:0};}}
 function saveAttempt(){const a=getAttempts();a.count++;a.date=getToday();localStorage.setItem('cpns_att',JSON.stringify(a));}
-function getHistory(){try{return JSON.parse(localStorage.getItem('cpns_hist')||'[]');}catch(e){return[];}}
-function saveHistory(entry){const h=getHistory();h.unshift(entry);if(h.length>50)h.length=50;localStorage.setItem('cpns_hist',JSON.stringify(h));}
-loadUser();
+
+// Sync premium status from Supabase
+async function refreshPremium(){
+  if(!sb||!currentUser?.id)return;
+  const{data}=await sb.from('profiles').select('premium').eq('id',currentUser.id).single();
+  if(data){currentUser.premium=data.premium;localStorage.setItem('cpns_user',JSON.stringify(currentUser));}
+}
+function isPremium(){return currentUser&&currentUser.premium===true;}
+
+// Init: check Supabase session
+async function initAuth(){
+  if(!sb){loadUser();updateHeader();showScreen('landing');return;}
+  const{data:{session}}=await sb.auth.getSession();
+  if(session){
+    const{data:profile}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
+    currentUser={id:session.user.id,email:session.user.email,name:profile?.name||session.user.email,premium:profile?.premium||false};
+    localStorage.setItem('cpns_user',JSON.stringify(currentUser));
+  }else{loadUser();}
+  updateHeader();showScreen(currentUser?'dashboard':'landing');
+}
+function loadUser(){try{const u=localStorage.getItem('cpns_user');if(u)currentUser=JSON.parse(u);}catch(e){}}
+
+// Auth state listener
+if(sb){sb.auth.onAuthStateChange(async(event,session)=>{
+  if(event==='SIGNED_IN'&&session){
+    const{data:profile}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
+    currentUser={id:session.user.id,email:session.user.email,name:profile?.name||session.user.email,premium:profile?.premium||false};
+    localStorage.setItem('cpns_user',JSON.stringify(currentUser));
+    updateHeader();showScreen('dashboard');
+  }else if(event==='SIGNED_OUT'){
+    currentUser=null;localStorage.removeItem('cpns_user');updateHeader();showScreen('landing');
+  }
+});}
 
 function toast(msg,type){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:3px;font-size:13px;font-family:IBM Plex Mono,monospace;z-index:999;color:white;'+(type==='success'?'background:#3E6B4F':'background:#CC3A20');t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
 
 function showScreen(name){
   document.querySelectorAll('#landingScreen,#loginScreen,#paymentScreen,#dashboardScreen,#setupScreen,#quizScreen,#resultScreen,#adminScreen').forEach(el=>{if(el)el.classList.add('hidden');});
   const el=document.getElementById(name+'Screen');if(el)el.classList.remove('hidden');
-  currentScreen=name;
-  updateHeader();
-  if(name==='setup')buildSetup();
-  if(name==='dashboard')renderDashboard();
-  if(name==='admin')renderAdmin();
+  currentScreen=name;updateHeader();
+  if(name==='setup')buildSetup();if(name==='dashboard')renderDashboard();if(name==='admin')renderAdmin();
 }
 function updateHeader(){
   const badge=document.getElementById('userBadge');
   if(currentUser){
     const cls=isPremium()?'premium':'';
     badge.innerHTML=`<span class="user-badge ${cls}" onclick="showScreen('dashboard')">${isPremium()?'⭐ ':''}${currentUser.name||currentUser.email} ${isPremium()?'PREMIUM':''}</span> <span class="user-badge" onclick="doLogout()" style="color:var(--alert);cursor:pointer" title="Logout">🚪</span>`;
-  }else{
-    badge.innerHTML=`<span class="user-badge" onclick="showScreen('login')">Masuk/Daftar</span>`;
-  }
+  }else{badge.innerHTML=`<span class="user-badge" onclick="showScreen('login')">Masuk/Daftar</span>`;}
 }
 
-/* ============ AUTH ============ */
+/* ============ AUTH (Supabase) ============ */
 function switchAuthTab(tab){
   document.getElementById('authLogin').classList.toggle('hidden',tab!=='login');
   document.getElementById('authRegister').classList.toggle('hidden',tab!=='register');
   document.querySelectorAll('#loginScreen .tab').forEach((t,i)=>{t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register'));});
 }
-function doLogin(){
+async function doLogin(){
   const email=document.getElementById('loginEmail').value.trim(),pass=document.getElementById('loginPass').value,errEl=document.getElementById('loginError');
-  if(!email||!pass){errEl.textContent='Isi email dan password';errEl.classList.remove('hidden');return;}
-  errEl.classList.add('hidden');
-  const accounts=JSON.parse(localStorage.getItem('cpns_acc')||'[]');
-  const acc=accounts.find(a=>a.email===email&&a.password===pass);
-  if(acc){currentUser={email:acc.email,name:acc.name,premium:acc.premium||false,createdAt:acc.createdAt};saveUser();toast('Login berhasil!','success');showScreen('dashboard');}
-  else if(sb){sb.auth.signInWithPassword({email,password:pass}).then(({data,error})=>{if(error){errEl.textContent='Email/password salah';errEl.classList.remove('hidden');return;}currentUser={email:data.user.email,name:data.user.user_metadata?.name||email,premium:data.user.user_metadata?.premium||false,id:data.user.id};saveUser();toast('Login berhasil!','success');showScreen('dashboard');});}
-  else{errEl.textContent='Email/password salah. Belum punya akun? Daftar.';errEl.classList.remove('hidden');}
+  if(!email||!pass){errEl.textContent='Isi email dan password';errEl.classList.remove('hidden');return;}errEl.classList.add('hidden');
+  const{data,error}=await sb.auth.signInWithPassword({email,password:pass});
+  if(error){errEl.textContent='Email/password salah';errEl.classList.remove('hidden');return;}
+  toast('Login berhasil!','success');
 }
-function doRegister(){
+async function doRegister(){
   const name=document.getElementById('regName').value.trim(),email=document.getElementById('regEmail').value.trim(),pass=document.getElementById('regPass').value,errEl=document.getElementById('regError');
   if(!name||!email||!pass){errEl.textContent='Semua field wajib diisi';errEl.classList.remove('hidden');return;}
-  if(pass.length<6){errEl.textContent='Password minimal 6 karakter';errEl.classList.remove('hidden');return;}
-  errEl.classList.add('hidden');
-  const accounts=JSON.parse(localStorage.getItem('cpns_acc')||'[]');
-  if(accounts.find(a=>a.email===email)){errEl.textContent='Email sudah terdaftar';errEl.classList.remove('hidden');return;}
-  const acc={email,name,password:pass,premium:false,createdAt:new Date().toISOString()};
-  accounts.push(acc);localStorage.setItem('cpns_acc',JSON.stringify(accounts));
-  currentUser={email,name,premium:false,createdAt:acc.createdAt};saveUser();
-  toast('Pendaftaran berhasil!','success');showScreen('dashboard');
+  if(pass.length<6){errEl.textContent='Password minimal 6 karakter';errEl.classList.remove('hidden');return;}errEl.classList.add('hidden');
+  const{data,error}=await sb.auth.signUp({email,password:pass,options:{data:{name}}});
+  if(error){errEl.textContent=error.message;errEl.classList.remove('hidden');return;}
+  toast('Cek email untuk verifikasi, lalu login!','success');
+  setTimeout(()=>showScreen('login'),2000);
 }
-function doLogout(){currentUser=null;localStorage.removeItem('cpns_user');updateHeader();showScreen('landing');toast('Logout berhasil','success');}
-function redeemKey(){
+async function doLogout(){
+  await sb.auth.signOut();
+  currentUser=null;localStorage.removeItem('cpns_user');updateHeader();showScreen('landing');toast('Logout berhasil','success');
+}
+
+/* ============ PREMIUM KEYS (Supabase) ============ */
+async function redeemKey(){
   const key=document.getElementById('premiumKey').value.trim().toUpperCase(),errEl=document.getElementById('keyError');
-  if(!key){errEl.textContent='Masukkan kode premium';errEl.classList.remove('hidden');return;}
-  errEl.classList.add('hidden');
-  const validKeys=JSON.parse(localStorage.getItem('cpns_keys')||'[]');
-  const found=validKeys.find(k=>k.key===key&&!k.used);
-  if(found){found.used=true;found.usedBy=currentUser?.email||'anonymous';found.usedAt=new Date().toISOString();localStorage.setItem('cpns_keys',JSON.stringify(validKeys));if(!currentUser){currentUser={email:found.usedBy,name:'User',premium:true};}else{currentUser.premium=true;}saveUser();const accounts=JSON.parse(localStorage.getItem('cpns_acc')||'[]');const acc=accounts.find(a=>a.email===currentUser.email);if(acc){acc.premium=true;localStorage.setItem('cpns_acc',JSON.stringify(accounts));}toast('Premium aktif! 🎉','success');showScreen('dashboard');}
-  else{errEl.textContent='Kode tidak valid/sudah digunakan';errEl.classList.remove('hidden');}
+  if(!key){errEl.textContent='Masukkan kode premium';errEl.classList.remove('hidden');return;}errEl.classList.add('hidden');
+  if(!currentUser){errEl.textContent='Login dulu sebelum redeem';errEl.classList.remove('hidden');return;}
+  const{data:keys,error}=await sb.from('premium_keys').select('*').eq('key',key).eq('used',false);
+  if(error||!keys.length){errEl.textContent='Kode tidak valid/sudah digunakan';errEl.classList.remove('hidden');return;}
+  const k=keys[0];
+  await sb.from('premium_keys').update({used:true,used_by:currentUser.id,used_at:new Date().toISOString()}).eq('id',k.id);
+  await sb.from('profiles').update({premium:true}).eq('id',currentUser.id);
+  currentUser.premium=true;localStorage.setItem('cpns_user',JSON.stringify(currentUser));
+  toast('Premium aktif! 🎉','success');showScreen('dashboard');
 }
-function generateKey(){
+async function generateKey(){
   const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let key='CPNS-';for(let i=0;i<4;i++)key+=chars[Math.floor(Math.random()*chars.length)];key+='-';for(let i=0;i<4;i++)key+=chars[Math.floor(Math.random()*chars.length)];
-  const validKeys=JSON.parse(localStorage.getItem('cpns_keys')||'[]');validKeys.push({key,used:false,createdAt:new Date().toISOString()});localStorage.setItem('cpns_keys',JSON.stringify(validKeys));renderAdmin();toast('Key: '+key,'success');
+  await sb.from('premium_keys').insert({key,used:false});renderAdmin();toast('Key: '+key,'success');
 }
-function revokeKey(k){const keys=JSON.parse(localStorage.getItem('cpns_keys')||'[]');const idx=keys.findIndex(x=>x.key===k);if(idx>=0){keys.splice(idx,1);localStorage.setItem('cpns_keys',JSON.stringify(keys));}renderAdmin();}
-function renderAdmin(){const el=document.getElementById('adminKeys');const keys=JSON.parse(localStorage.getItem('cpns_keys')||'[]');let h='<h3>Premium Keys</h3><button class="btn btn-primary btn-sm" onclick="generateKey()">Generate Key</button><br><br><table style="width:100%;font-size:11px"><tr><th>Key</th><th>Status</th><th>User</th><th></th></tr>';keys.forEach(k=>{h+=`<tr><td style="font-family:IBM Plex Mono,monospace">${k.key}</td><td>${k.used?'<span style="color:#3E6B4F">Used</span>':'<span style="color:#A9782F">Available</span>'}</td><td>${k.usedBy||'-'}</td><td>${!k.used?`<button class="btn btn-danger btn-sm" onclick="revokeKey('${k.key}')">Hapus</button>`:''}</td></tr>`;});h+='</table>';el.innerHTML=h;}
-function renderDashboard(){
+async function revokeKey(k){
+  const{data}=await sb.from('premium_keys').select('id').eq('key',k).eq('used',false).single();
+  if(data)await sb.from('premium_keys').delete().eq('id',data.id);
+  renderAdmin();
+}
+async function renderAdmin(){
+  const el=document.getElementById('adminKeys');
+  const{data:keys}=await sb.from('premium_keys').select('*').order('created_at',{ascending:false});
+  let h='<h3>Premium Keys</h3><button class="btn btn-primary btn-sm" onclick="generateKey()">Generate Key</button><br><br><table style="width:100%;font-size:11px"><tr><th>Key</th><th>Status</th><th>User</th><th></th></tr>';
+  (keys||[]).forEach(k=>{h+=`<tr><td style="font-family:IBM Plex Mono,monospace">${k.key}</td><td>${k.used?'<span style="color:#3E6B4F">Used</span>':'<span style="color:#A9782F">Available</span>'}</td><td>${k.used_by||'-'}</td><td>${!k.used?`<button class="btn btn-danger btn-sm" onclick="revokeKey('${k.key}')">Hapus</button>`:''}</td></tr>`;});
+  h+='</table>';el.innerHTML=h;
+}
+
+/* ============ HISTORY (Supabase) ============ */
+async function getHistory(){
+  if(!sb||!currentUser?.id)return[];
+  const{data}=await sb.from('test_history').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(50);
+  return data||[];
+}
+async function saveHistory(entry){
+  if(!sb||!currentUser?.id)return;
+  await sb.from('test_history').insert({user_id:currentUser.id,mode:entry.mode,total_soal:entry.totalSoal,total_score:entry.totalScore,twk_score:entry.twk||0,tiu_score:entry.tiu||0,tkp_score:entry.tkp||0,passed:entry.passed});
+}
+async function renderDashboard(){
   if(!currentUser){showScreen('landing');return;}
-  const hist=getHistory();const tt=hist.length;const avg=tt>0?Math.round(hist.reduce((s,h)=>s+h.totalScore,0)/tt):0;const best=tt>0?Math.max(...hist.map(h=>h.totalScore)):0;const pass=hist.filter(h=>h.passed).length;
+  const hist=await getHistory();const tt=hist.length;const avg=tt>0?Math.round(hist.reduce((s,h)=>s+h.total_score,0)/tt):0;const best=tt>0?Math.max(...hist.map(h=>h.total_score)):0;const pass=hist.filter(h=>h.passed).length;
   document.getElementById('statsGrid').innerHTML=`<div class="stat-box"><div class="stat-val">${tt}</div><div class="stat-label">Total Tryout</div></div><div class="stat-box"><div class="stat-val">${avg}</div><div class="stat-label">Rata-rata Skor</div></div><div class="stat-box"><div class="stat-val">${best}</div><div class="stat-label">Skor Tertinggi</div></div><div class="stat-box"><div class="stat-val">${pass}</div><div class="stat-label">Lulus</div></div><div class="stat-box"><div class="stat-val">${isPremium()?'∞':FREE_SOAL}</div><div class="stat-label">Max Soal/Kat</div></div><div class="stat-box"><div class="stat-val">${isPremium()?'∞':getAttempts().count+'/'+FREE_MAX}</div><div class="stat-label">Attempt Hari Ini</div></div>`;
   const body=document.getElementById('historyBody');
   if(hist.length===0){document.getElementById('historyEmpty').classList.remove('hidden');body.innerHTML='';return;}
   document.getElementById('historyEmpty').classList.add('hidden');
-  body.innerHTML=hist.map(h=>`<tr><td>${new Date(h.date).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</td><td><span class="badge-tier ${h.mode}">${h.mode==='simulation'?'Simulasi':'Kustom'}</span></td><td>${h.totalSoal}</td><td>${h.twk||'-'}</td><td>${h.tiu||'-'}</td><td>${h.tkp||'-'}</td><td class="${h.passed?'score-pass':'score-fail'}">${h.totalScore}</td><td>${h.passed?'✅':'❌'}</td></tr>`).join('');
+  body.innerHTML=hist.map(h=>`<tr><td>${new Date(h.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</td><td><span class="badge-tier ${h.mode}">${h.mode==='simulation'?'Simulasi':'Kustom'}</span></td><td>${h.total_soal}</td><td>${h.twk_score||'-'}</td><td>${h.tiu_score||'-'}</td><td>${h.tkp_score||'-'}</td><td class="${h.passed?'score-pass':'score-fail'}">${h.total_score}</td><td>${h.passed?'✅':'❌'}</td></tr>`).join('');
 }
 
 // ============ TIER ENFORCEMENT ============
@@ -792,8 +836,13 @@ function buildQuestionsForCat(code,n){
 }
 
 function startSession(){
+  if(!isPremium()){
+    const attempts=getAttempts();
+    if(attempts.count>=FREE_MAX){toast('Kuota gratis hari ini habis!','error');showScreen('payment');return;}
+    saveAttempt();
+  }
   let all=[];
-  if(quizMode==='simulation'){
+  if(quizMode==='simulation'&&isPremium()){
     selectedCats=new Set(['TWK','TIU','TKP']);timerSeconds=SIM_CONFIG.totalTime;
     CATEGORIES.forEach(c=>{all=all.concat(buildQuestionsForCat(c.code,SIM_CONFIG[c.code]));});
   }else{
@@ -864,7 +913,7 @@ document.getElementById('restartBtn').addEventListener('click',()=>{document.get
 
 document.addEventListener('keydown',e=>{if(document.getElementById('quizScreen').classList.contains('hidden'))return;const key=e.key.toLowerCase();if(key==='arrowleft'||key==='a'){e.preventDefault();prevBtn.click();}if(key==='arrowright'||key==='d'){e.preventDefault();nextBtn.click();}if(key>='1'&&key<='5'){e.preventDefault();const idx=parseInt(key)-1;if(idx<session.questions[session.idx].opts.length){session.answers[session.idx]=idx;renderNavGrid();renderQuestion();}}if(key==='b'){e.preventDefault();bookmarkBtn.click();}});
 document.addEventListener('keydown',function(e){if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();showScreen('admin');}});
-updateHeader();showScreen('landing');
+initAuth();
 </script>
 </body>
 </html>
