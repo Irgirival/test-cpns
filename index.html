@@ -107,11 +107,27 @@ header.top{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:
 <body>
 <div class="wrap">
 <header class="top"><div><div class="brand-eyebrow">Tryout · Seleksi Kompetensi Dasar</div><h1 class="brand-title">Lembar Ujian <em>CPNS</em> 2025</h1></div><div class="top-meta" id="headMeta"><span id="userBadge"></span></div></header>
-<div id="landingScreen"><div class="card" style="text-align:center"><h2>🎯 Siap Lolos CPNS 2025?</h2><p class="desc">Latihan SKD dengan 300+ soal real + 28 generator dinamis. Soal numerik & figural setara tingkat kesulitan CPNS asli.</p><div class="pricing-grid"><div class="pricing-card"><h3>Gratis</h3><div class="price">Rp0<span>/selamanya</span></div><ul><li>5 soal per kategori</li><li>Mode kustom (pilih TWK/TIU/TKP)</li><li class="no">Simulasi penuh 110 soal</li><li class="no">History & analisis</li><li>Maks 5x latihan/hari</li></ul><button class="btn btn-outline" onclick="showScreen('setup')">Mulai Gratis</button></div><div class="pricing-card premium"><div class="badge">⭐ POPULER</div><h3>Premium</h3><div class="price">Rp100K<span>/sekali bayar</span></div><ul><li>Simulasi penuh 110 soal (100 menit)</li><li>Unlimited soal per kategori</li><li>History & analisis performa</li><li>Timer + pembahasan lengkap</li><li>Passing grade real-time</li><li>Akses seumur hidup</li></ul><button class="btn btn-gold" onclick="showScreen('payment')">Beli Premium ✨</button></div></div><p style="font-size:11px;color:var(--ink2);margin-top:12px">Sudah premium? <a href="javascript:showScreen('login')" style="color:var(--brass);font-weight:600">Login di sini</a></p></div></div>
+<div id="landingScreen"><div class="card" style="text-align:center"><h2>🎯 Siap Lolos CPNS 2025?</h2><p class="desc">Latihan SKD dengan 300+ soal real + 28 generator dinamis. Soal numerik & figural setara tingkat kesulitan CPNS asli.</p><div class="pricing-grid"><div class="pricing-card"><h3>Gratis</h3><div class="price">Rp0<span>/selamanya</span></div><ul><li>5 soal per kategori</li><li>Mode kustom (pilih TWK/TIU/TKP)</li><li class="no">Simulasi penuh 110 soal</li><li class="no">History & analisis</li><li>Maks 5x latihan/hari</li></ul><button class="btn btn-outline" onclick="showScreen('setup')">Mulai Gratis</button></div><div class="pricing-card premium"><div class="badge">⭐ POPULER</div><h3>Premium</h3><div class="price">Rp100K<span>/sekali bayar</span></div><ul><li>Simulasi penuh 110 soal (100 menit)</li><li>Unlimited soal per kategori</li><li>History & analisis performa</li><li>Timer + pembahasan lengkap</li><li>Passing grade real-time</li><li>Akses seumur hidup</li></ul><button class="btn btn-gold" onclick="showScreen('payment')">Beli Premium ✨</button></div></div><p style="font-size:11px;color:var(--ink2);margin-top:12px">Sudah premium? <a href="javascript:showScreen('login')" style="color:var(--brass);font-weight:600">Login di sini</a></p>
+<p style="font-size:9px;color:var(--paper2);margin-top:4px;text-align:center"><a href="javascript:showScreen('admin')" style="color:var(--paper2)">·</a></p></div></div>
 <div id="loginScreen" class="hidden"><div class="card auth-form"><h2>Masuk / Daftar</h2><p class="desc">Gunakan akun untuk menyimpan history dan akses premium.</p><div class="tabs"><button class="tab active" onclick="switchAuthTab('login')">Login</button><button class="tab" onclick="switchAuthTab('register')">Daftar</button></div><div id="authLogin"><div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="email@contoh.com"></div><div class="form-group"><label>Password</label><input type="password" id="loginPass" placeholder="******"></div><div class="form-error hidden" id="loginError"></div><button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="doLogin()">Masuk</button></div><div id="authRegister" class="hidden"><div class="form-group"><label>Nama</label><input type="text" id="regName" placeholder="Nama Anda"></div><div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="email@contoh.com"></div><div class="form-group"><label>Password</label><input type="password" id="regPass" placeholder="min 6 karakter"></div><div class="form-error hidden" id="regError"></div><button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="doRegister()">Daftar</button></div><p style="text-align:center;font-size:11px;margin-top:12px"><a href="javascript:showScreen('landing')" style="color:var(--ink2)">← Kembali</a></p></div></div>
 <div id="paymentScreen" class="hidden"><div class="card" style="text-align:center"><h2>🔓 Upgrade ke Premium</h2><p class="desc">Sekali bayar Rp100.000 — akses seumur hidup.</p><div style="background:var(--paper2);padding:20px;border-radius:var(--radius);margin:16px 0"><p style="font-weight:600;margin:0 0 8px">Transfer ke:</p><p style="font-size:18px;font-family:'IBM Plex Mono',monospace;margin:4px 0"><b>BCA 1234567890</b></p><p style="font-size:13px;color:var(--ink2);margin:4px 0">a.n. Irgi Rival</p><p style="font-size:24px;font-weight:700;font-family:'IBM Plex Mono',monospace;margin:12px 0;color:var(--brass)">Rp100.000</p></div><p style="font-size:12px;color:var(--ink2)">Setelah transfer, masukkan kode premium:</p><div style="display:flex;gap:8px;max-width:400px;margin:12px auto"><input type="text" id="premiumKey" placeholder="Kode premium" style="flex:1;padding:10px;border:1.5px solid var(--line);border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:14px"><button class="btn btn-gold" onclick="redeemKey()">Aktifkan</button></div><div class="form-error hidden" id="keyError"></div><p style="font-size:11px;margin-top:12px"><a href="javascript:showScreen('landing')" style="color:var(--ink2)">← Kembali</a></p></div></div>
 <div id="dashboardScreen" class="hidden"><div class="card"><h2>📊 Dashboard</h2><div class="stats-grid" id="statsGrid"></div></div><div class="card"><h2>📋 Riwayat Tryout</h2><div style="overflow-x:auto"><table class="history-table"><thead><tr><th>Tgl</th><th>Mode</th><th>Soal</th><th>TWK</th><th>TIU</th><th>TKP</th><th>Total</th><th>Status</th></tr></thead><tbody id="historyBody"></tbody></table></div><p class="desc" style="text-align:center;margin-top:12px" id="historyEmpty">Belum ada riwayat tryout.</p></div><p style="text-align:center"><button class="btn btn-outline" onclick="showScreen('setup')">Mulai Tryout Baru</button></p></div>
-<div id="adminScreen" class="hidden"><div class="card"><h2>🔧 Admin Panel</h2><p class="desc">Generate premium keys. (Ctrl+Shift+A untuk akses)</p></div><div class="admin-section" id="adminKeys"></div></div>
+<div id="adminScreen" class="hidden">
+  <div id="adminLogin" class="card" style="max-width:400px;margin:0 auto">
+    <h2>🔐 Admin Login</h2>
+    <p class="desc">Masukkan email & password admin untuk mengelola premium keys.</p>
+    <div class="form-group"><label>Email Admin</label><input type="email" id="adminEmail" placeholder="admin@email.com"></div>
+    <div class="form-group"><label>Password</label><input type="password" id="adminPass" placeholder="******"></div>
+    <div class="form-error hidden" id="adminError"></div>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="doAdminLogin()">Masuk Admin</button>
+    <p style="text-align:center;font-size:11px;margin-top:12px"><a href="javascript:showScreen('landing')" style="color:var(--ink2)">← Kembali</a></p>
+  </div>
+  <div id="adminPanel" class="hidden">
+    <div class="card"><h2>🔧 Admin Panel</h2><p class="desc">Generate premium keys, lihat users.</p></div>
+    <div class="admin-section" id="adminKeys"></div>
+    <p style="text-align:center;margin-top:12px"><button class="btn btn-outline btn-sm" onclick="doAdminLogout()">Logout Admin</button></p>
+  </div>
+</div>
 <div id="setupScreen" class="hidden"><div id="attemptInfo"></div><div id="premiumUpsell" class="hidden"><div class="card" style="background:linear-gradient(135deg,#FBF3E4,#FFFDF8);border:2px solid var(--gold);text-align:center"><h2>⭐ Ingin lebih maksimal?</h2><p class="desc">Upgrade ke Premium untuk simulasi penuh 110 soal, unlimited, history, dan analisis.</p><button class="btn btn-gold" onclick="showScreen('payment')">Upgrade Premium — Rp100K</button></div></div><div class="card"><h2>Pilih Mode Latihan</h2><p class="desc">Mode Simulasi mengikuti format asli SKD CPNS. Mode Kustom bebas pilih kategori.</p><div class="mode-select" id="modeSelect"></div></div><div id="customOptions"><div class="card"><h2>Pilih Kategori Tes</h2><p class="desc">Soal dikocok ulang setiap sesi. Numerik & figural dibuat otomatis.</p><div class="cat-grid" id="catGrid"></div></div><div class="card"><h2>Jumlah Soal per Kategori</h2><p class="desc">Semakin banyak soal, semakin dekat dengan simulasi asli.</p><div class="count-row" id="countRow"></div></div></div><button class="btn btn-primary" style="width:100%;margin-top:18px;padding:14px;font-size:14px" id="startBtn">Mulai Mengerjakan</button><p class="foot-note" id="footNote">TWK &amp; TIU: benar +5, salah/kosong 0 — TKP: setiap jawaban bernilai 1–5</p></div>
 <div id="quizScreen" class="hidden">
 <div class="quiz-topbar"><span id="quizCatLabel">TWK</span><span class="timer" id="timerDisplay">00:00</span><span id="quizCounter">1 / 10</span></div>
@@ -130,6 +146,8 @@ try{sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){console
 
 /* ============ APP STATE ============ */
 let currentUser=null;
+let isAdmin=false;
+const ADMIN_EMAIL='irgirival@gmail.com'; // ganti dengan email admin kamu
 const FREE_MAX=5, FREE_SOAL=5;
 function getToday(){return new Date().toISOString().split('T')[0];}
 function getAttempts(){try{const a=JSON.parse(localStorage.getItem('cpns_att')||'{}');if(a.date!==getToday())return{date:getToday(),count:0};return a;}catch(e){return{date:getToday(),count:0};}}
@@ -173,8 +191,9 @@ function toast(msg,type){const t=document.createElement('div');t.style.cssText='
 function showScreen(name){
   document.querySelectorAll('#landingScreen,#loginScreen,#paymentScreen,#dashboardScreen,#setupScreen,#quizScreen,#resultScreen,#adminScreen').forEach(el=>{if(el)el.classList.add('hidden');});
   const el=document.getElementById(name+'Screen');if(el)el.classList.remove('hidden');
-  currentScreen=name;updateHeader();
-  if(name==='setup')buildSetup();if(name==='dashboard')renderDashboard();if(name==='admin')renderAdmin();
+  if(name==='admin'){isAdmin=false;document.getElementById('adminLogin').classList.remove('hidden');document.getElementById('adminPanel').classList.add('hidden');document.getElementById('adminEmail').value='';document.getElementById('adminPass').value='';}
+  updateHeader();
+  if(name==='setup')buildSetup();if(name==='dashboard')renderDashboard();if(name==='admin'){}
 }
 function updateHeader(){
   const badge=document.getElementById('userBadge');
@@ -239,6 +258,31 @@ async function renderAdmin(){
   let h='<h3>Premium Keys</h3><button class="btn btn-primary btn-sm" onclick="generateKey()">Generate Key</button><br><br><table style="width:100%;font-size:11px"><tr><th>Key</th><th>Status</th><th>User</th><th></th></tr>';
   (keys||[]).forEach(k=>{h+=`<tr><td style="font-family:IBM Plex Mono,monospace">${k.key}</td><td>${k.used?'<span style="color:#3E6B4F">Used</span>':'<span style="color:#A9782F">Available</span>'}</td><td>${k.used_by||'-'}</td><td>${!k.used?`<button class="btn btn-danger btn-sm" onclick="revokeKey('${k.key}')">Hapus</button>`:''}</td></tr>`;});
   h+='</table>';el.innerHTML=h;
+}
+
+/* ============ ADMIN AUTH ============ */
+async function doAdminLogin(){
+  const email=document.getElementById('adminEmail').value.trim();
+  const pass=document.getElementById('adminPass').value;
+  const errEl=document.getElementById('adminError');
+  if(!email||!pass){errEl.textContent='Isi email dan password';errEl.classList.remove('hidden');return;}
+  if(email!==ADMIN_EMAIL){errEl.textContent='Email bukan admin';errEl.classList.remove('hidden');return;}
+  errEl.classList.add('hidden');
+  const{error}=await sb.auth.signInWithPassword({email,password:pass});
+  if(error){errEl.textContent='Password salah';errEl.classList.remove('hidden');return;}
+  isAdmin=true;
+  document.getElementById('adminLogin').classList.add('hidden');
+  document.getElementById('adminPanel').classList.remove('hidden');
+  renderAdmin();
+  toast('Admin login berhasil','success');
+}
+function doAdminLogout(){
+  isAdmin=false;
+  document.getElementById('adminPanel').classList.add('hidden');
+  document.getElementById('adminLogin').classList.remove('hidden');
+  document.getElementById('adminEmail').value='';
+  document.getElementById('adminPass').value='';
+  toast('Admin logout','success');
 }
 
 /* ============ HISTORY (Supabase) ============ */
@@ -912,7 +956,6 @@ document.getElementById('toggleReview').addEventListener('click',function(){cons
 document.getElementById('restartBtn').addEventListener('click',()=>{document.getElementById('resultScreen').classList.add('hidden');showScreen('setup');});
 
 document.addEventListener('keydown',e=>{if(document.getElementById('quizScreen').classList.contains('hidden'))return;const key=e.key.toLowerCase();if(key==='arrowleft'||key==='a'){e.preventDefault();prevBtn.click();}if(key==='arrowright'||key==='d'){e.preventDefault();nextBtn.click();}if(key>='1'&&key<='5'){e.preventDefault();const idx=parseInt(key)-1;if(idx<session.questions[session.idx].opts.length){session.answers[session.idx]=idx;renderNavGrid();renderQuestion();}}if(key==='b'){e.preventDefault();bookmarkBtn.click();}});
-document.addEventListener('keydown',function(e){if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();showScreen('admin');}});
 initAuth();
 </script>
 </body>
