@@ -3,514 +3,574 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Latihan SKD CPNS</title>
+<title>Simulasi SKD CPNS 2025 — TWK · TIU · TKP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#F6F2E8;
-    --paper2:#EFE9DA;
-    --ink:#1C2A44;
-    --ink2:#42506A;
-    --brass:#A9782F;
-    --brass2:#C79A4B;
-    --stamp:#9A2E20;
-    --line:#D8CFB8;
-    --green:#3E6B4F;
-    --white:#FFFDF8;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--paper);
-    background-image:
-      radial-gradient(circle at 1px 1px, rgba(28,42,68,0.06) 1px, transparent 0);
-    background-size:22px 22px;
-    color:var(--ink);
-    font-family:'IBM Plex Sans', sans-serif;
-    min-height:100vh;
-    padding:0 0 60px 0;
-  }
-  .wrap{max-width:720px;margin:0 auto;padding:20px 18px;}
+:root{
+  --paper:#F6F2E8; --paper2:#EFE9DA; --ink:#1C2A44; --ink2:#42506A;
+  --brass:#A9782F; --brass2:#C79A4B; --stamp:#9A2E20; --line:#D8CFB8;
+  --green:#3E6B4F; --white:#FFFDF8; --alert:#CC3A20; --blue:#2E5A88;
+  --radius:3px; --shadow:0 8px 22px -14px rgba(28,42,68,.35);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--paper);
+  background-image:radial-gradient(circle at 1px 1px, rgba(28,42,68,0.06) 1px, transparent 0);
+  background-size:22px 22px;
+  color:var(--ink); font-family:'IBM Plex Sans', sans-serif;
+  min-height:100vh; padding:0 0 60px 0;
+}
+.wrap{max-width:780px;margin:0 auto;padding:20px 18px;}
 
-  header.top{
-    border-bottom:3px solid var(--ink);
-    padding-bottom:14px;
-    margin-bottom:22px;
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-  }
-  .brand-eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--brass);
-    font-weight:600;
-  }
-  .brand-title{
-    font-family:'Lora', serif;
-    font-weight:700;
-    font-size:28px;
-    margin:2px 0 0 0;
-    line-height:1.1;
-  }
-  .brand-title em{color:var(--stamp); font-style:normal;}
-  .top-meta{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    color:var(--ink2);
-    text-align:right;
-    line-height:1.5;
-  }
+/* HEADER */
+header.top{
+  border-bottom:3px solid var(--ink); padding-bottom:14px; margin-bottom:22px;
+  display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:10px;
+}
+.brand-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);font-weight:600;}
+.brand-title{font-family:'Lora',serif;font-weight:700;font-size:28px;margin:2px 0 0 0;line-height:1.1;}
+.brand-title em{color:var(--stamp);font-style:normal;}
+.top-meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink2);text-align:right;line-height:1.5;}
 
-  /* ---------- SETUP SCREEN ---------- */
-  .card{
-    background:var(--white);
-    border:1px solid var(--line);
-    border-radius:2px;
-    box-shadow:0 1px 0 var(--line), 0 8px 22px -14px rgba(28,42,68,.35);
-    padding:22px;
-    margin-bottom:16px;
-  }
-  .card h2{
-    font-family:'Lora', serif;
-    font-size:18px;
-    margin:0 0 4px 0;
-  }
-  .card p.desc{
-    margin:0 0 14px 0;
-    font-size:13.5px;
-    color:var(--ink2);
-    line-height:1.5;
-  }
-  .cat-grid{display:grid; grid-template-columns:1fr; gap:10px;}
-  .cat-option{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    border:1.5px solid var(--line);
-    border-radius:3px;
-    padding:12px 14px;
-    cursor:pointer;
-    transition:border-color .15s, background .15s;
-    background:var(--paper);
-  }
-  .cat-option:hover{border-color:var(--brass);}
-  .cat-option.active{
-    border-color:var(--stamp);
-    background:#FBF0EA;
-  }
-  .cat-code{
-    font-family:'IBM Plex Mono', monospace;
-    font-weight:700;
-    font-size:13px;
-    color:var(--white);
-    background:var(--ink);
-    border-radius:2px;
-    padding:4px 7px;
-    min-width:44px;
-    text-align:center;
-    flex-shrink:0;
-    align-self:flex-start;
-  }
-  .cat-option.active .cat-code{background:var(--stamp);}
-  .cat-text b{display:block; font-size:14px;}
-  .cat-text span{font-size:12px; color:var(--ink2); line-height:1.5;}
+/* CARDS */
+.card{
+  background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:22px; margin-bottom:16px;
+}
+.card h2{font-family:'Lora',serif;font-size:18px;margin:0 0 4px 0;}
+.card p.desc{margin:0 0 14px 0;font-size:13.5px;color:var(--ink2);line-height:1.5;}
 
-  .count-row{display:flex; gap:10px; margin-top:6px; flex-wrap:wrap;}
-  .count-btn{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:13px;
-    border:1.5px solid var(--line);
-    background:var(--paper);
-    border-radius:3px;
-    padding:8px 14px;
-    cursor:pointer;
-  }
-  .count-btn.active{border-color:var(--brass); background:#FBF3E4; color:var(--brass); font-weight:600;}
+/* SETUP */
+.mode-select{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.mode-btn{
+  padding:14px; border:1.5px solid var(--line); border-radius:var(--radius);
+  background:var(--paper); cursor:pointer; text-align:center; transition:border-color .15s,background .15s;
+  font-family:'IBM Plex Mono',monospace;
+}
+.mode-btn:hover{border-color:var(--brass);}
+.mode-btn.active{border-color:var(--stamp);background:#FBF0EA;}
+.mode-btn b{display:block;font-size:14px;margin-bottom:2px;}
+.mode-btn span{font-size:11px;color:var(--ink2);}
 
-  .start-btn{
-    display:block;
-    width:100%;
-    margin-top:18px;
-    padding:14px;
-    background:var(--ink);
-    color:var(--white);
-    border:none;
-    border-radius:3px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:13.5px;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    font-weight:600;
-    cursor:pointer;
-    transition:background .15s;
-  }
-  .start-btn:hover{background:var(--stamp);}
-  .start-btn:disabled{background:#B8B8A9; cursor:not-allowed;}
+.cat-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+.cat-option{
+  display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:var(--radius);
+  padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s;background:var(--paper);
+}
+.cat-option:hover{border-color:var(--brass);}
+.cat-option.active{border-color:var(--stamp);background:#FBF0EA;}
+.cat-code{
+  font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;color:var(--white);
+  background:var(--ink);border-radius:2px;padding:4px 7px;min-width:44px;text-align:center;flex-shrink:0;align-self:flex-start;
+}
+.cat-option.active .cat-code{background:var(--stamp);}
+.cat-text b{display:block;font-size:14px;}
+.cat-text span{font-size:12px;color:var(--ink2);line-height:1.5;}
 
-  /* ---------- QUIZ SCREEN ---------- */
-  .quiz-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:14px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-  }
-  .progress-track{
-    height:6px;
-    background:var(--paper2);
-    border-radius:4px;
-    overflow:hidden;
-    margin-bottom:18px;
-    border:1px solid var(--line);
-  }
-  .progress-fill{height:100%; background:var(--brass); transition:width .25s;}
+.count-row{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;}
+.count-btn{font-family:'IBM Plex Mono',monospace;font-size:13px;border:1.5px solid var(--line);background:var(--paper);border-radius:var(--radius);padding:8px 14px;cursor:pointer;}
+.count-btn.active{border-color:var(--brass);background:#FBF3E4;color:var(--brass);font-weight:600;}
 
-  .qcard{
-    background:var(--white);
-    border:1px solid var(--line);
-    border-radius:2px;
-    padding:22px;
-    box-shadow:0 8px 22px -14px rgba(28,42,68,.35);
-  }
-  .qtag{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    color:var(--brass);
-    font-weight:600;
-    margin-bottom:8px;
-  }
-  .qtext{
-    font-family:'Lora', serif;
-    font-size:17px;
-    line-height:1.5;
-    margin:0 0 18px 0;
-    white-space:pre-line;
-  }
-  .fig-row{display:flex; align-items:center; gap:12px; margin:12px 0 2px 0; flex-wrap:wrap;}
-  .fig-row svg{display:block; flex-shrink:0;}
-  .fig-qmark{
-    width:56px;height:56px;
-    border:2px dashed var(--ink2);
-    border-radius:6px;
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Lora',serif;font-size:22px;color:var(--ink2);
-    flex-shrink:0;
-  }
-  .options{display:flex; flex-direction:column; gap:10px;}
-  .option{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:11px 14px;
-    border:1px solid var(--line);
-    border-radius:3px;
-    cursor:pointer;
-    background:var(--paper);
-    transition:border-color .12s, background .12s;
-  }
-  .option:hover{border-color:var(--brass2);}
-  .option.selected{border-color:var(--ink); background:#EFF2F6;}
-  .bubble{
-    width:24px; height:24px;
-    border-radius:50%;
-    border:2px solid var(--ink2);
-    flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    font-weight:700;
-    color:var(--ink2);
-    background:var(--white);
-  }
-  .option.selected .bubble{
-    background:var(--ink);
-    color:var(--white);
-    border-color:var(--ink);
-  }
-  .opt-label{font-size:14px; line-height:1.4; display:flex; align-items:center; gap:8px;}
-  .opt-label svg{display:block;}
+.start-btn{
+  display:block;width:100%;margin-top:18px;padding:14px;background:var(--ink);color:var(--white);
+  border:none;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:13.5px;
+  letter-spacing:.06em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .15s;
+}
+.start-btn:hover{background:var(--stamp);}
+.start-btn:disabled{background:#B8B8A9;cursor:not-allowed;}
 
-  .nav-row{
-    display:flex;
-    justify-content:space-between;
-    margin-top:18px;
-    gap:10px;
-  }
-  .nav-btn{
-    flex:1;
-    padding:12px;
-    border-radius:3px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12.5px;
-    font-weight:600;
-    letter-spacing:.04em;
-    cursor:pointer;
-    border:1.5px solid var(--ink);
-    background:var(--white);
-    color:var(--ink);
-  }
-  .nav-btn.primary{background:var(--ink); color:var(--white);}
-  .nav-btn:disabled{opacity:.35; cursor:not-allowed;}
+/* QUIZ */
+.quiz-topbar{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;flex-wrap:wrap;gap:8px;
+}
+.quiz-topbar .timer{font-size:15px;font-weight:700;padding:4px 10px;border-radius:var(--radius);background:var(--paper2);}
+.quiz-topbar .timer.warning{background:#FDE8E0;color:var(--alert);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.6;}}
 
-  /* ---------- RESULT SCREEN ---------- */
-  .stamp-wrap{text-align:center; margin:6px 0 22px 0;}
-  .stamp{
-    display:inline-flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    width:132px; height:132px;
-    border-radius:50%;
-    border:3px solid var(--stamp);
-    color:var(--stamp);
-    transform:rotate(-8deg);
-    font-family:'IBM Plex Mono', monospace;
-    position:relative;
-  }
-  .stamp::before{
-    content:'';
-    position:absolute;
-    inset:8px;
-    border:1px solid var(--stamp);
-    border-radius:50%;
-  }
-  .stamp .big{font-size:30px; font-weight:700; font-family:'Lora',serif;}
-  .stamp .small{font-size:9px; letter-spacing:.12em; text-transform:uppercase; margin-top:2px;}
-  .stamp.pass{border-color:var(--green); color:var(--green);}
-  .stamp.pass::before{border-color:var(--green);}
+.progress-track{height:6px;background:var(--paper2);border-radius:4px;overflow:hidden;margin-bottom:6px;border:1px solid var(--line);}
+.progress-fill{height:100%;background:var(--brass);transition:width .25s;}
 
-  .result-summary{
-    text-align:center;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12.5px;
-    color:var(--ink2);
-    margin-bottom:22px;
-  }
+.nav-grid{
+  display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;max-height:0;overflow:hidden;transition:max-height .3s;
+}
+.nav-grid.open{max-height:300px;overflow-y:auto;}
+.nav-dot{
+  width:32px;height:32px;border-radius:var(--radius);border:1px solid var(--line);
+  font-family:'IBM Plex Mono',monospace;font-size:11px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;background:var(--paper);transition:all .12s;
+}
+.nav-dot:hover{border-color:var(--brass);}
+.nav-dot.current{border-color:var(--ink);background:var(--ink);color:var(--white);}
+.nav-dot.answered{background:var(--paper2);border-color:var(--brass2);}
+.nav-dot.bookmarked{background:#FBF0EA;border-color:var(--stamp);}
 
-  .score-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:12px 0;
-    border-bottom:1px dashed var(--line);
-  }
-  .score-row:last-child{border-bottom:none;}
-  .score-row .label b{display:block; font-size:14px;}
-  .score-row .label span{font-size:11.5px; color:var(--ink2);}
-  .score-row .val{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:18px;
-    font-weight:700;
-  }
+.nav-grid-toggle{
+  text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--brass);
+  cursor:pointer;margin-bottom:10px;text-decoration:underline;
+}
 
-  .review-item{
-    border-bottom:1px solid var(--line);
-    padding:14px 0;
-  }
-  .review-item:last-child{border-bottom:none;}
-  .review-q{font-family:'Lora',serif; font-size:14.5px; margin-bottom:8px; white-space:pre-line;}
-  .review-ans{font-size:12.5px; padding:6px 10px; border-radius:3px; margin-bottom:4px; display:flex; align-items:center; gap:8px;}
-  .review-ans svg{width:28px;height:28px;}
-  .review-ans.correct{background:#E7F1EA; color:var(--green);}
-  .review-ans.wrong{background:#FBEAE6; color:var(--stamp);}
-  .review-ans.right-answer{background:#E7F1EA; color:var(--green);}
+.qcard{
+  background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+  padding:22px;box-shadow:var(--shadow);
+}
+.qtag{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--brass);font-weight:600;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;
+}
+.qtag .bookmark-btn{cursor:pointer;font-size:15px;color:var(--ink2);transition:color .15s;}
+.qtag .bookmark-btn.active{color:var(--stamp);}
+.qtext{font-family:'Lora',serif;font-size:17px;line-height:1.5;margin:0 0 6px 0;white-space:pre-line;}
+.qpembahasan{
+  font-size:13px;color:var(--ink2);line-height:1.5;margin-top:12px;padding:12px;background:var(--paper2);
+  border-radius:var(--radius);border-left:3px solid var(--brass);
+}
+.fig-row{display:flex;align-items:center;gap:12px;margin:12px 0 2px 0;flex-wrap:wrap;}
+.fig-row svg{display:block;flex-shrink:0;}
+.fig-qmark{width:56px;height:56px;border:2px dashed var(--ink2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-size:22px;color:var(--ink2);flex-shrink:0;}
 
-  .toggle-review{
-    text-align:center;
-    margin-top:8px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-    color:var(--brass);
-    cursor:pointer;
-    text-decoration:underline;
-  }
+.options{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+.option{
+  display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--line);
+  border-radius:var(--radius);cursor:pointer;background:var(--paper);transition:border-color .12s,background .12s;
+}
+.option:hover{border-color:var(--brass2);}
+.option.selected{border-color:var(--ink);background:#EFF2F6;}
+.option.correct-show{border-color:var(--green);background:#E7F1EA;}
+.option.wrong-show{border-color:var(--stamp);background:#FBEAE6;}
+.bubble{
+  width:24px;height:24px;border-radius:50%;border:2px solid var(--ink2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;
+  font-size:11px;font-weight:700;color:var(--ink2);background:var(--white);
+}
+.option.selected .bubble{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.opt-label{font-size:14px;line-height:1.4;display:flex;align-items:center;gap:8px;}
+.opt-label svg{display:block;}
 
-  .restart-btn{
-    display:block;
-    width:100%;
-    margin-top:20px;
-    padding:14px;
-    background:var(--white);
-    border:1.5px solid var(--ink);
-    border-radius:3px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:13px;
-    font-weight:600;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-    cursor:pointer;
-  }
+.nav-row{display:flex;justify-content:space-between;margin-top:18px;gap:10px;}
+.nav-btn{
+  flex:1;padding:12px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;
+  font-size:12.5px;font-weight:600;letter-spacing:.04em;cursor:pointer;border:1.5px solid var(--ink);
+  background:var(--white);color:var(--ink);
+}
+.nav-btn.primary{background:var(--ink);color:var(--white);}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed;}
 
-  .hidden{display:none !important;}
-  .foot-note{
-    text-align:center;
-    font-size:11px;
-    color:var(--ink2);
-    margin-top:26px;
-    font-family:'IBM Plex Mono', monospace;
-  }
+/* RESULT */
+.stamp-wrap{text-align:center;margin:6px 0 22px 0;}
+.stamp{
+  display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+  width:132px;height:132px;border-radius:50%;border:3px solid var(--stamp);color:var(--stamp);
+  transform:rotate(-8deg);font-family:'IBM Plex Mono',monospace;position:relative;
+}
+.stamp::before{content:'';position:absolute;inset:8px;border:1px solid var(--stamp);border-radius:50%;}
+.stamp .big{font-size:30px;font-weight:700;font-family:'Lora',serif;}
+.stamp .small{font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-top:2px;}
+.stamp.pass{border-color:var(--green);color:var(--green);}
+.stamp.pass::before{border-color:var(--green);}
+
+.result-summary{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink2);margin-bottom:22px;}
+
+.score-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px dashed var(--line);}
+.score-row:last-child{border-bottom:none;}
+.score-row .label b{display:block;font-size:14px;}
+.score-row .label span{font-size:11.5px;color:var(--ink2);}
+.score-row .val{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;}
+.score-row .val.pass{color:var(--green);}
+.score-row .val.fail{color:var(--stamp);}
+
+.review-item{border-bottom:1px solid var(--line);padding:14px 0;}
+.review-item:last-child{border-bottom:none;}
+.review-q{font-family:'Lora',serif;font-size:14.5px;margin-bottom:8px;white-space:pre-line;}
+.review-ans{font-size:12.5px;padding:6px 10px;border-radius:var(--radius);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.review-ans.correct{background:#E7F1EA;color:var(--green);}
+.review-ans.wrong{background:#FBEAE6;color:var(--stamp);}
+.review-ans.right-answer{background:#E7F1EA;color:var(--green);}
+.review-pembahasan{font-size:12px;color:var(--ink2);padding:8px 10px;background:var(--paper);border-radius:var(--radius);margin-top:4px;line-height:1.5;}
+
+.toggle-review{text-align:center;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--brass);cursor:pointer;text-decoration:underline;}
+
+.restart-btn{
+  display:block;width:100%;margin-top:20px;padding:14px;background:var(--white);
+  border:1.5px solid var(--ink);border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;
+  font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;
+}
+.restart-btn:hover{background:var(--paper2);}
+
+.hidden{display:none !important;}
+.foot-note{text-align:center;font-size:11px;color:var(--ink2);margin-top:26px;font-family:'IBM Plex Mono',monospace;}
+@media(max-width:500px){.mode-select{grid-template-columns:1fr;}.wrap{padding:12px 10px;}}
 </style>
 </head>
 <body>
 <div class="wrap">
-
   <header class="top">
     <div>
-      <div class="brand-eyebrow">Simulasi &middot; Seleksi Kompetensi Dasar</div>
-      <h1 class="brand-title">Lembar Ujian <em>CPNS</em></h1>
+      <div class="brand-eyebrow">Simulasi · Seleksi Kompetensi Dasar</div>
+      <h1 class="brand-title">Lembar Ujian <em>CPNS</em> 2025</h1>
     </div>
-    <div class="top-meta" id="headMeta">TWK &middot; TIU &middot; TKP</div>
+    <div class="top-meta" id="headMeta">TWK · TIU · TKP</div>
   </header>
 
   <!-- SETUP -->
   <div id="setupScreen">
     <div class="card">
-      <h2>1. Pilih Kategori Tes</h2>
-      <p class="desc">Setiap sesi menghasilkan soal yang dikocok ulang, termasuk soal numerik dan figural yang dibuat otomatis, jadi tidak akan sama persis setiap kali dikerjakan.</p>
-      <div class="cat-grid" id="catGrid"></div>
+      <h2>Pilih Mode Latihan</h2>
+      <p class="desc">Mode Simulasi mengikuti format asli SKD CPNS (110 soal, 100 menit, passing grade resmi). Mode Kustom bebas pilih kategori dan jumlah soal.</p>
+      <div class="mode-select" id="modeSelect"></div>
     </div>
-
-    <div class="card">
-      <h2>2. Jumlah Soal per Kategori</h2>
-      <p class="desc">Semakin banyak soal, semakin dekat dengan simulasi asli.</p>
-      <div class="count-row" id="countRow"></div>
+    <div id="customOptions">
+      <div class="card">
+        <h2>Pilih Kategori Tes</h2>
+        <p class="desc">Setiap sesi menghasilkan soal yang dikocok ulang, termasuk soal numerik dan figural yang dibuat otomatis, jadi tidak akan sama persis setiap kali dikerjakan.</p>
+        <div class="cat-grid" id="catGrid"></div>
+      </div>
+      <div class="card">
+        <h2>Jumlah Soal per Kategori</h2>
+        <p class="desc">Semakin banyak soal, semakin dekat dengan simulasi asli.</p>
+        <div class="count-row" id="countRow"></div>
+      </div>
     </div>
-
     <button class="start-btn" id="startBtn">Mulai Mengerjakan</button>
-    <p class="foot-note">TWK &amp; TIU: benar +5, salah/kosong 0. TKP: setiap jawaban bernilai 1&ndash;5.</p>
+    <p class="foot-note" id="footNote">TWK &amp; TIU: benar +5, salah/kosong 0 — TKP: setiap jawaban bernilai 1–5</p>
   </div>
 
   <!-- QUIZ -->
   <div id="quizScreen" class="hidden">
-    <div class="quiz-head">
+    <div class="quiz-topbar">
       <span id="quizCatLabel">TWK</span>
+      <span class="timer" id="timerDisplay">00:00</span>
       <span id="quizCounter">1 / 10</span>
     </div>
     <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="nav-grid-toggle" id="navGridToggle">Tampilkan navigasi soal ▾</div>
+    <div class="nav-grid" id="navGrid"></div>
     <div class="qcard">
-      <div class="qtag" id="qTag">Wawasan Kebangsaan</div>
+      <div class="qtag"><span id="qTag">Wawasan Kebangsaan</span><span class="bookmark-btn" id="bookmarkBtn" title="Tandai ragu-ragu">☆</span></div>
       <div class="qtext" id="qText"></div>
       <div class="options" id="qOptions"></div>
+      <div class="qpembahasan hidden" id="qPembahasan"></div>
     </div>
     <div class="nav-row">
-      <button class="nav-btn" id="prevBtn">&larr; Sebelumnya</button>
-      <button class="nav-btn primary" id="nextBtn">Berikutnya &rarr;</button>
+      <button class="nav-btn" id="prevBtn">← Sebelumnya</button>
+      <button class="nav-btn primary" id="nextBtn">Berikutnya →</button>
     </div>
   </div>
 
   <!-- RESULT -->
   <div id="resultScreen" class="hidden">
-    <div class="stamp-wrap">
-      <div class="stamp" id="stampEl">
-        <span class="big" id="stampScore">0</span>
-        <span class="small" id="stampLabel">Total Nilai</span>
-      </div>
-    </div>
+    <div class="stamp-wrap"><div class="stamp" id="stampEl"><span class="big" id="stampScore">0</span><span class="small" id="stampLabel">Total Nilai</span></div></div>
     <p class="result-summary" id="resultSummary"></p>
-
     <div class="card" id="scoreCard"></div>
-
-    <p class="toggle-review" id="toggleReview">Lihat pembahasan jawaban &darr;</p>
+    <p class="toggle-review" id="toggleReview">Lihat pembahasan jawaban ↓</p>
     <div class="card hidden" id="reviewCard"></div>
-
     <button class="restart-btn" id="restartBtn">Coba Sesi Baru</button>
   </div>
-
 </div>
 
 <script>
 /* ============ UTIL ============ */
 function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
-function shuffle(arr){
-  const a=arr.slice();
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
-}
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
 
 /* ============ CATEGORY CONFIG ============ */
 const CATEGORIES = [
-  {code:'TWK', name:'Tes Wawasan Kebangsaan', desc:'Pancasila, UUD 1945, NKRI, Bhinneka Tunggal Ika, nasionalisme, integritas, bela negara, Bahasa Indonesia'},
-  {code:'TIU', name:'Tes Intelegensia Umum', desc:'Analogi dan sinonim/antonim verbal, silogisme, numerik (angka dibuat acak tiap sesi), deret angka, serta figural/pola gambar'},
-  {code:'TKP', name:'Tes Karakteristik Pribadi', desc:'Pelayanan publik, profesionalisme, kerja sama tim, jejaring kerja, sosial budaya, teknologi informasi, integritas, anti-radikalisme'},
+  {code:'TWK',name:'Tes Wawasan Kebangsaan',desc:'Pancasila, UUD 1945, NKRI, Bhinneka Tunggal Ika, Sejarah Nasional, Nasionalisme, Integritas, Bela Negara, Lembaga Negara, Bahasa Indonesia, HAM'},
+  {code:'TIU',name:'Tes Intelegensia Umum',desc:'Verbal (sinonim, antonim, analogi, wacana), Numerik (deret, aritmatika, perbandingan, persentase, bangun datar), Figural (pola, rotasi, analogi), Logika (silogisme)'},
+  {code:'TKP',name:'Tes Karakteristik Pribadi',desc:'Pelayanan publik, profesionalisme, kerja sama tim, jejaring kerja, sosial budaya, teknologi informasi, integritas, anti-radikalisme'},
 ];
 
-/* ============ TWK BANK (static, tiap item punya subtag materi) ============ */
+/* ================================================================
+   TWK BANK — 85+ SOAL REAL CPNS
+   ================================================================ */
 const TWK_BANK = [
-  {tag:'Pancasila', q:"Pancasila sebagai dasar negara Indonesia disahkan oleh PPKI pada tanggal...", opts:["17 Agustus 1945","18 Agustus 1945","1 Juni 1945","22 Juni 1945"], a:1},
-  {tag:'Pancasila', q:"Nilai yang terkandung dalam sila ke-3 Pancasila, \"Persatuan Indonesia\", paling tepat dicerminkan oleh sikap...", opts:["Mengutamakan kepentingan pribadi di atas kepentingan bersama","Mengutamakan musyawarah dalam setiap pengambilan keputusan","Menempatkan persatuan dan kesatuan bangsa di atas kepentingan pribadi/golongan","Menghormati hak orang lain untuk beribadah"], a:2},
-  {tag:'Pancasila', q:"Salah satu contoh penerapan sila keempat Pancasila dalam kehidupan berbangsa adalah...", opts:["Memaksakan pendapat pribadi dalam rapat","Mengutamakan musyawarah mufakat dalam pengambilan keputusan bersama","Mengambil keputusan sepihak tanpa berdiskusi","Mengabaikan pendapat kelompok minoritas"], a:1},
-  {tag:'Pancasila', q:"Makna dari sila kedua Pancasila \"Kemanusiaan yang Adil dan Beradab\" adalah...", opts:["Mengutamakan kepentingan kelompok tertentu","Mengakui dan memperlakukan manusia sesuai dengan harkat dan martabatnya sebagai makhluk Tuhan","Membedakan perlakuan berdasarkan status sosial","Mengutamakan kekuasaan di atas nilai kemanusiaan"], a:1},
-  {tag:'Pancasila', q:"Nilai keadilan sosial bagi seluruh rakyat Indonesia tercermin dalam sila ke-...", opts:["Kesatu","Ketiga","Kelima","Keempat"], a:2},
-  {tag:'UUD 1945', q:"UUD 1945 sebelum amandemen terdiri dari 16 bab, 37 pasal, 4 pasal aturan peralihan, dan 2 ayat aturan tambahan. UUD 1945 telah diamandemen sebanyak...", opts:["2 kali","3 kali","4 kali","5 kali"], a:2},
-  {tag:'UUD 1945', q:"Lembaga negara yang berwenang mengubah dan menetapkan UUD adalah...", opts:["Dewan Perwakilan Rakyat (DPR)","Majelis Permusyawaratan Rakyat (MPR)","Mahkamah Konstitusi (MK)","Presiden"], a:1},
-  {tag:'UUD 1945', q:"Sistem pemerintahan Indonesia menurut UUD 1945 hasil amandemen adalah...", opts:["Parlementer","Presidensial","Semi-presidensial","Monarki konstitusional"], a:1},
-  {tag:'NKRI', q:"Bentuk negara Indonesia berdasarkan Pasal 1 ayat (1) UUD 1945 adalah...", opts:["Kesatuan yang berbentuk Republik","Federasi","Kerajaan konstitusional","Konfederasi"], a:0},
-  {tag:'NKRI', q:"Upaya menjaga keutuhan NKRI dari ancaman disintegrasi dapat dilakukan melalui...", opts:["Pemerataan pembangunan dan penguatan rasa kebangsaan","Pembatasan hak berkumpul secara luas","Sentralisasi kekuasaan penuh di pusat","Pembatasan otonomi daerah secara total"], a:0},
-  {tag:'NKRI', q:"Wawasan Nusantara pada hakikatnya merupakan...", opts:["Cara pandang bangsa Indonesia tentang diri dan lingkungannya berdasarkan Pancasila dan UUD 1945","Strategi pertahanan militer semata","Kebijakan luar negeri bebas aktif","Pedoman hubungan diplomatik antarnegara ASEAN"], a:0},
-  {tag:'Bhinneka Tunggal Ika', q:"Semboyan \"Bhinneka Tunggal Ika\" diambil dari kitab...", opts:["Negarakertagama karya Mpu Prapanca","Sutasoma karya Mpu Tantular","Arjunawiwaha karya Mpu Kanwa","Pararaton"], a:1},
-  {tag:'Bhinneka Tunggal Ika', q:"Sikap yang mencerminkan pengamalan Bhinneka Tunggal Ika dalam kehidupan sehari-hari adalah...", opts:["Menghargai perbedaan suku, agama, dan budaya sebagai kekayaan bangsa","Memaksakan satu budaya tertentu berlaku bagi semua daerah","Membatasi interaksi dengan kelompok yang berbeda","Menganggap budaya sendiri paling unggul"], a:0},
-  {tag:'Nasionalisme', q:"Sikap mencintai dan menggunakan produk dalam negeri merupakan wujud nyata dari...", opts:["Nasionalisme ekonomi","Individualisme","Liberalisme pasar bebas","Proteksionisme sempit"], a:0},
-  {tag:'Nasionalisme', q:"Sumpah Pemuda yang menjadi tonggak persatuan bangsa Indonesia diikrarkan pada tahun...", opts:["1908","1928","1945","1949"], a:1},
-  {tag:'Integritas', q:"Integritas seorang ASN paling tepat dimaknai sebagai...", opts:["Kemampuan menyelesaikan pekerjaan secepat mungkin","Konsistensi antara ucapan, tindakan, dan nilai-nilai kejujuran meski tidak diawasi","Kepatuhan pada atasan tanpa mempertimbangkan aturan","Kemampuan bernegosiasi dengan pihak luar"], a:1},
-  {tag:'Integritas', q:"ASN yang berintegritas akan menolak gratifikasi dalam bentuk apa pun karena...", opts:["Gratifikasi dapat memengaruhi objektivitas dan melanggar kode etik","Gratifikasi hanya dilarang jika nominalnya besar","Gratifikasi hanya dilarang dari pihak asing","Gratifikasi diperbolehkan jika untuk kepentingan tim"], a:0},
-  {tag:'Bela Negara', q:"Contoh sikap bela negara dalam kehidupan sehari-hari bagi seorang ASN adalah...", opts:["Menjalankan tugas dengan penuh dedikasi dan taat aturan demi kepentingan pelayanan publik","Mengutamakan proyek yang menguntungkan pribadi","Bersikap acuh terhadap kebijakan pemerintah","Menyebarkan informasi tanpa verifikasi demi kecepatan"], a:0},
-  {tag:'Bela Negara', q:"Bela negara tidak hanya dimaknai sebagai keterlibatan fisik dalam pertahanan militer, tetapi juga mencakup...", opts:["Kontribusi dalam bidang pendidikan, ekonomi, dan pelayanan publik yang jujur","Keikutsertaan wajib dalam wajib militer","Penolakan terhadap kebijakan pemerintah","Netralitas total terhadap isu kebangsaan"], a:0},
-  {tag:'Bela Negara', q:"Salah satu bentuk bela negara dalam bidang pendidikan adalah...", opts:["Mendidik generasi muda dengan nilai kebangsaan dan cinta tanah air","Mewajibkan seragam militer di seluruh sekolah","Menghapus pelajaran sejarah dari kurikulum","Membatasi akses pendidikan bagi kelompok tertentu"], a:0},
-  {tag:'Bahasa Indonesia', q:"Kalimat berikut yang menggunakan ejaan sesuai kaidah kebahasaan yang tepat adalah...", opts:["Ia tinggal di Jakarta sejak tahun 2010.","Ia tinggal Di jakarta sejak Tahun 2010.","Ia tinggal dijakarta sejak tahun 2010.","Ia Tinggal di Jakarta Sejak Tahun 2010."], a:0},
-  {tag:'Bahasa Indonesia', q:"Kalimat efektif yang tepat untuk memperbaiki kalimat \"Para hadirin sekalian dimohon untuk berdiri\" adalah...", opts:["Hadirin dimohon berdiri.","Para hadirin sekalian dimohon semuanya berdiri.","Untuk para hadirin sekalian dimohon berdiri.","Para hadirin dimohon untuk semuanya berdiri."], a:0},
-  {tag:'Bahasa Indonesia', q:"Makna kata \"implementasi\" dalam kalimat \"Pemerintah melakukan implementasi kebijakan baru\" adalah...", opts:["Penerapan","Perencanaan","Evaluasi","Pembatalan"], a:0},
-  {tag:'Bahasa Indonesia', q:"Kalimat yang menggunakan kata baku dengan tepat adalah...", opts:["Ia membeli obat di apotek dekat rumah.","Ia membeli obat di apotik dekat rumah.","Ia membeli obat di apotheek dekat rumah.","Ia membeli obat di apotic dekat rumah."], a:0},
-  {tag:'Bahasa Indonesia', q:"Penulisan kalimat yang tepat sesuai kaidah penggunaan awalan \"di-\" dan kata depan \"di\" adalah...", opts:["Buku itu diletakkan di atas meja.","Buku itu di letakkan diatas meja.","Buku itu diletakkan diatas meja.","Buku itu di letakkan di atas meja."], a:0},
-  {tag:'Bahasa Indonesia', q:"Kalimat yang menggunakan tanda baca secara tepat adalah...", opts:["Ia membeli buku, pensil, dan penghapus di toko itu.","Ia membeli buku pensil dan penghapus, di toko itu.","Ia membeli buku, pensil dan, penghapus di toko itu.","Ia membeli, buku pensil dan penghapus di toko itu."], a:0},
+  // --- PANCASILA (12 soal) ---
+  {tag:'Pancasila',q:"Pancasila sebagai dasar negara Indonesia disahkan oleh PPKI pada tanggal...",opts:["17 Agustus 1945","18 Agustus 1945","1 Juni 1945","22 Juni 1945","29 Mei 1945"],a:1,
+   pembahasan:"PPKI mengesahkan Pancasila sebagai dasar negara pada 18 Agustus 1945, sehari setelah proklamasi. 1 Juni 1945 adalah pidato Soekarno tentang Pancasila di BPUPKI. 22 Juni 1945 adalah Piagam Jakarta."},
+  {tag:'Pancasila',q:"Nilai yang terkandung dalam sila ke-3 Pancasila, \"Persatuan Indonesia\", paling tepat dicerminkan oleh sikap...",opts:["Mengutamakan kepentingan pribadi di atas kepentingan bersama","Mengutamakan musyawarah dalam setiap pengambilan keputusan","Menempatkan persatuan dan kesatuan bangsa di atas kepentingan pribadi/golongan","Menghormati hak orang lain untuk beribadah","Mengembangkan sikap saling mencintai sesama manusia"],a:2,
+   pembahasan:"Sila ke-3 'Persatuan Indonesia' menekankan persatuan bangsa di atas kepentingan pribadi atau golongan. Musyawarah (opsi B) adalah sila ke-4. Menghormati ibadah adalah sila ke-1."},
+  {tag:'Pancasila',q:"Salah satu contoh penerapan sila keempat Pancasila dalam kehidupan berbangsa adalah...",opts:["Memaksakan pendapat pribadi dalam rapat","Mengutamakan musyawarah mufakat dalam pengambilan keputusan bersama","Mengambil keputusan sepihak tanpa berdiskusi","Mengabaikan pendapat kelompok minoritas","Memberikan suara tanpa mendengarkan pendapat lain"],a:1,
+   pembahasan:"Sila ke-4 'Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan' mengamanatkan musyawarah mufakat sebagai mekanisme pengambilan keputusan."},
+  {tag:'Pancasila',q:"Makna dari sila kedua Pancasila \"Kemanusiaan yang Adil dan Beradab\" adalah...",opts:["Mengutamakan kepentingan kelompok tertentu","Mengakui dan memperlakukan manusia sesuai dengan harkat dan martabatnya sebagai makhluk Tuhan","Membedakan perlakuan berdasarkan status sosial","Mengutamakan kekuasaan di atas nilai kemanusiaan","Mengutamakan kepentingan ekonomi di atas kemanusiaan"],a:1,
+   pembahasan:"Sila ke-2 menegaskan pengakuan terhadap harkat dan martabat manusia sebagai makhluk ciptaan Tuhan yang harus diperlakukan secara adil dan beradab."},
+  {tag:'Pancasila',q:"Nilai keadilan sosial bagi seluruh rakyat Indonesia tercermin dalam sila ke-...",opts:["Kesatu","Ketiga","Kelima","Keempat","Kedua"],a:2,
+   pembahasan:"Sila ke-5: 'Keadilan sosial bagi seluruh rakyat Indonesia'. Ini mencakup keadilan di bidang ekonomi, hukum, pendidikan, dan kesejahteraan."},
+  {tag:'Pancasila',q:"Rumusan Pancasila yang sah dan resmi tercantum dalam...",opts:["Piagam Jakarta","Pidato Soekarno 1 Juni 1945","Pembukaan UUD 1945 alinea ke-4","Dekrit Presiden 5 Juli 1959","Ketetapan MPR No. XVIII/MPR/1998"],a:2,
+   pembahasan:"Rumusan resmi Pancasila terdapat dalam Pembukaan UUD 1945 alinea ke-4. Piagam Jakarta memiliki rumusan berbeda (dengan 'tujuh kata'). Pidato 1 Juni adalah usulan awal."},
+  {tag:'Pancasila',q:"Pancasila sebagai ideologi terbuka mengandung makna bahwa Pancasila...",opts:["Dapat diubah sesuai perkembangan zaman","Bersifat kaku dan tidak dapat diinterpretasikan","Nilai-nilainya bersifat tetap namun dapat dikembangkan secara kreatif sesuai dinamika zaman","Hanya berlaku pada masa tertentu","Dapat digantikan oleh ideologi lain"],a:2,
+   pembahasan:"Pancasila sebagai ideologi terbuka berarti nilai dasarnya tetap (tidak berubah) namun dapat diinterpretasikan dan dikembangkan sesuai dinamika masyarakat tanpa kehilangan jati diri."},
+  {tag:'Pancasila',q:"Tokoh yang pertama kali mengusulkan istilah 'Pancasila' sebagai dasar negara adalah...",opts:["Mohammad Hatta","Soepomo","Muhammad Yamin","Ir. Soekarno","Ahmad Subardjo"],a:3,
+   pembahasan:"Ir. Soekarno pertama kali mengusulkan istilah 'Pancasila' dalam pidatonya di sidang BPUPKI pada 1 Juni 1945. Sebelumnya, Muhammad Yamin dan Soepomo juga menyampaikan usulan dasar negara."},
+  {tag:'Pancasila',q:"Nilai Ketuhanan dalam sila pertama Pancasila mengandung pengertian bahwa negara Indonesia...",opts:["Menganut satu agama resmi","Berdasarkan pada satu kepercayaan tertentu","Menjamin kebebasan beragama dan beribadah sesuai agama dan kepercayaan masing-masing","Memisahkan urusan agama dari negara sepenuhnya","Mewajibkan seluruh warga negara memeluk agama tertentu"],a:2,
+   pembahasan:"Sila pertama 'Ketuhanan Yang Maha Esa' menjamin kebebasan setiap warga negara untuk memeluk agama dan beribadah sesuai keyakinannya, bukan negara agama dan bukan pula negara sekuler."},
+  {tag:'Pancasila',q:"Butir-butir pengamalan Pancasila yang pernah ditetapkan melalui Ketetapan MPR, untuk sila ke-3 'Persatuan Indonesia' antara lain...",opts:["Menempatkan kepentingan negara di atas kepentingan pribadi","Mengakui persamaan derajat","Mengembangkan sikap saling mencintai","Musyawarah untuk mufakat","Tidak memaksakan kehendak"],a:0,
+   pembahasan:"Butir sila ke-3: cinta tanah air, bangga berbangsa Indonesia, memajukan pergaulan demi persatuan, dan menempatkan kepentingan bangsa di atas kepentingan pribadi/golongan."},
+  {tag:'Pancasila',q:"Pancasila sebagai sumber dari segala sumber hukum di Indonesia ditegaskan dalam...",opts:["UU No. 10 Tahun 2004","UU No. 12 Tahun 2011","TAP MPR No. III/MPR/2000","UU No. 15 Tahun 2019","Perpres No. 7 Tahun 2018"],a:1,
+   pembahasan:"UU No. 12 Tahun 2011 tentang Pembentukan Peraturan Perundang-undangan Pasal 2 menegaskan bahwa Pancasila merupakan sumber segala sumber hukum negara."},
+  {tag:'Pancasila',q:"Sikap yang mencerminkan pengamalan sila pertama Pancasila dalam kehidupan bernegara adalah...",opts:["Memaksakan agama tertentu kepada orang lain","Saling menghormati kebebasan menjalankan ibadah sesuai agama masing-masing","Mencampuradukkan ajaran agama","Mengabaikan perayaan hari besar keagamaan","Melarang pendirian rumah ibadah"],a:1,
+   pembahasan:"Pengamalan sila ke-1 adalah saling menghormati antarumat beragama dan memberikan kebebasan menjalankan ibadah sesuai keyakinan masing-masing."},
+
+  // --- UUD 1945 (12 soal) ---
+  {tag:'UUD 1945',q:"UUD 1945 telah diamandemen sebanyak...",opts:["2 kali","3 kali","4 kali","5 kali","6 kali"],a:2,
+   pembahasan:"UUD 1945 diamandemen 4 kali: 1999, 2000, 2001, dan 2002. Era Reformasi membawa perubahan besar pada konstitusi Indonesia."},
+  {tag:'UUD 1945',q:"Lembaga negara yang berwenang mengubah dan menetapkan UUD adalah...",opts:["Dewan Perwakilan Rakyat (DPR)","Majelis Permusyawaratan Rakyat (MPR)","Mahkamah Konstitusi (MK)","Presiden","Dewan Perwakilan Daerah (DPD)"],a:1,
+   pembahasan:"Pasal 3 ayat (1) UUD 1945: MPR berwenang mengubah dan menetapkan UUD. MPR terdiri dari anggota DPR dan DPD."},
+  {tag:'UUD 1945',q:"Sistem pemerintahan Indonesia menurut UUD 1945 hasil amandemen adalah...",opts:["Parlementer","Presidensial","Semi-presidensial","Monarki konstitusional","Federal"],a:1,
+   pembahasan:"Indonesia menganut sistem presidensial di mana presiden adalah kepala negara sekaligus kepala pemerintahan, dipilih langsung oleh rakyat, dan tidak bertanggung jawab kepada parlemen."},
+  {tag:'UUD 1945',q:"Pasal 1 ayat (3) UUD 1945 menyatakan bahwa 'Negara Indonesia adalah negara hukum'. Implikasi dari ketentuan ini adalah...",opts:["Pemerintah memiliki kekuasaan mutlak","Semua tindakan penyelenggara negara harus berdasarkan hukum yang berlaku","Hukum hanya berlaku untuk warga negara biasa","Hukum dapat diabaikan dalam keadaan darurat","Hanya presiden yang kebal hukum"],a:1,
+   pembahasan:"Konsekuensi negara hukum: semua penyelenggara negara dan warga negara tunduk pada hukum, ada pemisahan kekuasaan, perlindungan HAM, dan peradilan yang bebas."},
+  {tag:'UUD 1945',q:"Hak asasi manusia dalam UUD 1945 diatur terutama dalam...",opts:["Pasal 27 sampai 34","Pasal 28A sampai 28J","Pasal 29 sampai 30","Pasal 1 sampai 3","Pasal 22 sampai 25"],a:1,
+   pembahasan:"Pasal 28A-28J UUD 1945 (hasil amandemen kedua) secara spesifik mengatur tentang HAM, mencakup hak hidup, hak berkeluarga, hak perlindungan, hak kesejahteraan, dan lain-lain."},
+  {tag:'UUD 1945',q:"Presiden memegang kekuasaan pemerintahan menurut UUD 1945. Hal ini diatur dalam...",opts:["Pasal 3","Pasal 4 ayat (1)","Pasal 5","Pasal 6","Pasal 7"],a:1,
+   pembahasan:"Pasal 4 ayat (1): 'Presiden Republik Indonesia memegang kekuasaan pemerintahan menurut Undang-Undang Dasar.'"},
+  {tag:'UUD 1945',q:"Amandemen UUD 1945 yang pertama dilakukan pada tahun...",opts:["1998","1999","2000","2001","2002"],a:1,
+   pembahasan:"Amandemen pertama UUD 1945 dilakukan pada Sidang Umum MPR 1999 (14-21 Oktober 1999). Fokus utama: pembatasan kekuasaan presiden dan penguatan DPR."},
+  {tag:'UUD 1945',q:"Pasal 33 UUD 1945 mengatur tentang...",opts:["Pertahanan dan keamanan","Perekonomian nasional dan kesejahteraan sosial","Pendidikan dan kebudayaan","Agama","Bendera dan bahasa"],a:1,
+   pembahasan:"Pasal 33 UUD 1945: perekonomian disusun sebagai usaha bersama berdasarkan asas kekeluargaan; cabang produksi penting dikuasai negara; bumi dan air dan kekayaan alam dikuasai negara untuk sebesar-besar kemakmuran rakyat."},
+  {tag:'UUD 1945',q:"Menurut UUD 1945, DPR memiliki fungsi legislasi, anggaran, dan...",opts:["Yudikatif","Eksekutif","Pengawasan","Konsultatif","Mediasi"],a:2,
+   pembahasan:"Pasal 20A UUD 1945: DPR memiliki tiga fungsi — legislasi (membentuk UU), anggaran (menetapkan APBN), dan pengawasan (mengawasi pelaksanaan UU dan APBN)."},
+  {tag:'UUD 1945',q:"Mahkamah Konstitusi berwenang mengadili pada tingkat pertama dan terakhir yang putusannya bersifat final antara lain...",opts:["Perkara pidana korupsi","Menguji UU terhadap UUD","Sengketa tanah","Perkara perdata","Perkara tata usaha negara"],a:1,
+   pembahasan:"Pasal 24C UUD 1945: MK berwenang menguji UU terhadap UUD, memutus sengketa kewenangan lembaga negara, memutus pembubaran parpol, dan memutus perselisihan hasil pemilu."},
+  {tag:'UUD 1945',q:"Menurut UUD 1945, pemilihan umum (pemilu) diselenggarakan paling lama...",opts:["3 tahun sekali","4 tahun sekali","5 tahun sekali","6 tahun sekali","7 tahun sekali"],a:2,
+   pembahasan:"Pasal 22E UUD 1945: Pemilu dilaksanakan setiap 5 (lima) tahun sekali untuk memilih anggota DPR, DPD, Presiden dan Wakil Presiden, serta DPRD."},
+  {tag:'UUD 1945',q:"Perubahan UUD 1945 membawa dampak signifikan pada struktur kelembagaan negara. Salah satunya adalah...",opts:["Penghapusan DPR","Pembentukan Mahkamah Konstitusi","Penghapusan BPK","Pembentukan DPA","Penghapusan MPR"],a:1,
+   pembahasan:"Amandemen UUD 1945 membentuk lembaga baru seperti Mahkamah Konstitusi (MK), Komisi Yudisial (KY), dan Dewan Perwakilan Daerah (DPD), serta menghapus Dewan Pertimbangan Agung (DPA)."},
+
+  // --- NKRI (8 soal) ---
+  {tag:'NKRI',q:"Bentuk negara Indonesia berdasarkan Pasal 1 ayat (1) UUD 1945 adalah...",opts:["Kesatuan yang berbentuk Republik","Federasi","Kerajaan konstitusional","Konfederasi","Negara serikat"],a:0,
+   pembahasan:"Pasal 1 ayat (1): 'Negara Indonesia ialah Negara Kesatuan yang berbentuk Republik.' Ini menegaskan NKRI sebagai bentuk final."},
+  {tag:'NKRI',q:"Upaya menjaga keutuhan NKRI dari ancaman disintegrasi dapat dilakukan melalui...",opts:["Pemerataan pembangunan dan penguatan rasa kebangsaan","Pembatasan hak berkumpul secara luas","Sentralisasi kekuasaan penuh di pusat","Pembatasan otonomi daerah secara total","Pemisahan wilayah berdasarkan etnis"],a:0,
+   pembahasan:"Menjaga NKRI: pemerataan pembangunan, penguatan rasa kebangsaan, otonomi daerah yang proporsional, penegakan hukum, dan dialog antar kelompok."},
+  {tag:'NKRI',q:"Wawasan Nusantara pada hakikatnya merupakan...",opts:["Cara pandang bangsa Indonesia tentang diri dan lingkungannya berdasarkan Pancasila dan UUD 1945","Strategi pertahanan militer semata","Kebijakan luar negeri bebas aktif","Pedoman hubungan diplomatik antarnegara ASEAN","Konsep pembangunan ekonomi maritim"],a:0,
+   pembahasan:"Wawasan Nusantara adalah cara pandang bangsa Indonesia tentang diri dan lingkungan geografisnya sebagai satu kesatuan (politik, ekonomi, sosial budaya, dan pertahanan keamanan) berdasarkan Pancasila dan UUD 1945."},
+  {tag:'NKRI',q:"Konsep negara kesatuan yang dianut Indonesia mengandung arti bahwa...",opts:["Setiap daerah bisa membuat UUD sendiri","Kekuasaan tertinggi berada di tangan pemerintah pusat dan daerah hanya menjalankan","Daerah memiliki kedaulatan penuh","Pemerintah pusat dan daerah memiliki kedaulatan yang sejajar","Indonesia adalah gabungan negara-negara bagian"],a:1,
+   pembahasan:"Dalam negara kesatuan, kedaulatan tertinggi ada di pemerintah pusat. Daerah diberi otonomi untuk mengatur rumah tangganya sendiri namun tetap dalam kerangka NKRI."},
+  {tag:'NKRI',q:"Otonomi daerah di Indonesia diatur dalam UU No. 23 Tahun 2014 yang memberikan kewenangan kepada daerah untuk...",opts:["Mengatur dan mengurus sendiri urusan pemerintahan menurut asas otonomi dan tugas pembantuan","Membuat undang-undang sendiri","Mencetak uang sendiri","Menentukan hubungan luar negeri","Mengatur pertahanan dan keamanan"],a:0,
+   pembahasan:"UU No. 23/2014: Otonomi daerah adalah hak, wewenang, dan kewajiban daerah otonom untuk mengatur dan mengurus sendiri urusan pemerintahan dan kepentingan masyarakat setempat."},
+  {tag:'NKRI',q:"Deklarasi Djuanda 1957 sangat penting bagi NKRI karena...",opts:["Menetapkan batas wilayah Indonesia","Menyatakan bahwa laut di antara pulau-pulau Indonesia adalah wilayah NKRI","Memisahkan Indonesia dari Belanda","Membentuk provinsi baru","Menyatakan kemerdekaan Indonesia"],a:1,
+   pembahasan:"Deklarasi Djuanda 13 Desember 1957 menyatakan bahwa laut di antara dan di sekitar kepulauan Indonesia adalah bagian dari wilayah NKRI sebagai satu kesatuan (archipelagic state)."},
+  {tag:'NKRI',q:"Ancaman terhadap NKRI dapat berupa ancaman militer dan nonmiliter. Contoh ancaman nonmiliter adalah...",opts:["Invasi militer asing","Gerakan separatis bersenjata","Korupsi yang merusak sendi-sendi ekonomi dan kepercayaan publik","Agresi militer","Pelanggaran wilayah oleh negara lain"],a:2,
+   pembahasan:"Ancaman nonmiliter: korupsi, narkoba, degradasi lingkungan, krisis ekonomi, ideologi yang bertentangan dengan Pancasila, dan perang informasi/cyber."},
+  {tag:'NKRI',q:"Prinsip descentralisasi dalam NKRI berarti...",opts:["Semua kekuasaan di pusat","Penyerahan urusan pemerintahan dari pusat ke daerah","Penghapusan pemerintah daerah","Pemusatan semua kebijakan di Jakarta","Daerah tidak memiliki kewenangan apapun"],a:1,
+   pembahasan:"Desentralisasi adalah penyerahan urusan pemerintahan dari pemerintah pusat kepada daerah otonom berdasarkan asas otonomi. Kebalikannya adalah sentralisasi."},
+
+  // --- BHINNEKA TUNGGAL IKA (6 soal) ---
+  {tag:'Bhinneka Tunggal Ika',q:"Semboyan \"Bhinneka Tunggal Ika\" diambil dari kitab...",opts:["Negarakertagama karya Mpu Prapanca","Sutasoma karya Mpu Tantular","Arjunawiwaha karya Mpu Kanwa","Pararaton","Babad Tanah Jawi"],a:1,
+   pembahasan:"Semboyan Bhinneka Tunggal Ika berasal dari kitab Sutasoma karangan Mpu Tantular pada masa Kerajaan Majapahit abad ke-14. Artinya: berbeda-beda tetapi tetap satu."},
+  {tag:'Bhinneka Tunggal Ika',q:"Sikap yang mencerminkan pengamalan Bhinneka Tunggal Ika dalam kehidupan sehari-hari adalah...",opts:["Menghargai perbedaan suku, agama, dan budaya sebagai kekayaan bangsa","Memaksakan satu budaya tertentu berlaku bagi semua daerah","Membatasi interaksi dengan kelompok yang berbeda","Menganggap budaya sendiri paling unggul","Mengisolasi diri dari keberagaman"],a:0,
+   pembahasan:"Bhinneka Tunggal Ika mengajarkan toleransi dan penghargaan terhadap perbedaan. Keberagaman adalah kekayaan bangsa, bukan sumber perpecahan."},
+  {tag:'Bhinneka Tunggal Ika',q:"Faktor yang dapat memperkuat persatuan dalam keberagaman Indonesia adalah...",opts:["Etnosentrisme","Primordialisme","Toleransi dan saling menghormati","Eksklusivisme","Fanatisme sempit"],a:2,
+   pembahasan:"Toleransi dan saling menghormati adalah kunci memperkuat persatuan. Etnosentrisme dan primordialisme justru melemahkan persatuan."},
+  {tag:'Bhinneka Tunggal Ika',q:"Pancasila sebagai dasar negara berfungsi sebagai pemersatu bangsa karena...",opts:["Memaksakan satu agama","Mengakomodasi keberagaman dalam satu bingkai kebangsaan","Menghilangkan perbedaan suku","Menyamaratakan semua budaya daerah","Mengabaikan hak minoritas"],a:1,
+   pembahasan:"Pancasila mengakomodasi keberagaman suku, agama, ras, dan golongan dalam bingkai NKRI tanpa menghilangkan identitas masing-masing."},
+  {tag:'Bhinneka Tunggal Ika',q:"Semboyan Bhinneka Tunggal Ika secara resmi menjadi semboyan negara Indonesia berdasarkan...",opts:["PP No. 66 Tahun 1951","UU No. 24 Tahun 2009","Perpres No. 35 Tahun 2010","TAP MPR No. II/MPR/1998","Inpres No. 1 Tahun 1990"],a:0,
+   pembahasan:"PP No. 66 Tahun 1951 tentang Lambang Negara menetapkan Bhinneka Tunggal Ika sebagai semboyan pada Garuda Pancasila."},
+  {tag:'Bhinneka Tunggal Ika',q:"Dalam konteks kehidupan berbangsa, prinsip Bhinneka Tunggal Ika menekankan pentingnya...",opts:["Uniformitas dalam semua aspek kehidupan","Persatuan tanpa menghilangkan identitas dan keragaman","Dominasi mayoritas terhadap minoritas","Pemisahan kelompok berdasarkan identitas","Penyeragaman budaya nasional"],a:1,
+   pembahasan:"Bhinneka Tunggal Ika: persatuan dalam keragaman. Keberbedaan suku, agama, ras, dan golongan disatukan dalam identitas nasional Indonesia."},
+
+  // --- SEJARAH INDONESIA (12 soal) ---
+  {tag:'Sejarah Nasional',q:"Sumpah Pemuda yang menjadi tonggak persatuan bangsa Indonesia diikrarkan pada tahun...",opts:["1908","1928","1945","1949","1966"],a:1,
+   pembahasan:"Sumpah Pemuda diikrarkan pada 28 Oktober 1928 dalam Kongres Pemuda II di Jakarta. Isinya: satu tanah air, satu bangsa, dan satu bahasa — Indonesia."},
+  {tag:'Sejarah Nasional',q:"Organisasi pergerakan nasional pertama di Indonesia adalah...",opts:["Sarekat Islam","Budi Utomo","Indische Partij","Partai Nasional Indonesia","Muhammadiyah"],a:1,
+   pembahasan:"Budi Utomo didirikan pada 20 Mei 1908 oleh dr. Wahidin Sudirohusodo dan para mahasiswa STOVIA. Tanggal ini kemudian diperingati sebagai Hari Kebangkitan Nasional."},
+  {tag:'Sejarah Nasional',q:"Proklamasi kemerdekaan Indonesia dikumandangkan pada...",opts:["16 Agustus 1945","17 Agustus 1945","18 Agustus 1945","19 Agustus 1945","20 Agustus 1945"],a:1,
+   pembahasan:"Proklamasi kemerdekaan Indonesia dibacakan oleh Ir. Soekarno pada hari Jumat, 17 Agustus 1945 pukul 10.00 WIB di Jalan Pegangsaan Timur No. 56, Jakarta."},
+  {tag:'Sejarah Nasional',q:"Peristiwa Rengasdengklok adalah...",opts:["Pertempuran melawan Jepang","Penculikan Soekarno-Hatta oleh golongan muda untuk segera memproklamasikan kemerdekaan","Pembentukan BPUPKI","Perjanjian dengan Belanda","Penandatanganan Piagam Jakarta"],a:1,
+   pembahasan:"Pada 16 Agustus 1945, golongan muda (Sukarni, Chaerul Saleh, dll) membawa Soekarno-Hatta ke Rengasdengklok untuk mendesak agar proklamasi segera dilakukan tanpa menunggu Jepang."},
+  {tag:'Sejarah Nasional',q:"Konferensi Meja Bundar (KMB) tahun 1949 menghasilkan...",opts:["Kemerdekaan penuh Indonesia","Pengakuan kedaulatan Indonesia oleh Belanda dalam bentuk RIS","Pembentukan NKRI","Penyerahan Irian Barat","Pembentukan ASEAN"],a:1,
+   pembahasan:"KMB (23 Agustus – 2 November 1949) di Den Haag menghasilkan: Belanda mengakui kedaulatan Indonesia dalam bentuk Republik Indonesia Serikat (RIS). RIS kemudian kembali ke NKRI pada 17 Agustus 1950."},
+  {tag:'Sejarah Nasional',q:"Dekrit Presiden 5 Juli 1959 dikeluarkan karena...",opts:["Terjadi pemberontakan G30S/PKI","Konstituante gagal menyusun UUD baru","Indonesia diserang Belanda","Terjadi krisis ekonomi","Indonesia keluar dari PBB"],a:1,
+   pembahasan:"Dekrit Presiden 5 Juli 1959: membubarkan Konstituante, memberlakukan kembali UUD 1945, dan tidak berlakunya UUDS 1950. Dikeluarkan karena Konstituante gagal menyusun UUD baru."},
+  {tag:'Sejarah Nasional',q:"Supersemar (Surat Perintah Sebelas Maret) 1966 memberikan wewenang kepada...",opts:["Ir. Soekarno untuk membubarkan PKI","Soeharto untuk mengambil tindakan mengamankan negara","DPR untuk mengubah UUD","Mahkamah Agung untuk mengadili koruptor","TNI untuk melakukan operasi militer"],a:1,
+   pembahasan:"Supersemar 11 Maret 1966: Presiden Soekarno memberikan mandat kepada Letjen Soeharto untuk mengambil segala tindakan yang dianggap perlu untuk mengamankan negara pasca G30S/PKI."},
+  {tag:'Sejarah Nasional',q:"Reformasi 1998 ditandai dengan peristiwa penting, yaitu...",opts:["Kemenangan Indonesia di Piala Dunia","Pengunduran diri Presiden Soeharto","Pembentukan ASEAN","Kembalinya Indonesia ke PBB","Pemilu pertama Indonesia"],a:1,
+   pembahasan:"Gerakan Reformasi 1998 mencapai puncaknya pada 21 Mei 1998 dengan pengunduran diri Presiden Soeharto setelah 32 tahun berkuasa. Ini membuka era demokrasi dan reformasi di Indonesia."},
+  {tag:'Sejarah Nasional',q:"BPUPKI (Badan Penyelidik Usaha-usaha Persiapan Kemerdekaan Indonesia) dibentuk pada tanggal...",opts:["1 Maret 1945","29 April 1945","1 Juni 1945","17 Agustus 1945","18 Agustus 1945"],a:1,
+   pembahasan:"BPUPKI (Dokuritsu Junbi Cosakai) dibentuk pada 29 April 1945 dan diketuai oleh dr. Rajiman Wedyodiningrat. Tugasnya: menyelidiki dan mempersiapkan kemerdekaan Indonesia."},
+  {tag:'Sejarah Nasional',q:"Pemilu pertama di Indonesia pada tahun 1955 bertujuan untuk memilih...",opts:["Presiden dan Wakil Presiden","Anggota DPR dan Konstituante","Gubernur","Hanya anggota DPR","Hanya Konstituante"],a:1,
+   pembahasan:"Pemilu 1955: memilih anggota DPR (29 September 1955) dan anggota Konstituante (15 Desember 1955). Ini adalah pemilu pertama dan paling demokratis di Indonesia."},
+  {tag:'Sejarah Nasional',q:"Trikora (Tri Komando Rakyat) yang dicanangkan Presiden Soekarno pada 1961 bertujuan untuk...",opts:["Mengusir Portugis dari Timor Timur","Membebaskan Irian Barat dari Belanda","Mengusir Jepang dari Indonesia","Membantu Malaysia merdeka","Mengirim pasukan ke Kongo"],a:1,
+   pembahasan:"Trikora 19 Desember 1961: gagalkan pembentukan negara boneka Papua, kibarkan bendera Merah Putih di Irian Barat, dan bersiaplah untuk mobilisasi umum. Irian Barat akhirnya kembali ke Indonesia pada 1963."},
+  {tag:'Sejarah Nasional',q:"Politik Etis (Politik Balas Budi) yang diterapkan Belanda di Indonesia mencakup tiga program, yaitu...",opts:["Irigasi, emigrasi, dan edukasi","Militer, ekonomi, dan politik","Pertanian, perdagangan, dan industri","Kesehatan, transportasi, dan komunikasi","Agama, budaya, dan hukum"],a:0,
+   pembahasan:"Politik Etis (1901): irigasi (pengairan), emigrasi (transmigrasi), dan edukasi (pendidikan). Program ini membuka akses pendidikan bagi pribumi yang kemudian melahirkan kaum terpelajar dan pergerakan nasional."},
+
+  // --- NASIONALISME (8 soal) ---
+  {tag:'Nasionalisme',q:"Sikap mencintai dan menggunakan produk dalam negeri merupakan wujud nyata dari...",opts:["Nasionalisme ekonomi","Individualisme","Liberalisme pasar bebas","Proteksionisme sempit","Kolonialisme modern"],a:0,
+   pembahasan:"Nasionalisme ekonomi adalah sikap mengutamakan produk dalam negeri untuk memperkuat kemandirian ekonomi bangsa. Ini adalah wujud cinta tanah air dalam bidang ekonomi."},
+  {tag:'Nasionalisme',q:"Nasionalisme dalam konteks Indonesia memiliki ciri khas yang membedakannya dari nasionalisme Barat, yaitu...",opts:["Individualistis","Mengedepankan persatuan dan gotong royong","Materialistis","Ekspansionis","Chauvinistik"],a:1,
+   pembahasan:"Nasionalisme Indonesia bercirikan persatuan, gotong royong, dan kebersamaan. Berbeda dengan nasionalisme Barat yang cenderung individualistis dan chauvinistik."},
+  {tag:'Nasionalisme',q:"Nilai-nilai nasionalisme dapat ditanamkan melalui...",opts:["Pendidikan kewarganegaraan dan penguatan karakter bangsa","Pembatasan akses informasi global","Isolasi budaya","Pengabaian sejarah bangsa","Penolakan terhadap budaya asing"],a:0,
+   pembahasan:"Nasionalisme ditanamkan melalui pendidikan kewarganegaraan, penguatan karakter, pembelajaran sejarah, dan keteladanan pemimpin. Bukan dengan isolasi atau penolakan budaya asing."},
+  {tag:'Nasionalisme',q:"Salah satu tantangan nasionalisme di era globalisasi adalah...",opts:["Meningkatnya rasa cinta tanah air","Lunturnya identitas nasional akibat pengaruh budaya asing","Menguatnya ekonomi nasional","Berkurangnya konflik antar bangsa","Meningkatnya partisipasi politik"],a:1,
+   pembahasan:"Globalisasi membawa tantangan berupa lunturnya identitas nasional, masuknya budaya asing yang tidak sesuai nilai Pancasila, dan pola hidup konsumtif yang mengikis nasionalisme."},
+  {tag:'Nasionalisme',q:"Hari Kebangkitan Nasional diperingati setiap tanggal 20 Mei untuk mengenang...",opts:["Proklamasi kemerdekaan","Berdirinya Budi Utomo","Sumpah Pemuda","Hari Pahlawan","Pembentukan BPUPKI"],a:1,
+   pembahasan:"20 Mei 1908: berdirinya Budi Utomo, organisasi pergerakan nasional pertama. Ditetapkan sebagai Hari Kebangkitan Nasional oleh Presiden Soekarno pada 1948."},
+  {tag:'Nasionalisme',q:"Sikap nasionalisme yang tepat bagi seorang ASN adalah...",opts:["Mengutamakan kepentingan pribadi","Bekerja dengan penuh dedikasi dan integritas untuk kemajuan bangsa","Mengabaikan pelayanan publik","Mementingkan golongan tertentu","Bekerja hanya untuk mencari keuntungan pribadi"],a:1,
+   pembahasan:"ASN yang nasionalis bekerja dengan dedikasi dan integritas, mengutamakan kepentingan bangsa dan negara di atas kepentingan pribadi atau golongan."},
+  {tag:'Nasionalisme',q:"Pancasila sebagai ideologi nasional berfungsi sebagai...",opts:["Alat kekuasaan pemerintah","Perekat persatuan dan identitas bangsa","Dokumen sejarah semata","Simbol tanpa makna","Alat propaganda politik"],a:1,
+   pembahasan:"Pancasila adalah ideologi pemersatu bangsa, identitas nasional, dan pedoman dalam kehidupan berbangsa dan bernegara."},
+  {tag:'Nasionalisme',q:"Contoh sikap nasionalisme dalam kehidupan sehari-hari adalah...",opts:["Mengabaikan budaya Indonesia","Menggunakan bahasa Indonesia dengan baik dan benar","Menganggap budaya asing lebih unggul","Meremehkan produk dalam negeri","Tidak peduli dengan sejarah bangsa"],a:1,
+   pembahasan:"Menggunakan bahasa Indonesia dengan baik dan benar, bangga menggunakan produk dalam negeri, dan menghormati simbol-simbol negara adalah wujud nasionalisme sehari-hari."},
+
+  // --- INTEGRITAS (6 soal) ---
+  {tag:'Integritas',q:"Integritas seorang ASN paling tepat dimaknai sebagai...",opts:["Kemampuan menyelesaikan pekerjaan secepat mungkin","Konsistensi antara ucapan, tindakan, dan nilai-nilai kejujuran meski tidak diawasi","Kepatuhan pada atasan tanpa mempertimbangkan aturan","Kemampuan bernegosiasi dengan pihak luar","Kemampuan mencari keuntungan dari jabatan"],a:1,
+   pembahasan:"Integritas adalah keutuhan pribadi: konsistensi antara ucapan, tindakan, nilai, dan prinsip moral. ASN berintegritas tetap jujur meski tidak ada yang mengawasi."},
+  {tag:'Integritas',q:"ASN yang berintegritas akan menolak gratifikasi dalam bentuk apa pun karena...",opts:["Gratifikasi dapat memengaruhi objektivitas dan melanggar kode etik","Gratifikasi hanya dilarang jika nominalnya besar","Gratifikasi hanya dilarang dari pihak asing","Gratifikasi diperbolehkan jika untuk kepentingan tim","Gratifikasi adalah bagian dari budaya kerja"],a:0,
+   pembahasan:"Gratifikasi dapat mempengaruhi objektivitas dan integritas ASN. UU No. 20/2001 jo UU No. 31/1999 tentang Pemberantasan Tindak Pidana Korupsi mengatur tentang gratifikasi."},
+  {tag:'Integritas',q:"Nilai-nilai dasar ASN yang dikenal dengan 'BerAKHLAK' mencakup...",opts:["Berorientasi pelayanan, Akuntabel, Kompeten, Harmonis, Loyal, Adaptif, Kolaboratif","Berani, Aktif, Kreatif, Harmonis, Lincah, Adaptif, Kritis","Bersih, Akuntabel, Kreatif, Harmonis, Luwes, Amanah, Kompeten","Berintegritas, Aktif, Kompeten, Harmonis, Loyal, Amanah, Kritis","Berwibawa, Akuntabel, Kompeten, Harmonis, Loyal, Adaptif, Kreatif"],a:0,
+   pembahasan:"BerAKHLAK: Berorientasi pelayanan, Akuntabel, Kompeten, Harmonis, Loyal, Adaptif, Kolaboratif. Ini adalah core values ASN yang ditetapkan melalui Surat Edaran Menteri PANRB."},
+  {tag:'Integritas',q:"Komisi Pemberantasan Korupsi (KPK) dibentuk berdasarkan...",opts:["UU No. 30 Tahun 2002","UU No. 20 Tahun 2001","UU No. 31 Tahun 1999","UU No. 28 Tahun 1999","UU No. 15 Tahun 2002"],a:0,
+   pembahasan:"KPK dibentuk berdasarkan UU No. 30 Tahun 2002 tentang Komisi Pemberantasan Tindak Pidana Korupsi. KPK memiliki tugas melakukan pemberantasan korupsi secara profesional, intensif, dan berkesinambungan."},
+  {tag:'Integritas',q:"Salah satu bentuk nyata integritas dalam pelayanan publik adalah...",opts:["Menerima hadiah sebagai ucapan terima kasih","Transparansi dalam setiap proses pelayanan dan tidak memungut biaya di luar ketentuan","Memberikan pelayanan lebih cepat kepada yang dikenal","Mengutamakan pelayanan bagi yang membayar lebih","Memperlambat proses untuk mendapatkan keuntungan"],a:1,
+   pembahasan:"Integritas dalam pelayanan publik: transparansi, tidak memungut biaya di luar ketentuan (pungli), memberikan pelayanan yang sama rata tanpa diskriminasi."},
+  {tag:'Integritas',q:"Whistleblower (pengungkap fakta) dalam konteks integritas ASN adalah...",opts:["Orang yang membocorkan rahasia negara","Orang yang melaporkan dugaan pelanggaran/korupsi yang diketahui di lingkungan kerjanya","Orang yang menyebarkan gosip tentang rekan kerja","Orang yang mengkritik pemerintah di media sosial","Orang yang membocorkan data pribadi warga"],a:1,
+   pembahasan:"Whistleblower adalah seseorang yang melaporkan dugaan tindak pidana korupsi atau pelanggaran yang terjadi di dalam organisasi tempatnya bekerja. Mereka dilindungi oleh UU."},
+
+  // --- BELA NEGARA (6 soal) ---
+  {tag:'Bela Negara',q:"Bela negara tidak hanya dimaknai sebagai keterlibatan fisik dalam pertahanan militer, tetapi juga mencakup...",opts:["Kontribusi dalam bidang pendidikan, ekonomi, dan pelayanan publik yang jujur","Keikutsertaan wajib dalam wajib militer","Penolakan terhadap kebijakan pemerintah","Netralitas total terhadap isu kebangsaan","Penyerahan seluruh kekayaan pribadi kepada negara"],a:0,
+   pembahasan:"Bela negara adalah sikap, tekad, dan tindakan warga negara dalam menjaga kedaulatan negara, keutuhan wilayah, dan keselamatan bangsa, bisa melalui profesi dan kontribusi di berbagai bidang."},
+  {tag:'Bela Negara',q:"Dasar hukum bela negara di Indonesia diatur dalam...",opts:["Pasal 27 ayat (3) UUD 1945","Pasal 28 UUD 1945","Pasal 29 UUD 1945","Pasal 30 UUD 1945","Pasal 31 UUD 1945"],a:0,
+   pembahasan:"Pasal 27 ayat (3): 'Setiap warga negara berhak dan wajib ikut serta dalam upaya pembelaan negara.'"},
+  {tag:'Bela Negara',q:"Contoh sikap bela negara dalam kehidupan sehari-hari bagi seorang ASN adalah...",opts:["Menjalankan tugas dengan penuh dedikasi dan taat aturan demi kepentingan pelayanan publik","Mengutamakan proyek yang menguntungkan pribadi","Bersikap acuh terhadap kebijakan pemerintah","Menyebarkan informasi tanpa verifikasi demi kecepatan","Mengabaikan tugas demi kepentingan pribadi"],a:0,
+   pembahasan:"ASN berperan dalam bela negara melalui pelayanan publik yang prima, dedikasi, dan ketaatan pada aturan untuk kemajuan bangsa."},
+  {tag:'Bela Negara',q:"Salah satu bentuk bela negara dalam bidang pendidikan adalah...",opts:["Mendidik generasi muda dengan nilai kebangsaan dan cinta tanah air","Mewajibkan seragam militer di seluruh sekolah","Menghapus pelajaran sejarah dari kurikulum","Membatasi akses pendidikan bagi kelompok tertentu","Mengajarkan ideologi asing di sekolah"],a:0,
+   pembahasan:"Bela negara di bidang pendidikan: menanamkan nilai-nilai kebangsaan, cinta tanah air, dan karakter Pancasila kepada generasi muda."},
+  {tag:'Bela Negara',q:"Ancaman terhadap kedaulatan negara di era digital yang harus dihadapi melalui bela negara adalah...",opts:["Perang nuklir","Penyebaran hoaks, ujaran kebencian, dan radikalisme melalui media sosial","Invasi militer asing","Perang dagang","Blokade ekonomi"],a:1,
+   pembahasan:"Di era digital, bela negara mencakup perlawanan terhadap hoaks, ujaran kebencian, radikalisme online, dan serangan siber yang dapat memecah belah bangsa."},
+  {tag:'Bela Negara',q:"Komponen cadangan (komcad) dalam sistem pertahanan Indonesia diatur dalam...",opts:["UU No. 23 Tahun 2019","UU No. 3 Tahun 2002","UU No. 34 Tahun 2004","UU No. 2 Tahun 2002","UU No. 16 Tahun 2019"],a:0,
+   pembahasan:"UU No. 23 Tahun 2019 tentang Pengelolaan Sumber Daya Nasional untuk Pertahanan Negara mengatur pembentukan komponen cadangan sebagai bagian dari sistem pertahanan semesta."},
+
+  // --- LEMBAGA NEGARA (8 soal) ---
+  {tag:'Lembaga Negara',q:"Lembaga yang memiliki kewenangan melakukan pengujian undang-undang terhadap UUD 1945 adalah...",opts:["Mahkamah Agung (MA)","Mahkamah Konstitusi (MK)","Dewan Perwakilan Rakyat (DPR)","Badan Pemeriksa Keuangan (BPK)","Komisi Yudisial (KY)"],a:1,
+   pembahasan:"Pasal 24C UUD 1945: MK berwenang menguji UU terhadap UUD. MA menguji peraturan di bawah UU terhadap UU."},
+  {tag:'Lembaga Negara',q:"Komisi Yudisial (KY) memiliki kewenangan utama yaitu...",opts:["Mengadili perkara korupsi","Mengusulkan pengangkatan hakim agung dan menjaga kehormatan serta perilaku hakim","Membuat undang-undang","Memeriksa keuangan negara","Mengawasi jalannya pemerintahan"],a:1,
+   pembahasan:"Pasal 24B UUD 1945: KY berwenang mengusulkan pengangkatan hakim agung dan mempunyai wewenang lain dalam rangka menjaga dan menegakkan kehormatan, keluhuran martabat, serta perilaku hakim."},
+  {tag:'Lembaga Negara',q:"Badan Pemeriksa Keuangan (BPK) bertugas...",opts:["Membuat anggaran negara","Memeriksa pengelolaan dan tanggung jawab keuangan negara","Menetapkan pajak","Mengawasi kinerja menteri","Mengadili sengketa keuangan negara"],a:1,
+   pembahasan:"Pasal 23E UUD 1945: BPK bertugas memeriksa pengelolaan dan tanggung jawab keuangan negara. Hasil pemeriksaan diserahkan kepada DPR, DPD, dan DPRD."},
+  {tag:'Lembaga Negara',q:"Dewan Perwakilan Daerah (DPD) adalah lembaga yang mewakili...",opts:["Partai politik","Daerah provinsi","Organisasi masyarakat","Pemerintah pusat","Lembaga swadaya masyarakat"],a:1,
+   pembahasan:"Pasal 22C UUD 1945: Anggota DPD dipilih dari setiap provinsi melalui pemilu. DPD mewakili kepentingan daerah di tingkat nasional."},
+  {tag:'Lembaga Negara',q:"Hak angket yang dimiliki DPR adalah...",opts:["Hak untuk mengajukan RUU","Hak untuk melakukan penyelidikan terhadap kebijakan pemerintah","Hak untuk menyatakan pendapat","Hak untuk bertanya kepada presiden","Hak untuk mengangkat menteri"],a:1,
+   pembahasan:"Hak angket: hak DPR untuk melakukan penyelidikan terhadap pelaksanaan suatu UU dan/atau kebijakan pemerintah yang diduga bertentangan dengan peraturan perundang-undangan."},
+  {tag:'Lembaga Negara',q:"Mahkamah Agung (MA) adalah lembaga...",opts:["Legislatif","Eksekutif","Yudikatif","Federatif","Eksaminatif"],a:2,
+   pembahasan:"MA adalah lembaga yudikatif (kekuasaan kehakiman) tertinggi bersama MK. MA membawahi peradilan umum, agama, militer, dan tata usaha negara."},
+  {tag:'Lembaga Negara',q:"Presiden dalam menjalankan kekuasaan pemerintahan dibantu oleh...",opts:["Hanya Wakil Presiden","Menteri-menteri negara","DPR dan DPD","Mahkamah Agung","BPK"],a:1,
+   pembahasan:"Pasal 17 UUD 1945: Presiden dibantu oleh menteri-menteri negara. Menteri diangkat dan diberhentikan oleh Presiden."},
+  {tag:'Lembaga Negara',q:"Kekuasaan kehakiman di Indonesia dilakukan oleh Mahkamah Agung dan badan peradilan di bawahnya, serta oleh...",opts:["Kejaksaan Agung","Mahkamah Konstitusi","Kepolisian","Komisi Yudisial","KPK"],a:1,
+   pembahasan:"Pasal 24 ayat (2): Kekuasaan kehakiman dilakukan oleh MA dan badan peradilan di bawahnya, dan oleh MK. Kekuasaan kehakiman adalah kekuasaan yang merdeka."},
+
+  // --- BAHASA INDONESIA (10 soal) ---
+  {tag:'Bahasa Indonesia',q:"Kalimat berikut yang menggunakan ejaan sesuai kaidah kebahasaan yang tepat adalah...",opts:["Ia tinggal di Jakarta sejak tahun 2010.","Ia tinggal Di jakarta sejak Tahun 2010.","Ia tinggal dijakarta sejak tahun 2010.","Ia Tinggal di Jakarta Sejak Tahun 2010.","Ia tinggal di Jakarta sejak Tahun 2010."],a:0,
+   pembahasan:"'di' sebagai kata depan ditulis terpisah. 'Jakarta' nama kota huruf kapital. 'tahun' bukan kata khusus jadi huruf kecil. 'Ia' di awal kalimat huruf kapital."},
+  {tag:'Bahasa Indonesia',q:"Kalimat efektif yang tepat untuk memperbaiki kalimat \"Para hadirin sekalian dimohon untuk berdiri\" adalah...",opts:["Hadirin dimohon berdiri.","Para hadirin sekalian dimohon semuanya berdiri.","Untuk para hadirin sekalian dimohon berdiri.","Para hadirin dimohon untuk semuanya berdiri.","Hadirin sekalian dimohon untuk berdiri."],a:0,
+   pembahasan:"Kata 'hadirin' sudah bermakna jamak, sehingga 'para' dan 'sekalian' tidak perlu (pleonasme). 'Hadirin dimohon berdiri' adalah kalimat efektif."},
+  {tag:'Bahasa Indonesia',q:"Makna kata \"implementasi\" dalam kalimat \"Pemerintah melakukan implementasi kebijakan baru\" adalah...",opts:["Penerapan","Perencanaan","Evaluasi","Pembatalan","Pengawasan"],a:0,
+   pembahasan:"Implementasi = penerapan, pelaksanaan. Kata ini berasal dari bahasa Inggris 'implementation' yang berarti pelaksanaan atau penerapan."},
+  {tag:'Bahasa Indonesia',q:"Kalimat yang menggunakan kata baku dengan tepat adalah...",opts:["Ia membeli obat di apotek dekat rumah.","Ia membeli obat di apotik dekat rumah.","Ia membeli obat di apotheek dekat rumah.","Ia membeli obat di apotic dekat rumah.","Ia membeli obat di apotique dekat rumah."],a:0,
+   pembahasan:"Kata baku yang benar adalah 'apotek', bukan 'apotik', 'apotheek', atau 'apotic'. Penyerapan dari bahasa Belanda 'apotheek' menjadi 'apotek'."},
+  {tag:'Bahasa Indonesia',q:"Penulisan kalimat yang tepat sesuai kaidah penggunaan awalan \"di-\" dan kata depan \"di\" adalah...",opts:["Buku itu diletakkan di atas meja.","Buku itu di letakkan diatas meja.","Buku itu diletakkan diatas meja.","Buku itu di letakkan di atas meja.","Buku itu di letakan diatas meja."],a:0,
+   pembahasan:"Awalan 'di-' (pasif) ditulis serangkai: 'diletakkan'. Kata depan 'di' ditulis terpisah: 'di atas'. 'diatas' tanpa spasi salah."},
+  {tag:'Bahasa Indonesia',q:"Kalimat yang menggunakan tanda baca secara tepat adalah...",opts:["Ia membeli buku, pensil, dan penghapus di toko itu.","Ia membeli buku pensil dan penghapus, di toko itu.","Ia membeli buku, pensil dan, penghapus di toko itu.","Ia membeli, buku pensil dan penghapus di toko itu.","Ia membeli buku pensil, dan penghapus di toko itu."],a:0,
+   pembahasan:"Tanda koma digunakan untuk memisahkan unsur dalam perincian. Penempatan koma sebelum 'dan' pada perincian lebih dari dua unsur adalah opsional namun dianjurkan dalam EYD."},
+  {tag:'Bahasa Indonesia',q:"Fungsi bahasa Indonesia sebagai bahasa negara tercantum dalam...",opts:["Pasal 36 UUD 1945","Pasal 35 UUD 1945","Pasal 32 UUD 1945","Pasal 28 UUD 1945","Pasal 30 UUD 1945"],a:0,
+   pembahasan:"Pasal 36 UUD 1945: 'Bahasa Negara ialah Bahasa Indonesia.' Pasal 36C: 'Ketentuan lebih lanjut tentang Bendera, Bahasa, dan Lambang Negara, serta Lagu Kebangsaan diatur dengan undang-undang.'"},
+  {tag:'Bahasa Indonesia',q:"Kata serapan yang tepat dari bahasa Inggris 'quality' adalah...",opts:["Kwalitas","Kualitas","Kwalitet","Kualitet","Quality"],a:1,
+   pembahasan:"'Quality' diserap menjadi 'kualitas'. Penyerapan: 'qu' menjadi 'ku', 'ty' menjadi 'tas'. Contoh lain: quantity → kuantitas, university → universitas."},
+  {tag:'Bahasa Indonesia',q:"Penggunaan huruf kapital yang benar terdapat pada kalimat...",opts:["Presiden Joko Widodo meresmikan gedung baru.","Presiden joko widodo meresmikan gedung baru.","presiden Joko Widodo meresmikan gedung baru.","Presiden joko Widodo meresmikan gedung baru.","Presiden Joko widodo meresmikan gedung baru."],a:0,
+   pembahasan:"Nama jabatan diikuti nama orang: huruf kapital. Nama orang: semua kata huruf kapital. 'Presiden' di awal kalimat: huruf kapital."},
+  {tag:'Bahasa Indonesia',q:"Paragraf yang kalimat utamanya terletak di awal paragraf disebut paragraf...",opts:["Induktif","Deduktif","Campuran","Naratif","Deskriptif"],a:1,
+   pembahasan:"Paragraf deduktif: kalimat utama di awal paragraf, diikuti kalimat penjelas. Paragraf induktif: kalimat utama di akhir. Campuran: di awal dan di akhir."},
+
+  // --- HAM (6 soal) ---
+  {tag:'HAM',q:"Hak asasi manusia adalah hak yang...",opts:["Diberikan oleh negara","Melekat pada diri setiap manusia sejak lahir sebagai anugerah Tuhan","Dapat dicabut sewaktu-waktu","Hanya berlaku bagi warga negara tertentu","Tergantung pada status sosial"],a:1,
+   pembahasan:"HAM adalah hak yang melekat (inherent) pada setiap manusia sejak lahir, bersifat universal, tidak dapat dicabut, dan tidak dapat dipisahkan."},
+  {tag:'HAM',q:"Komnas HAM dibentuk berdasarkan...",opts:["UU No. 39 Tahun 1999","UU No. 26 Tahun 2000","Kepres No. 50 Tahun 1993","UU No. 40 Tahun 1999","TAP MPR No. XVII/MPR/1998"],a:2,
+   pembahasan:"Komnas HAM pertama kali dibentuk melalui Kepres No. 50 Tahun 1993, kemudian diperkuat dengan UU No. 39 Tahun 1999 tentang Hak Asasi Manusia."},
+  {tag:'HAM',q:"Pelanggaran HAM berat menurut UU No. 26 Tahun 2000 meliputi...",opts:["Kejahatan genosida dan kejahatan terhadap kemanusiaan","Pencurian dan perampokan","Korupsi dan suap","Pelanggaran lalu lintas","Pencemaran nama baik"],a:0,
+   pembahasan:"UU No. 26/2000 tentang Pengadilan HAM: pelanggaran HAM berat mencakup kejahatan genosida dan kejahatan terhadap kemanusiaan."},
+  {tag:'HAM',q:"Setiap orang berhak atas kebebasan berserikat, berkumpul, dan mengeluarkan pendapat. Hal ini dijamin dalam...",opts:["Pasal 28E ayat (3) UUD 1945","Pasal 27 UUD 1945","Pasal 29 UUD 1945","Pasal 30 UUD 1945","Pasal 31 UUD 1945"],a:0,
+   pembahasan:"Pasal 28E ayat (3): 'Setiap orang berhak atas kebebasan berserikat, berkumpul, dan mengeluarkan pendapat.'"},
+  {tag:'HAM',q:"Di Indonesia, pengadilan HAM yang menangani kasus pelanggaran HAM berat adalah...",opts:["Pengadilan Negeri","Pengadilan Tinggi","Pengadilan HAM ad hoc","Pengadilan Agama","Pengadilan Tata Usaha Negara"],a:2,
+   pembahasan:"Pengadilan HAM ad hoc dibentuk untuk menangani kasus pelanggaran HAM berat yang terjadi sebelum UU No. 26/2000 diundangkan, atas rekomendasi DPR."},
+  {tag:'HAM',q:"Hak ekonomi, sosial, dan budaya (ekosob) dalam UUD 1945 antara lain mencakup...",opts:["Hak untuk hidup","Hak atas pekerjaan dan penghidupan yang layak","Hak beragama","Hak berserikat","Hak atas kebebasan pribadi"],a:1,
+   pembahasan:"Pasal 27 ayat (2): 'Tiap-tiap warga negara berhak atas pekerjaan dan penghidupan yang layak bagi kemanusiaan.' Ini adalah contoh hak ekosob."},
 ];
 
-/* ============ TIU VERBAL BANK ============ */
+/* ================================================================
+   TIU VERBAL BANK — 40+ SOAL
+   ================================================================ */
 const VERBAL_BANK = [
-  {q:"Padanan kata (sinonim) dari \"AKURAT\" adalah...", opts:["Tepat","Cepat","Ragu","Longgar"], a:0},
-  {q:"Lawan kata (antonim) dari \"EKSPANSIF\" adalah...", opts:["Meluas","Terbatas","Agresif","Terbuka"], a:1},
-  {q:"KONTRADIKTIF berarti...", opts:["Sejalan","Bertentangan","Melengkapi","Serupa"], a:1},
-  {q:"Analogi: GURU : MENGAJAR = DOKTER : ...", opts:["Sekolah","Mengobati","Rumah Sakit","Obat"], a:1},
-  {q:"Analogi: PADI : SAWAH = ... : LAUT", opts:["Nelayan","Ikan","Kapal","Ombak"], a:1},
-  {q:"Sinonim dari \"MUSABAB\" adalah...", opts:["Akibat","Sebab","Tujuan","Proses"], a:1},
-  {q:"Antonim dari \"SPORADIS\" adalah...", opts:["Jarang","Terus-menerus","Acak","Singkat"], a:1},
-  {q:"Analogi: BUKU : PENULIS = LAGU : ...", opts:["Penyanyi","Pencipta Lagu","Album","Panggung"], a:1},
-  {q:"KREDIBEL paling dekat maknanya dengan...", opts:["Dapat dipercaya","Mahal","Cepat","Rumit"], a:0},
-  {q:"Antonim dari \"OTONOMI\" adalah...", opts:["Kemandirian","Ketergantungan","Kebebasan","Wewenang"], a:1},
-  {q:"Sinonim dari \"KONSISTEN\" adalah...", opts:["Ajeg","Berubah-ubah","Ragu-ragu","Ceroboh"], a:0},
-  {q:"Antonim dari \"SUBJEKTIF\" adalah...", opts:["Pribadi","Objektif","Emosional","Sepihak"], a:1},
-  {q:"Analogi: PETANI : CANGKUL = NELAYAN : ...", opts:["Laut","Jaring","Perahu","Ikan"], a:1},
-  {q:"Analogi: SISWA : KELAS = NARAPIDANA : ...", opts:["Polisi","Penjara","Hakim","Hukuman"], a:1},
-  {q:"Sinonim dari \"MANDIRI\" adalah...", opts:["Bergantung","Independen","Pasif","Ragu"], a:1},
+  // Sinonim (12)
+  {q:"Padanan kata (sinonim) dari \"AKURAT\" adalah...",opts:["Tepat","Cepat","Ragu","Longgar","Lambat"],a:0,tag:'Sinonim'},
+  {q:"Sinonim dari \"MUSABAB\" adalah...",opts:["Akibat","Sebab","Tujuan","Proses","Hasil"],a:1,tag:'Sinonim'},
+  {q:"KREDIBEL paling dekat maknanya dengan...",opts:["Dapat dipercaya","Mahal","Cepat","Rumit","Sulit"],a:0,tag:'Sinonim'},
+  {q:"Sinonim dari \"KONSISTEN\" adalah...",opts:["Ajeg","Berubah-ubah","Ragu-ragu","Ceroboh","Longgar"],a:0,tag:'Sinonim'},
+  {q:"Sinonim dari \"MANDIRI\" adalah...",opts:["Bergantung","Independen","Pasif","Ragu","Lemah"],a:1,tag:'Sinonim'},
+  {q:"Sinonim dari \"EFEKTIF\" adalah...",opts:["Percuma","Mubazir","Manjur","Rumit","Lambat"],a:2,tag:'Sinonim'},
+  {q:"Sinonim dari \"DEDIKASI\" adalah...",opts:["Kelalaian","Pengabdian","Kecerobohan","Kemalasan","Keengganan"],a:1,tag:'Sinonim'},
+  {q:"Sinonim dari \"ABOLISI\" adalah...",opts:["Pemberatan","Pembatalan","Penghapusan","Penundaan","Perpanjangan"],a:2,tag:'Sinonim'},
+  {q:"Sinonim dari \"AMBIGU\" adalah...",opts:["Jelas","Tegas","Mendua","Pasti","Tepat"],a:2,tag:'Sinonim'},
+  {q:"Sinonim dari \"KONTRADIKSI\" adalah...",opts:["Keselarasan","Pertentangan","Kesamaan","Kecocokan","Keharmonisan"],a:1,tag:'Sinonim'},
+  {q:"Sinonim dari \"OTORITAS\" adalah...",opts:["Kewenangan","Kelemahan","Keraguan","Kebebasan","Kelalaian"],a:0,tag:'Sinonim'},
+  {q:"Sinonim dari \"ANGGARAN\" adalah...",opts:["Pengeluaran","Belanja","Bujet","Pendapatan","Utang"],a:2,tag:'Sinonim'},
+
+  // Antonim (12)
+  {q:"Lawan kata (antonim) dari \"EKSPANSIF\" adalah...",opts:["Meluas","Terbatas","Agresif","Terbuka","Besar"],a:1,tag:'Antonim'},
+  {q:"Antonim dari \"SPORADIS\" adalah...",opts:["Jarang","Terus-menerus","Acak","Singkat","Cepat"],a:1,tag:'Antonim'},
+  {q:"Antonim dari \"OTONOMI\" adalah...",opts:["Kemandirian","Ketergantungan","Kebebasan","Wewenang","Kekuasaan"],a:1,tag:'Antonim'},
+  {q:"Antonim dari \"SUBJEKTIF\" adalah...",opts:["Pribadi","Objektif","Emosional","Sepihak","Parsial"],a:1,tag:'Antonim'},
+  {q:"Antonim dari \"MAYOR\" adalah...",opts:["Besar","Utama","Minor","Penting","Serius"],a:2,tag:'Antonim'},
+  {q:"Antonim dari \"STABIL\" adalah...",opts:["Mantap","Kokoh","Labil","Tetap","Kuat"],a:2,tag:'Antonim'},
+  {q:"Antonim dari \"PRODUSEN\" adalah...",opts:["Pembuat","Penjual","Konsumen","Pemasok","Distributor"],a:2,tag:'Antonim'},
+  {q:"Antonim dari \"ABSTRAK\" adalah...",opts:["Tidak nyata","Samar","Konkret","Kabur","Rumit"],a:2,tag:'Antonim'},
+  {q:"Antonim dari \"PROMINEN\" adalah...",opts:["Terkenal","Biasa","Terkemuka","Terpandang","Unggul"],a:1,tag:'Antonim'},
+  {q:"Antonim dari \"AKSELERASI\" adalah...",opts:["Percepatan","Perlambatan","Kecepatan","Gerakan","Lajuan"],a:1,tag:'Antonim'},
+  {q:"Antonim dari \"DEFISIT\" adalah...",opts:["Kekurangan","Rugi","Surplus","Hutang","Beban"],a:2,tag:'Antonim'},
+  {q:"Antonim dari \"EKSPLISIT\" adalah...",opts:["Jelas","Tegas","Implisit","Terang","Gamblang"],a:2,tag:'Antonim'},
+
+  // Analogi (12)
+  {q:"Analogi: GURU : MENGAJAR = DOKTER : ...",opts:["Sekolah","Mengobati","Rumah Sakit","Obat","Pasien"],a:1,tag:'Analogi'},
+  {q:"Analogi: PADI : SAWAH = ... : LAUT",opts:["Nelayan","Ikan","Kapal","Ombak","Pantai"],a:1,tag:'Analogi'},
+  {q:"Analogi: BUKU : PENULIS = LAGU : ...",opts:["Penyanyi","Pencipta Lagu","Album","Panggung","Musik"],a:1,tag:'Analogi'},
+  {q:"Analogi: PETANI : CANGKUL = NELAYAN : ...",opts:["Laut","Jaring","Perahu","Ikan","Ombak"],a:1,tag:'Analogi'},
+  {q:"Analogi: SISWA : KELAS = NARAPIDANA : ...",opts:["Polisi","Penjara","Hakim","Hukuman","Pengadilan"],a:1,tag:'Analogi'},
+  {q:"Analogi: KAYU : POHON = EMAS : ...",opts:["Perhiasan","Tambang","Logam","Mahal","Cincin"],a:1,tag:'Analogi'},
+  {q:"Analogi: HUTAN : POHON = KOTA : ...",opts:["Desa","Bangunan","Penduduk","Jalan","Negara"],a:1,tag:'Analogi'},
+  {q:"Analogi: BUNGA : KUMBANG = BANGKAI : ...",opts:["Lalat","Kupu-kupu","Semut","Nyamuk","Cacing"],a:0,tag:'Analogi'},
+  {q:"Analogi: KEPALA : TOPI = KAKI : ...",opts:["Celana","Sepatu","Kaos Kaki","Sarung Tangan","Baju"],a:1,tag:'Analogi'},
+  {q:"Analogi: MOBIL : BENSIN = MANUSIA : ...",opts:["Air","Udara","Makanan","Darah","Oksigen"],a:2,tag:'Analogi'},
+  {q:"Analogi: PELUKIS : KANVAS = KOMPONIS : ...",opts:["Piano","Nada","Partitur","Orkestra","Musik"],a:2,tag:'Analogi'},
+  {q:"Analogi: KORAN : BERITA = BUKU : ...",opts:["Halaman","Ilmu","Cerita","Tulisan","Kertas"],a:1,tag:'Analogi'},
 ];
 
-/* ============ TIU LOGIKA (silogisme, static) ============ */
+/* ================================================================
+   TIU LOGIKA (SILOGISME) — 14 static + dynamic generators
+   ================================================================ */
 const LOGIKA_BANK = [
-  {q:"Semua pegawai negeri wajib mengikuti apel pagi. Andi adalah pegawai negeri. Simpulan yang tepat adalah...", opts:["Andi tidak wajib apel pagi","Andi wajib mengikuti apel pagi","Andi mungkin mengikuti apel pagi","Apel pagi tidak berlaku untuk Andi"], a:1},
-  {q:"Jika hari hujan, maka jalan menjadi becek. Hari ini jalan tidak becek. Simpulan yang tepat adalah...", opts:["Hari ini hujan","Hari ini tidak hujan","Jalan sedang diperbaiki","Tidak dapat disimpulkan"], a:1},
-  {q:"Semua anggota tim harus lulus tes kesehatan. Sebagian anggota tim adalah atlet. Simpulan yang tepat adalah...", opts:["Semua atlet lulus tes kesehatan","Sebagian atlet lulus tes kesehatan","Tidak ada atlet yang lulus tes kesehatan","Atlet tidak perlu tes kesehatan"], a:1},
-  {q:"Jika Rani rajin belajar, ia akan lulus ujian. Rani lulus ujian. Simpulan yang paling tepat adalah...", opts:["Rani pasti rajin belajar","Belum tentu Rani rajin belajar","Rani tidak belajar sama sekali","Ujian tersebut sangat mudah"], a:1},
-  {q:"Semua kucing adalah mamalia. Sebagian mamalia hidup di air. Simpulan yang tepat adalah...", opts:["Semua kucing hidup di air","Sebagian kucing hidup di air","Tidak dapat ditarik simpulan pasti tentang kucing dan air dari premis ini","Semua mamalia adalah kucing"], a:2},
-  {q:"Tidak ada siswa yang boleh terlambat lebih dari 3 kali. Budi sudah terlambat 4 kali. Simpulan yang tepat adalah...", opts:["Budi melanggar aturan","Budi masih diperbolehkan","Aturan tidak berlaku untuk Budi","Tidak dapat disimpulkan"], a:0},
-  {q:"Semua dokumen resmi harus memiliki stempel. Dokumen ini tidak memiliki stempel. Simpulan yang tepat adalah...", opts:["Dokumen ini resmi","Dokumen ini bukan dokumen resmi","Dokumen ini sedang diproses","Stempel tidak diperlukan"], a:1},
-  {q:"Jika sebuah proyek disetujui, anggaran akan dicairkan. Anggaran proyek ini belum dicairkan. Simpulan yang tepat adalah...", opts:["Proyek ini disetujui","Proyek ini belum tentu disetujui","Proyek ini pasti ditolak","Anggaran hilang"], a:1},
+  {q:"Semua pegawai negeri wajib mengikuti apel pagi. Andi adalah pegawai negeri. Simpulan yang tepat adalah...",opts:["Andi tidak wajib apel pagi","Andi wajib mengikuti apel pagi","Andi mungkin mengikuti apel pagi","Apel pagi tidak berlaku untuk Andi","Andi bisa memilih tidak ikut apel"],a:1,tag:'Logika (Silogisme)'},
+  {q:"Jika hari hujan, maka jalan menjadi becek. Hari ini jalan tidak becek. Simpulan yang tepat adalah...",opts:["Hari ini hujan","Hari ini tidak hujan","Jalan sedang diperbaiki","Tidak dapat disimpulkan","Hari ini gerimis"],a:1,tag:'Logika (Silogisme)'},
+  {q:"Semua anggota tim harus lulus tes kesehatan. Sebagian anggota tim adalah atlet. Simpulan yang tepat adalah...",opts:["Semua atlet lulus tes kesehatan","Sebagian atlet lulus tes kesehatan","Tidak ada atlet yang lulus tes kesehatan","Atlet tidak perlu tes kesehatan","Semua atlet gagal tes"],a:1,tag:'Logika (Silogisme)'},
+  {q:"Jika Rani rajin belajar, ia akan lulus ujian. Rani lulus ujian. Simpulan yang paling tepat adalah...",opts:["Rani pasti rajin belajar","Belum tentu Rani rajin belajar","Rani tidak belajar sama sekali","Ujian tersebut sangat mudah","Rani pasti tidak belajar"],a:1,tag:'Logika (Silogisme)'},
+  {q:"Semua kucing adalah mamalia. Sebagian mamalia hidup di air. Simpulan yang tepat adalah...",opts:["Semua kucing hidup di air","Sebagian kucing hidup di air","Tidak dapat ditarik simpulan pasti tentang kucing dan air","Semua mamalia adalah kucing","Semua kucing adalah mamalia air"],a:2,tag:'Logika (Silogisme)'},
+  {q:"Tidak ada siswa yang boleh terlambat lebih dari 3 kali. Budi sudah terlambat 4 kali. Simpulan yang tepat adalah...",opts:["Budi melanggar aturan","Budi masih diperbolehkan","Aturan tidak berlaku untuk Budi","Tidak dapat disimpulkan","Budi diberi dispensasi"],a:0,tag:'Logika (Silogisme)'},
+  {q:"Semua dokumen resmi harus memiliki stempel. Dokumen ini tidak memiliki stempel. Simpulan yang tepat adalah...",opts:["Dokumen ini resmi","Dokumen ini bukan dokumen resmi","Dokumen ini sedang diproses","Stempel tidak diperlukan","Dokumen ini palsu"],a:1,tag:'Logika (Silogisme)'},
+  {q:"Jika sebuah proyek disetujui, anggaran akan dicairkan. Anggaran proyek ini belum dicairkan. Simpulan yang tepat adalah...",opts:["Proyek ini disetujui","Proyek ini belum tentu disetujui","Proyek ini pasti ditolak","Anggaran hilang","Proyek sedang berjalan"],a:1,tag:'Logika (Silogisme)'},
+  {q:"Semua ASN harus memiliki integritas tinggi. Siti adalah seorang ASN. Maka...",opts:["Siti mungkin memiliki integritas","Siti wajib memiliki integritas tinggi","Siti tidak perlu integritas","Integritas tidak penting bagi Siti","Siti sudah pasti berintegritas"],a:1,tag:'Logika (Silogisme)'},
+  {q:"Semua burung bernapas dengan paru-paru. Merpati adalah burung. Simpulan yang tepat...",opts:["Merpati bernapas dengan insang","Merpati bernapas dengan paru-paru","Merpati tidak bernapas","Tidak semua burung bernapas","Merpati bernapas dengan kulit"],a:1,tag:'Logika (Silogisme)'},
+  {q:"Jika sebuah kebijakan baru diterapkan, maka akan ada masa transisi. Kebijakan baru ini sudah diterapkan. Simpulan...",opts:["Tidak ada masa transisi","Masa transisi sudah terjadi","Akan ada masa transisi","Kebijakan ditunda","Tidak ada kebijakan baru"],a:2,tag:'Logika (Silogisme)'},
+  {q:"Semua peserta ujian memiliki kartu peserta. Budi tidak memiliki kartu peserta. Simpulan...",opts:["Budi adalah peserta ujian","Budi bukan peserta ujian","Budi kehilangan kartu","Kartu peserta tidak penting","Budi belum mendaftar"],a:1,tag:'Logika (Silogisme)'},
+  {q:"Jika suhu udara di atas normal, AC akan otomatis menyala. Suhu udara di atas normal. Simpulan...",opts:["AC tidak menyala","AC akan otomatis menyala","AC rusak","Suhu normal","AC dalam perbaikan"],a:1,tag:'Logika (Silogisme)'},
+  {q:"Tidak ada calon yang tidak memenuhi syarat administrasi yang bisa lolos. Anton tidak memenuhi syarat administrasi. Maka...",opts:["Anton bisa lolos","Anton tidak bisa lolos","Anton mungkin lolos","Syarat administrasi tidak penting","Anton bisa mengajukan banding"],a:1,tag:'Logika (Silogisme)'},
 ];
 
-/* ============ LOGIKA GENERATORS (silogisme & modus tollens dinamis) ============ */
-const SIL_SUBJECTS = ["pegawai negeri","siswa SMA","anggota koperasi","calon ASN","peserta pelatihan","nasabah bank","anggota organisasi","warga RT setempat","peserta ujian","anggota tim proyek"];
-const SIL_PREDICATES = ["wajib mengikuti apel pagi","wajib membayar iuran bulanan","wajib mengikuti tes kesehatan","wajib mematuhi kode etik","berhak mendapatkan kartu identitas","wajib mengikuti orientasi","wajib melapor secara berkala","wajib mengisi daftar hadir"];
-const SIL_NAMES = ["Andi","Budi","Citra","Dewi","Eka","Fajar","Gita","Hendra","Indra","Joko","Kirana","Lestari"];
+/* SILOGISME GENERATORS */
+const SIL_SUBJECTS = ["pegawai negeri","siswa SMA","anggota koperasi","calon ASN","peserta pelatihan","nasabah bank","anggota organisasi","warga RT setempat","peserta ujian","anggota tim proyek","mahasiswa baru","karyawan tetap","peserta seminar","anggota komunitas","delegasi daerah"];
+const SIL_PREDICATES = ["wajib mengikuti apel pagi","wajib membayar iuran bulanan","wajib mengikuti tes kesehatan","wajib mematuhi kode etik","berhak mendapatkan kartu identitas","wajib mengikuti orientasi","wajib melapor secara berkala","wajib mengisi daftar hadir","wajib mengikuti upacara bendera","wajib menandatangani pakta integritas"];
+const SIL_NAMES = ["Andi","Budi","Citra","Dewi","Eka","Fajar","Gita","Hendra","Indra","Joko","Kirana","Lestari","Mira","Novi","Oscar","Putri","Rama","Sinta","Tono","Umar"];
+
 function genSilogismeTemplate(){
   const subj = pick(SIL_SUBJECTS), pred = pick(SIL_PREDICATES), name = pick(SIL_NAMES);
   const q = `Semua ${subj} ${pred}. ${name} adalah ${subj}. Simpulan yang tepat adalah...`;
@@ -518,18 +578,19 @@ function genSilogismeTemplate(){
   const wrong1 = `${name} tidak ${pred}`;
   const wrong2 = `${name} mungkin ${pred}`;
   const wrong3 = `${subj} yang bukan ${name} juga ${pred}`;
-  const opts = shuffle([correct,wrong1,wrong2,wrong3]);
-  return {q, opts, a: opts.indexOf(correct)};
+  const wrong4 = `${pred} tidak berlaku untuk semua ${subj}`;
+  const opts = shuffle([correct,wrong1,wrong2,wrong3,wrong4]);
+  return {q, opts, a: opts.indexOf(correct), tag:'Logika (Silogisme)',type:'single'};
 }
+
 const MT_CONDS = [
-  ["hari hujan","jalan menjadi becek"],
-  ["harga BBM naik","biaya transportasi meningkat"],
-  ["seseorang rajin berlatih","kemampuannya akan meningkat"],
-  ["dokumen tidak lengkap","permohonan akan ditolak"],
-  ["listrik padam","produksi pabrik terhenti"],
-  ["anggaran disetujui","program dapat dilaksanakan"],
-  ["nilai ujian di bawah standar","peserta dinyatakan tidak lulus"],
+  ["hari hujan","jalan menjadi becek"],["harga BBM naik","biaya transportasi meningkat"],
+  ["seseorang rajin berlatih","kemampuannya akan meningkat"],["dokumen tidak lengkap","permohonan akan ditolak"],
+  ["listrik padam","produksi pabrik terhenti"],["anggaran disetujui","program dapat dilaksanakan"],
+  ["nilai ujian di bawah standar","peserta dinyatakan tidak lulus"],["permintaan pasar meningkat","harga barang akan naik"],
+  ["cuaca sangat panas","konsumsi listrik meningkat"],["suku bunga naik","investasi akan menurun"],
 ];
+
 function genModusTollensTemplate(){
   const [cond,cons] = pick(MT_CONDS);
   const q = `Jika ${cond}, maka ${cons}. Kenyataannya ${cons} tidak terjadi. Simpulan yang tepat adalah...`;
@@ -537,163 +598,175 @@ function genModusTollensTemplate(){
   const wrong1 = cap(`${cond} tetap terjadi`);
   const wrong2 = `Tidak dapat disimpulkan apa pun dari pernyataan ini`;
   const wrong3 = cap(`${cons} pasti akan terjadi kemudian`);
-  const opts = shuffle([correct,wrong1,wrong2,wrong3]);
-  return {q, opts, a: opts.indexOf(correct)};
+  const wrong4 = `Hubungan antara ${cond} dan ${cons} tidak dapat dipastikan`;
+  const opts = shuffle([correct,wrong1,wrong2,wrong3,wrong4]);
+  return {q, opts, a: opts.indexOf(correct), tag:'Logika (Silogisme)',type:'single'};
 }
-const LOGIKA_GENERATORS = [genSilogismeTemplate, genModusTollensTemplate];
 
-/* ============ TKP BANK (skala 1-5, urutan opsi sesuai skor terbaik->kurang tepat) ============ */
+function genModusPonensTemplate(){
+  const [cond,cons] = pick(MT_CONDS);
+  const q = `Jika ${cond}, maka ${cons}. Kenyataannya ${cond} terjadi. Simpulan yang tepat adalah...`;
+  const correct = cap(cons);
+  const wrong1 = cap(`${cons} tidak terjadi`);
+  const wrong2 = `Tidak dapat disimpulkan`;
+  const wrong3 = cap(`${cond} tidak mempengaruhi ${cons}`);
+  const wrong4 = `Hubungan tidak dapat dipastikan`;
+  const opts = shuffle([correct,wrong1,wrong2,wrong3,wrong4]);
+  return {q, opts, a: opts.indexOf(correct), tag:'Logika (Silogisme)',type:'single'};
+}
+
+const LOGIKA_GENERATORS = [genSilogismeTemplate, genModusTollensTemplate, genModusPonensTemplate];
+
+/* ================================================================
+   TKP BANK — 50+ SOAL REAL CPNS (skala 1-5)
+   ================================================================ */
 const TKP_BANK = [
-  {tag:'Profesionalisme', q:"Anda diberi tugas mendesak oleh atasan menjelang jam pulang kerja, sementara Anda sudah memiliki janji pribadi. Sikap Anda...", opts:[
-    "Menyelesaikan tugas terlebih dahulu, lalu mengomunikasikan penyesuaian jadwal pribadi",
-    "Meminta izin menyelesaikan sebagian dan melanjutkan besok pagi dengan koordinasi jelas",
-    "Mengerjakan sebisanya sambil terburu-buru pergi",
-    "Menitipkan tugas ke rekan kerja tanpa penjelasan",
-    "Menolak dan langsung pergi sesuai jadwal pribadi"]},
-  {tag:'Kerja Sama Tim', q:"Rekan kerja Anda melakukan kesalahan dalam laporan yang berdampak pada tim. Anda akan...", opts:[
-    "Memberitahu secara langsung dan membantu memperbaiki kesalahan tersebut",
-    "Melaporkan ke atasan agar segera ditindaklanjuti",
-    "Membiarkan karena bukan tanggung jawab Anda",
-    "Membicarakannya ke rekan lain terlebih dahulu",
-    "Menegur di depan banyak orang agar jera"]},
-  {tag:'Profesionalisme', q:"Anda mendapat kritik keras dari atasan atas hasil kerja Anda di depan rekan-rekan. Reaksi Anda...", opts:[
-    "Menerima masukan dengan tenang dan menanyakan cara perbaikannya",
-    "Mendengarkan lalu mengevaluasi diri secara pribadi setelahnya",
-    "Diam saja tanpa merespons",
-    "Merasa kesal namun tetap bekerja seperti biasa",
-    "Membalas kritik tersebut di tempat"]},
-  {tag:'Teknologi Informasi', q:"Ada perubahan mendadak pada sistem kerja di kantor yang belum Anda kuasai. Sikap Anda...", opts:[
-    "Segera mempelajari sistem baru dan aktif bertanya agar cepat beradaptasi",
-    "Mempelajari secara bertahap sambil tetap menjalankan tugas",
-    "Menunggu pelatihan resmi dari kantor",
-    "Meminta rekan mengerjakan bagian yang menggunakan sistem baru",
-    "Tetap menggunakan cara lama karena lebih familiar"]},
-  {tag:'Integritas', q:"Anda menemukan indikasi penyalahgunaan fasilitas kantor oleh rekan kerja. Tindakan Anda...", opts:[
-    "Melaporkan sesuai prosedur kepada pihak yang berwenang menangani",
-    "Menegur rekan tersebut secara langsung dan pribadi",
-    "Mendiamkan karena tidak ingin ikut campur",
-    "Membicarakannya dengan rekan lain untuk konfirmasi",
-    "Mengabaikan karena bukan urusan Anda"]},
-  {tag:'Profesionalisme', q:"Target pekerjaan yang diberikan kepada Anda sangat tinggi dan waktunya singkat. Anda akan...", opts:[
-    "Menyusun rencana kerja yang efisien dan berkomunikasi bila ada kendala",
-    "Bekerja lebih keras tanpa menyusun rencana khusus",
-    "Meminta perpanjangan waktu di awal tanpa mencoba dahulu",
-    "Mengerjakan seadanya agar cepat selesai",
-    "Mengeluh kepada rekan kerja tentang beratnya target"]},
-  {tag:'Kerja Sama Tim', q:"Dalam sebuah rapat tim, ide Anda ditolak oleh mayoritas anggota. Sikap Anda...", opts:[
-    "Menerima keputusan bersama dan tetap mendukung pelaksanaannya",
-    "Menyampaikan argumen tambahan sekali lagi secara sopan sebelum menerima keputusan",
-    "Diam dan merasa kecewa sepanjang rapat",
-    "Tetap bersikeras dengan pendapat sendiri",
-    "Menolak bekerja sama dalam pelaksanaan keputusan tersebut"]},
-  {tag:'Jejaring Kerja', q:"Anda ditempatkan di unit kerja baru dengan rekan-rekan yang belum Anda kenal. Sikap Anda...", opts:[
-    "Aktif memperkenalkan diri dan membangun komunikasi yang baik",
-    "Menunggu rekan lain menyapa terlebih dahulu",
-    "Fokus bekerja sendiri tanpa banyak interaksi",
-    "Bersikap seperlunya hanya saat dibutuhkan",
-    "Menghindari interaksi karena belum nyaman"]},
-  {tag:'Pelayanan Publik', q:"Anda melihat prosedur pelayanan publik di kantor Anda kurang efisien dan menyulitkan masyarakat. Anda akan...", opts:[
-    "Mengusulkan perbaikan prosedur kepada atasan disertai alasan yang jelas",
-    "Membicarakan usulan tersebut secara informal dengan rekan kerja",
-    "Menjalankan prosedur seperti biasa tanpa mengusulkan perubahan",
-    "Mengeluhkan hal tersebut ke pihak luar kantor",
-    "Mengabaikan karena bukan wewenang Anda"]},
-  {tag:'Kerja Sama Tim', q:"Anda diminta bekerja sama dengan tim dari unit lain yang memiliki cara kerja berbeda. Sikap Anda...", opts:[
-    "Menyesuaikan diri dan mencari titik temu cara kerja yang efektif bersama",
-    "Mengikuti arahan tim lain sepenuhnya tanpa memberi masukan",
-    "Tetap menggunakan cara kerja sendiri",
-    "Bekerja terpisah agar tidak terjadi konflik",
-    "Menolak bekerja sama karena berbeda kebiasaan"]},
-  {tag:'Integritas', q:"Anda mengetahui informasi rahasia terkait pekerjaan yang ditanyakan oleh pihak luar tanpa wewenang. Anda akan...", opts:[
-    "Menolak memberi informasi dan mengarahkan ke pihak yang berwenang",
-    "Memberikan informasi umum saja tanpa detail",
-    "Memberikan informasi karena diminta dengan sopan",
-    "Menanyakan izin atasan setelah informasi terlanjur diberikan",
-    "Memberikan informasi lengkap agar tidak dianggap tidak kooperatif"]},
-  {tag:'Profesionalisme', q:"Beban kerja Anda meningkat drastis karena rekan satu tim sedang cuti panjang. Sikap Anda...", opts:[
-    "Mengatur prioritas kerja dan berkoordinasi agar pelayanan tetap berjalan baik",
-    "Mengerjakan semua tugas tanpa mengatur prioritas",
-    "Menunda tugas-tugas yang dianggap kurang penting tanpa koordinasi",
-    "Meminta pengurangan target tanpa penjelasan",
-    "Mengerjakan hanya tugas milik sendiri, mengabaikan tugas rekan yang cuti"]},
-  {tag:'Jejaring Kerja', q:"Anda ditugaskan menjalin kerja sama dengan instansi lain untuk kelancaran program kerja. Sikap Anda...", opts:[
-    "Membangun komunikasi yang terbuka dan saling menguntungkan dengan pihak terkait",
-    "Menjalin komunikasi seperlunya sesuai kebutuhan formal",
-    "Menyerahkan sepenuhnya proses komunikasi kepada atasan",
-    "Menjalin hubungan hanya dengan pihak yang menguntungkan pribadi",
-    "Menghindari komunikasi dengan pihak luar karena dianggap merepotkan"]},
-  {tag:'Jejaring Kerja', q:"Anda memiliki kesempatan memperluas jejaring dengan komunitas profesi sejenis di luar instansi. Anda akan...", opts:[
-    "Aktif bergabung dan berbagi informasi yang bermanfaat bagi instansi",
-    "Bergabung namun pasif mengikuti kegiatan",
-    "Bergabung hanya untuk menambah relasi pribadi",
-    "Menunggu diajak oleh rekan lain",
-    "Tidak tertarik karena dianggap tidak penting"]},
-  {tag:'Sosial Budaya', q:"Anda ditempatkan bertugas di daerah dengan budaya dan kebiasaan masyarakat yang berbeda dari daerah asal Anda. Sikap Anda...", opts:[
-    "Mempelajari dan menghormati budaya setempat agar dapat berbaur dengan baik",
-    "Menyesuaikan diri secukupnya tanpa mempelajari budaya setempat",
-    "Tetap menjalankan kebiasaan asal tanpa menyesuaikan diri",
-    "Berinteraksi seperlunya saja dengan masyarakat setempat",
-    "Menghindari interaksi dengan masyarakat karena berbeda budaya"]},
-  {tag:'Sosial Budaya', q:"Dalam pelayanan kepada masyarakat, Anda menemui warga dari latar belakang suku dan agama yang berbeda-beda. Sikap Anda...", opts:[
-    "Memberikan pelayanan yang sama adil tanpa membeda-bedakan latar belakang",
-    "Melayani dengan baik namun cenderung lebih ramah pada yang sesuku",
-    "Melayani sesuai urutan tanpa memperhatikan kebutuhan khusus",
-    "Mendahulukan yang menurut Anda lebih dekat secara budaya",
-    "Bersikap acuh terhadap latar belakang sosial budaya warga"]},
-  {tag:'Teknologi Informasi', q:"Kantor Anda menerapkan sistem pelaporan kerja berbasis aplikasi digital yang baru. Sikap Anda...", opts:[
-    "Mempelajari aplikasi tersebut secara mandiri dan memanfaatkannya secara optimal",
-    "Menggunakan aplikasi sesuai kebutuhan minimal saja",
-    "Meminta rekan kerja mengoperasikan aplikasi untuk Anda",
-    "Menunggu pelatihan resmi sebelum menggunakan aplikasi",
-    "Tetap menggunakan cara manual karena belum terbiasa"]},
-  {tag:'Teknologi Informasi', q:"Anda diminta mengolah data menggunakan aplikasi spreadsheet yang belum pernah Anda gunakan sebelumnya. Anda akan...", opts:[
-    "Mempelajari fitur aplikasi tersebut melalui tutorial sambil menyelesaikan tugas",
-    "Mengerjakan secara manual lalu memindahkan hasilnya ke aplikasi",
-    "Meminta bantuan rekan untuk mengerjakan seluruhnya",
-    "Menunda pekerjaan sampai ada pelatihan",
-    "Menyerahkan tugas tersebut ke rekan lain sepenuhnya"]},
-  {tag:'Anti-Radikalisme', q:"Anda mendapati rekan kerja menyebarkan paham yang bertentangan dengan nilai-nilai Pancasila di lingkungan kantor. Sikap Anda...", opts:[
-    "Mengingatkan secara persuasif dan melaporkan ke pihak berwenang bila diperlukan",
-    "Mendiamkan karena bukan urusan pribadi",
-    "Ikut mendengarkan tanpa memberikan tanggapan",
-    "Menghindar dari rekan tersebut tanpa melaporkan",
-    "Mengabaikan karena takut berkonflik"]},
-  {tag:'Anti-Radikalisme', q:"Anda menemukan konten di media sosial yang mengandung ujaran kebencian dan berpotensi memecah belah persatuan bangsa. Anda akan...", opts:[
-    "Tidak menyebarluaskan dan melaporkan konten tersebut sesuai mekanisme yang berlaku",
-    "Membiarkan saja karena bukan tanggung jawab pribadi",
-    "Ikut mengomentari untuk mendebat isi konten",
-    "Membagikan konten tersebut agar orang lain waspada tanpa melaporkan",
-    "Menyimpan dan mengabaikannya"]},
-  {tag:'Pelayanan Publik', q:"Seorang warga mengeluh atas pelayanan yang lambat di loket Anda. Sikap Anda...", opts:[
-    "Meminta maaf, menjelaskan penyebabnya, dan segera membantu menyelesaikan keperluannya",
-    "Menjelaskan penyebab keterlambatan tanpa membantu lebih lanjut",
-    "Mengabaikan keluhan dan melanjutkan pekerjaan seperti biasa",
-    "Menyalahkan sistem tanpa memberikan solusi",
-    "Meminta warga tersebut mengeluh ke pihak lain"]},
+  // Profesionalisme (8)
+  {tag:'Profesionalisme',q:"Anda diberi tugas mendesak oleh atasan menjelang jam pulang kerja, sementara Anda sudah memiliki janji pribadi. Sikap Anda...",opts:[
+    "Menyelesaikan tugas terlebih dahulu, lalu mengomunikasikan penyesuaian jadwal pribadi","Meminta izin menyelesaikan sebagian dan melanjutkan besok pagi dengan koordinasi jelas","Mengerjakan sebisanya sambil terburu-buru pergi","Menitipkan tugas ke rekan kerja tanpa penjelasan","Menolak dan langsung pergi sesuai jadwal pribadi"]},
+  {tag:'Profesionalisme',q:"Anda mendapat kritik keras dari atasan atas hasil kerja Anda di depan rekan-rekan. Reaksi Anda...",opts:[
+    "Menerima masukan dengan tenang dan menanyakan cara perbaikannya","Mendengarkan lalu mengevaluasi diri secara pribadi setelahnya","Diam saja tanpa merespons","Merasa kesal namun tetap bekerja seperti biasa","Membalas kritik tersebut di tempat"]},
+  {tag:'Profesionalisme',q:"Target pekerjaan yang diberikan kepada Anda sangat tinggi dan waktunya singkat. Anda akan...",opts:[
+    "Menyusun rencana kerja yang efisien dan berkomunikasi bila ada kendala","Bekerja lebih keras tanpa menyusun rencana khusus","Meminta perpanjangan waktu di awal tanpa mencoba dahulu","Mengerjakan seadanya agar cepat selesai","Mengeluh kepada rekan kerja tentang beratnya target"]},
+  {tag:'Profesionalisme',q:"Beban kerja Anda meningkat drastis karena rekan satu tim sedang cuti panjang. Sikap Anda...",opts:[
+    "Mengatur prioritas kerja dan berkoordinasi agar pelayanan tetap berjalan baik","Mengerjakan semua tugas tanpa mengatur prioritas","Menunda tugas-tugas yang dianggap kurang penting tanpa koordinasi","Meminta pengurangan target tanpa penjelasan","Mengerjakan hanya tugas milik sendiri, mengabaikan tugas rekan yang cuti"]},
+  {tag:'Profesionalisme',q:"Anda melakukan kesalahan fatal dalam pekerjaan yang berdampak pada tim. Anda akan...",opts:[
+    "Mengakui kesalahan, meminta maaf, dan segera mencari solusi perbaikan","Menyalahkan keadaan atau faktor eksternal","Diam dan berharap tidak ada yang menyadari","Mengalihkan kesalahan kepada rekan lain","Menunggu atasan menemukan kesalahan tersebut"]},
+  {tag:'Profesionalisme',q:"Anda diminta menyelesaikan dua tugas penting dengan deadline yang sama. Sikap Anda...",opts:[
+    "Membuat prioritas berdasarkan urgensi, bernegosiasi perpanjangan waktu jika perlu, dan fokus menyelesaikan","Mengerjakan keduanya sekaligus secara bersamaan","Memilih salah satu dan mengabaikan yang lain","Meminta rekan mengerjakan semuanya","Menyerah dan tidak mengerjakan keduanya"]},
+  {tag:'Profesionalisme',q:"Atasan Anda memberikan tugas yang berada di luar kompetensi Anda. Anda akan...",opts:[
+    "Menerima tugas, mempelajari hal baru, dan konsultasi dengan yang lebih ahli bila perlu","Menolak dengan sopan karena bukan bidang Anda","Menerima tapi mengerjakan seadanya","Mendelegasikan ke rekan tanpa sepengetahuan atasan","Mengabaikan tugas tersebut"]},
+  {tag:'Profesionalisme',q:"Hasil evaluasi kinerja Anda di bawah standar yang diharapkan. Reaksi Anda...",opts:[
+    "Menerima hasil evaluasi, mengidentifikasi kelemahan, dan membuat rencana perbaikan diri","Menyalahkan sistem evaluasi yang tidak adil","Membandingkan diri dengan rekan yang nilainya lebih baik","Merasa tidak bersemangat bekerja","Mengabaikan hasil evaluasi dan tetap bekerja seperti biasa"]},
+
+  // Kerja Sama Tim (6)
+  {tag:'Kerja Sama Tim',q:"Rekan kerja Anda melakukan kesalahan dalam laporan yang berdampak pada tim. Anda akan...",opts:[
+    "Memberitahu secara langsung dan membantu memperbaiki kesalahan tersebut","Melaporkan ke atasan agar segera ditindaklanjuti","Membiarkan karena bukan tanggung jawab Anda","Membicarakannya ke rekan lain terlebih dahulu","Menegur di depan banyak orang agar jera"]},
+  {tag:'Kerja Sama Tim',q:"Dalam sebuah rapat tim, ide Anda ditolak oleh mayoritas anggota. Sikap Anda...",opts:[
+    "Menerima keputusan bersama dan tetap mendukung pelaksanaannya","Menyampaikan argumen tambahan sekali lagi secara sopan sebelum menerima keputusan","Diam dan merasa kecewa sepanjang rapat","Tetap bersikeras dengan pendapat sendiri","Menolak bekerja sama dalam pelaksanaan keputusan tersebut"]},
+  {tag:'Kerja Sama Tim',q:"Anda diminta bekerja sama dengan tim dari unit lain yang memiliki cara kerja berbeda. Sikap Anda...",opts:[
+    "Menyesuaikan diri dan mencari titik temu cara kerja yang efektif bersama","Mengikuti arahan tim lain sepenuhnya tanpa memberi masukan","Tetap menggunakan cara kerja sendiri","Bekerja terpisah agar tidak terjadi konflik","Menolak bekerja sama karena berbeda kebiasaan"]},
+  {tag:'Kerja Sama Tim',q:"Tim Anda sedang mengalami konflik internal yang mempengaruhi produktivitas. Sebagai anggota tim, Anda akan...",opts:[
+    "Menginisiasi dialog terbuka untuk mencari solusi bersama dan memperbaiki komunikasi","Menunggu atasan turun tangan menyelesaikan masalah","Menghindari rekan yang terlibat konflik","Memihak salah satu pihak yang menurut Anda benar","Memanfaatkan situasi untuk kepentingan pribadi"]},
+  {tag:'Kerja Sama Tim',q:"Salah satu anggota tim Anda sering tidak menyelesaikan tugas tepat waktu. Anda akan...",opts:[
+    "Mendekati secara personal, menawarkan bantuan, dan mencari tahu penyebabnya","Melaporkan langsung ke atasan tanpa bicara dulu","Membiarkan karena itu bukan urusan Anda","Membicarakannya dengan anggota tim lain di belakang","Mengambil alih tugasnya tanpa komunikasi"]},
+  {tag:'Kerja Sama Tim',q:"Dalam rapat, pendapat Anda berbeda dengan rekan yang lebih senior. Anda akan...",opts:[
+    "Menyampaikan pendapat dengan sopan disertai data dan alasan yang kuat","Mengikuti saja pendapat senior meskipun kurang setuju","Diam dan menyimpan pendapat sendiri","Menyampaikan pendapat dengan nada tinggi untuk menunjukkan keyakinan","Membicarakan ketidaksetujuan di luar rapat"]},
+
+  // Pelayanan Publik (6)
+  {tag:'Pelayanan Publik',q:"Anda melihat prosedur pelayanan publik di kantor Anda kurang efisien dan menyulitkan masyarakat. Anda akan...",opts:[
+    "Mengusulkan perbaikan prosedur kepada atasan disertai alasan yang jelas","Membicarakan usulan tersebut secara informal dengan rekan kerja","Menjalankan prosedur seperti biasa tanpa mengusulkan perubahan","Mengeluhkan hal tersebut ke pihak luar kantor","Mengabaikan karena bukan wewenang Anda"]},
+  {tag:'Pelayanan Publik',q:"Seorang warga mengeluh atas pelayanan yang lambat di loket Anda. Sikap Anda...",opts:[
+    "Meminta maaf, menjelaskan penyebabnya, dan segera membantu menyelesaikan keperluannya","Menjelaskan penyebab keterlambatan tanpa membantu lebih lanjut","Mengabaikan keluhan dan melanjutkan pekerjaan seperti biasa","Menyalahkan sistem tanpa memberikan solusi","Meminta warga tersebut mengeluh ke pihak lain"]},
+  {tag:'Pelayanan Publik',q:"Anda bertugas di loket pelayanan saat jam istirahat. Tiba-tiba ada warga yang membutuhkan pelayanan mendesak. Anda akan...",opts:[
+    "Melayani dengan senang hati karena pelayanan prima adalah prioritas","Melayani namun menunjukkan ekspresi tidak senang","Meminta warga menunggu sampai jam istirahat selesai","Menyuruh warga datang kembali besok","Mengabaikan dan melanjutkan istirahat"]},
+  {tag:'Pelayanan Publik',q:"Seorang warga penyandang disabilitas datang ke kantor Anda untuk mengurus dokumen. Anda akan...",opts:[
+    "Memberikan bantuan dan kemudahan akses sesuai kebutuhannya dengan penuh empati","Melayani seperti biasa tanpa memberikan perhatian khusus","Meminta rekan lain yang melayani","Menyarankan untuk diwakilkan oleh keluarganya saja","Mengabaikan karena keterbatasan fasilitas"]},
+  {tag:'Pelayanan Publik',q:"Anda mendapat informasi bahwa ada pungutan liar (pungli) dalam proses pengurusan dokumen di instansi Anda. Anda akan...",opts:[
+    "Melaporkan informasi tersebut kepada pihak berwenang dan mendukung pemberantasannya","Mengabaikan karena sudah menjadi rahasia umum","Mengikuti saja karena semua orang melakukannya","Menceritakan kepada rekan kerja tanpa melaporkan","Memanfaatkan informasi tersebut untuk keuntungan pribadi"]},
+  {tag:'Pelayanan Publik',q:"Seorang warga marah-marah karena persyaratan dokumennya tidak lengkap padahal sudah diinformasikan sebelumnya. Anda akan...",opts:[
+    "Tetap tenang, menjelaskan kembali dengan sopan persyaratan yang diperlukan, dan memberikan solusi alternatif","Ikut marah dan membalas dengan nada tinggi","Meminta petugas keamanan untuk mengusirnya","Mengabaikan dan melanjutkan pekerjaan lain","Menyalahkan warga karena tidak membaca informasi"]},
+
+  // Jejaring Kerja (5)
+  {tag:'Jejaring Kerja',q:"Anda ditempatkan di unit kerja baru dengan rekan-rekan yang belum Anda kenal. Sikap Anda...",opts:[
+    "Aktif memperkenalkan diri dan membangun komunikasi yang baik","Menunggu rekan lain menyapa terlebih dahulu","Fokus bekerja sendiri tanpa banyak interaksi","Bersikap seperlunya hanya saat dibutuhkan","Menghindari interaksi karena belum nyaman"]},
+  {tag:'Jejaring Kerja',q:"Anda ditugaskan menjalin kerja sama dengan instansi lain untuk kelancaran program kerja. Sikap Anda...",opts:[
+    "Membangun komunikasi yang terbuka dan saling menguntungkan dengan pihak terkait","Menjalin komunikasi seperlunya sesuai kebutuhan formal","Menyerahkan sepenuhnya proses komunikasi kepada atasan","Menjalin hubungan hanya dengan pihak yang menguntungkan pribadi","Menghindari komunikasi dengan pihak luar karena dianggap merepotkan"]},
+  {tag:'Jejaring Kerja',q:"Anda memiliki kesempatan memperluas jejaring dengan komunitas profesi sejenis di luar instansi. Anda akan...",opts:[
+    "Aktif bergabung dan berbagi informasi yang bermanfaat bagi instansi","Bergabung namun pasif mengikuti kegiatan","Bergabung hanya untuk menambah relasi pribadi","Menunggu diajak oleh rekan lain","Tidak tertarik karena dianggap tidak penting"]},
+  {tag:'Jejaring Kerja',q:"Anda diundang dalam forum diskusi antarinstansi pemerintah. Dalam forum tersebut Anda akan...",opts:[
+    "Berpartisipasi aktif, berbagi pengalaman, dan membangun kolaborasi yang produktif","Hadir namun pasif dan tidak berkontribusi","Menggunakan forum untuk kepentingan pribadi","Mendelegasikan kehadiran kepada staf junior","Tidak hadir karena dianggap tidak penting"]},
+  {tag:'Jejaring Kerja',q:"Seorang rekan dari instansi lain meminta bantuan informasi terkait bidang kerja Anda. Anda akan...",opts:[
+    "Memberikan informasi dengan senang hati selama tidak melanggar aturan kerahasiaan","Memberikan informasi terbatas saja","Menolak karena beda instansi","Mengarahkan ke prosedur formal yang berbelit","Memberikan informasi palsu"]},
+
+  // Integritas (6)
+  {tag:'Integritas',q:"Anda menemukan indikasi penyalahgunaan fasilitas kantor oleh rekan kerja. Tindakan Anda...",opts:[
+    "Melaporkan sesuai prosedur kepada pihak yang berwenang menangani","Menegur rekan tersebut secara langsung dan pribadi","Mendiamkan karena tidak ingin ikut campur","Membicarakannya dengan rekan lain untuk konfirmasi","Mengabaikan karena bukan urusan Anda"]},
+  {tag:'Integritas',q:"Anda mengetahui informasi rahasia terkait pekerjaan yang ditanyakan oleh pihak luar tanpa wewenang. Anda akan...",opts:[
+    "Menolak memberi informasi dan mengarahkan ke pihak yang berwenang","Memberikan informasi umum saja tanpa detail","Memberikan informasi karena diminta dengan sopan","Menanyakan izin atasan setelah informasi terlanjur diberikan","Memberikan informasi lengkap agar tidak dianggap tidak kooperatif"]},
+  {tag:'Integritas',q:"Seorang rekan menawarkan 'jalan pintas' yang melanggar prosedur untuk mempercepat penyelesaian pekerjaan. Anda akan...",opts:[
+    "Menolak tegas dan tetap mengikuti prosedur yang benar","Mempertimbangkan tawaran jika tidak ada yang mengetahui","Mengikuti tawaran karena semua rekan melakukannya","Membiarkan rekan tersebut melakukannya sendiri","Melaporkan rekan tersebut tanpa berbicara dulu"]},
+  {tag:'Integritas',q:"Anda menemukan uang di tempat kerja yang bukan milik Anda. Anda akan...",opts:[
+    "Menyerahkan kepada pihak yang bertanggung jawab dan mengumumkan penemuan tersebut","Menyimpan sementara dan menunggu jika ada yang mencari","Mengambil dan menggunakannya untuk keperluan pribadi","Membiarkannya di tempat semula","Membaginya dengan rekan yang melihat"]},
+  {tag:'Integritas',q:"Anda diminta oleh atasan untuk memanipulasi data laporan keuangan. Anda akan...",opts:[
+    "Menolak dengan tegas dan menjelaskan konsekuensi hukum serta etika dari tindakan tersebut","Mengikuti perintah atasan karena takut diberhentikan","Melakukan manipulasi sebagian saja","Meminta rekan lain yang melakukannya","Mengundurkan diri tanpa menjelaskan alasan"]},
+  {tag:'Integritas',q:"Seorang pengusaha menawarkan hadiah mahal kepada Anda sebagai 'ucapan terima kasih' atas pelayanan yang diberikan. Anda akan...",opts:[
+    "Menolak dengan sopan dan menjelaskan bahwa ASN tidak boleh menerima gratifikasi","Menerima dengan senang hati karena tidak ada yang tahu","Menerima tapi melaporkan ke KPK setelahnya","Menerima dan membagikan ke rekan kerja","Menerima dengan alasan itu adalah bentuk apresiasi"]},
+
+  // Sosial Budaya (5)
+  {tag:'Sosial Budaya',q:"Anda ditempatkan bertugas di daerah dengan budaya dan kebiasaan masyarakat yang berbeda dari daerah asal Anda. Sikap Anda...",opts:[
+    "Mempelajari dan menghormati budaya setempat agar dapat berbaur dengan baik","Menyesuaikan diri secukupnya tanpa mempelajari budaya setempat","Tetap menjalankan kebiasaan asal tanpa menyesuaikan diri","Berinteraksi seperlunya saja dengan masyarakat setempat","Menghindari interaksi dengan masyarakat karena berbeda budaya"]},
+  {tag:'Sosial Budaya',q:"Dalam pelayanan kepada masyarakat, Anda menemui warga dari latar belakang suku dan agama yang berbeda-beda. Sikap Anda...",opts:[
+    "Memberikan pelayanan yang sama adil tanpa membeda-bedakan latar belakang","Melayani dengan baik namun cenderung lebih ramah pada yang sesuku","Melayani sesuai urutan tanpa memperhatikan kebutuhan khusus","Mendahulukan yang menurut Anda lebih dekat secara budaya","Bersikap acuh terhadap latar belakang sosial budaya warga"]},
+  {tag:'Sosial Budaya',q:"Di kantor baru, Anda mendapati rekan-rekan memiliki kebiasaan makan bersama yang berbeda dengan kebiasaan Anda. Anda akan...",opts:[
+    "Menghormati kebiasaan mereka dan beradaptasi tanpa kehilangan identitas diri","Memaksakan kebiasaan Anda kepada rekan-rekan","Mengisolasi diri saat jam makan","Mengkritik kebiasaan mereka secara terbuka","Melaporkan kebiasaan tersebut ke atasan"]},
+  {tag:'Sosial Budaya',q:"Anda diminta memimpin acara yang dihadiri peserta dari berbagai latar belakang budaya. Anda akan...",opts:[
+    "Mengakomodasi keberagaman dengan bahasa dan simbol yang inklusif untuk semua kalangan","Menggunakan pendekatan yang sesuai budaya sendiri","Mengabaikan perbedaan dan menggunakan format standar","Menyerahkan kepemimpinan pada orang lain","Menunda acara sampai ada pedoman yang jelas"]},
+  {tag:'Sosial Budaya',q:"Seorang warga menggunakan bahasa daerah yang tidak Anda mengerti saat mengurus dokumen. Anda akan...",opts:[
+    "Meminta bantuan rekan yang mengerti atau menggunakan bahasa Indonesia dengan sopan","Mengabaikan dan memintanya datang lagi dengan penerjemah","Memarahi karena tidak menggunakan bahasa Indonesia","Mencoba mengerti sebisanya dan berharap tidak salah","Menolak melayani sampai dia menggunakan bahasa Indonesia"]},
+
+  // Teknologi Informasi (6)
+  {tag:'Teknologi Informasi',q:"Ada perubahan mendadak pada sistem kerja di kantor yang belum Anda kuasai. Sikap Anda...",opts:[
+    "Segera mempelajari sistem baru dan aktif bertanya agar cepat beradaptasi","Mempelajari secara bertahap sambil tetap menjalankan tugas","Menunggu pelatihan resmi dari kantor","Meminta rekan mengerjakan bagian yang menggunakan sistem baru","Tetap menggunakan cara lama karena lebih familiar"]},
+  {tag:'Teknologi Informasi',q:"Kantor Anda menerapkan sistem pelaporan kerja berbasis aplikasi digital yang baru. Sikap Anda...",opts:[
+    "Mempelajari aplikasi tersebut secara mandiri dan memanfaatkannya secara optimal","Menggunakan aplikasi sesuai kebutuhan minimal saja","Meminta rekan kerja mengoperasikan aplikasi untuk Anda","Menunggu pelatihan resmi sebelum menggunakan aplikasi","Tetap menggunakan cara manual karena belum terbiasa"]},
+  {tag:'Teknologi Informasi',q:"Anda diminta mengolah data menggunakan aplikasi spreadsheet yang belum pernah Anda gunakan sebelumnya. Anda akan...",opts:[
+    "Mempelajari fitur aplikasi tersebut melalui tutorial sambil menyelesaikan tugas","Mengerjakan secara manual lalu memindahkan hasilnya ke aplikasi","Meminta bantuan rekan untuk mengerjakan seluruhnya","Menunda pekerjaan sampai ada pelatihan","Menyerahkan tugas tersebut ke rekan lain sepenuhnya"]},
+  {tag:'Teknologi Informasi',q:"Anda menemukan celah keamanan pada sistem informasi kantor yang bisa disalahgunakan. Anda akan...",opts:[
+    "Segera melaporkan temuan tersebut kepada unit TI dan atasan untuk ditindaklanjuti","Mengabaikan karena bukan tanggung jawab Anda","Memanfaatkan celah tersebut untuk keuntungan pribadi","Memberitahu rekan-rekan terdekat saja","Membiarkan karena sistem sudah berjalan lama"]},
+  {tag:'Teknologi Informasi',q:"Dalam rapat virtual, Anda mengalami kendala teknis yang membuat Anda tidak bisa menyampaikan presentasi. Anda akan...",opts:[
+    "Tetap tenang, menginformasikan kendala, dan menawarkan alternatif penyampaian materi","Panik dan meninggalkan rapat","Menyalahkan perangkat atau koneksi internet secara berlebihan","Diam saja dan berharap orang lain mengambil alih","Meminta rapat dibatalkan karena kendala teknis"]},
+  {tag:'Teknologi Informasi',q:"Anda mendapatkan email mencurigakan yang mengatasnamakan instansi Anda dan meminta data pribadi. Anda akan...",opts:[
+    "Tidak mengklik tautan apapun, melaporkan ke unit TI, dan mengingatkan rekan kerja","Membuka dan mengikuti instruksinya karena penasaran","Mengabaikan dan menghapus email tersebut tanpa melaporkan","Membalas email tersebut untuk memastikan keasliannya","Meneruskan email tersebut ke semua rekan kerja"]},
+
+  // Anti-Radikalisme (4)
+  {tag:'Anti-Radikalisme',q:"Anda mendapati rekan kerja menyebarkan paham yang bertentangan dengan nilai-nilai Pancasila di lingkungan kantor. Sikap Anda...",opts:[
+    "Mengingatkan secara persuasif dan melaporkan ke pihak berwenang bila diperlukan","Mendiamkan karena bukan urusan pribadi","Ikut mendengarkan tanpa memberikan tanggapan","Menghindar dari rekan tersebut tanpa melaporkan","Mengabaikan karena takut berkonflik"]},
+  {tag:'Anti-Radikalisme',q:"Anda menemukan konten di media sosial yang mengandung ujaran kebencian dan berpotensi memecah belah persatuan bangsa. Anda akan...",opts:[
+    "Tidak menyebarluaskan dan melaporkan konten tersebut sesuai mekanisme yang berlaku","Membiarkan saja karena bukan tanggung jawab pribadi","Ikut mengomentari untuk mendebat isi konten","Membagikan konten tersebut agar orang lain waspada tanpa melaporkan","Menyimpan dan mengabaikannya"]},
+  {tag:'Anti-Radikalisme',q:"Seorang tokoh masyarakat menyebarkan ajaran yang mengajarkan kebencian terhadap kelompok lain di wilayah Anda. Anda akan...",opts:[
+    "Melaporkan kepada pihak berwenang dan turut serta dalam upaya deradikalisasi","Membiarkan karena itu hak kebebasan berpendapat","Mendukung ajaran tersebut jika sesuai keyakinan","Menyebarkan ajaran tersebut lebih luas","Menghindari wilayah tersebut tanpa melaporkan"]},
+  {tag:'Anti-Radikalisme',q:"Anda melihat ada rekan yang mulai tertarik dengan paham radikal melalui media online. Anda akan...",opts:[
+    "Mengajak diskusi secara persuasif tentang nilai-nilai kebangsaan dan melaporkan ke atasan","Membiarkan karena itu hak pribadi","Ikut bergabung untuk memahami paham tersebut","Menjauhi rekan tersebut","Menceritakan ke rekan lain tanpa mengambil tindakan"]},
+
+  // TKP tambahan campuran (4)
+  {tag:'Pelayanan Publik',q:"Anda sedang mengerjakan tugas penting ketika tiba-tiba ada warga yang membutuhkan informasi. Anda akan...",opts:[
+    "Berhenti sejenak, memberikan informasi yang dibutuhkan, lalu melanjutkan pekerjaan","Pura-pura tidak melihat dan melanjutkan pekerjaan","Menyuruh warga menunggu sampai pekerjaan selesai","Mengoper warga ke rekan lain tanpa penjelasan","Menyuruh warga kembali besok"]},
+  {tag:'Profesionalisme',q:"Anda dirotasi ke bagian yang sama sekali baru dan berbeda dari latar belakang pendidikan Anda. Anda akan...",opts:[
+    "Menyambut sebagai tantangan baru, belajar dengan cepat, dan membuktikan kemampuan adaptasi","Menolak mutasi dan mengajukan keberatan","Menerima tapi bekerja dengan setengah hati","Mengundurkan diri dari pekerjaan","Mengeluh setiap hari kepada rekan kerja"]},
+  {tag:'Kerja Sama Tim',q:"Proyek tim Anda gagal mencapai target karena kesalahan bersama. Dalam rapat evaluasi, Anda akan...",opts:[
+    "Mengakui bagian kesalahan Anda, tidak menyalahkan individu, dan fokus pada perbaikan ke depan","Menyalahkan rekan lain yang paling banyak melakukan kesalahan","Diam dan berharap tidak ditanya","Mengalihkan pembahasan agar tidak membahas kegagalan","Menyalahkan faktor eksternal sepenuhnya"]},
+  {tag:'Sosial Budaya',q:"Anda ditugaskan di daerah terpencil dengan fasilitas yang sangat minim. Sikap Anda...",opts:[
+    "Menerima penugasan dengan ikhlas, berinovasi dengan keterbatasan, dan tetap memberikan pelayanan terbaik","Mengeluh setiap hari tentang kondisi tersebut","Mengajukan permohonan pindah sesegera mungkin","Bekerja seadanya sesuai fasilitas yang ada","Menolak penugasan tersebut"]},
 ];
 
-/* ============ TIU NUMERIK: GENERATOR SOAL DINAMIS ============ */
+/* ================================================================
+   TIU NUMERIK: GENERATOR SOAL DINAMIS (9 tipe)
+   ================================================================ */
 function genArithmetic(){
-  const ops = ['+','-','\u00d7'];
+  const ops = ['+','-','\u00d7','\u00f7'];
   const op = pick(ops);
   let a,b,ans,text;
   if(op==='+'){ a=rnd(120,899); b=rnd(45,760); ans=a+b; text=`${a} + ${b} = ...`; }
   else if(op==='-'){ a=rnd(300,999); b=rnd(45,a-10); ans=a-b; text=`${a} \u2212 ${b} = ...`; }
-  else { a=rnd(12,45); b=rnd(6,29); ans=a*b; text=`${a} \u00d7 ${b} = ...`; }
-  const opts = shuffle([ans, ans+rnd(2,9), ans-rnd(2,9), ans+rnd(10,20)]);
-  return {q:"Hitunglah hasil operasi berikut:\n"+text, opts:opts.map(String), a:opts.indexOf(ans)};
+  else if(op==='\u00d7'){ a=rnd(12,45); b=rnd(6,29); ans=a*b; text=`${a} \u00d7 ${b} = ...`; }
+  else { b=rnd(3,15); ans=rnd(5,50); a=ans*b; text=`${a} \u00f7 ${b} = ...`; }
+  const opts = shuffle([ans, ans+rnd(2,9), ans-rnd(2,9), ans+rnd(10,20), ans-rnd(10,20)]);
+  return {q:"Hitunglah hasil operasi berikut:\n"+text, opts:opts.map(String), a:opts.indexOf(ans), tag:'Numerik (Aritmatika)',type:'single'};
 }
+
 function genPercent(){
   const persen = pick([5,10,15,20,25,30,40,50]);
   const nilai = rnd(4,40)*20;
   const ans = Math.round(nilai*persen/100);
   const q = `${persen}% dari ${nilai} adalah...`;
-  const opts = shuffle([ans, ans+rnd(3,10), Math.max(1,ans-rnd(3,10)), ans+rnd(15,25)]);
-  return {q, opts:opts.map(String), a:opts.indexOf(ans)};
+  const opts = shuffle([ans, ans+rnd(3,10), Math.max(1,ans-rnd(3,10)), ans+rnd(15,25), ans+rnd(30,40)]);
+  return {q, opts:opts.map(String), a:opts.indexOf(ans), tag:'Numerik (Persentase)',type:'single'};
 }
+
 function genDeret(){
-  const type = pick(['arit','geo','kuadrat']);
-  let start=rnd(2,20), seq=[], ans, text;
+  const type = pick(['arit','geo','kuadrat','fibonacci','custom']);
+  let start=rnd(2,20), seq=[], ans;
   if(type==='arit'){
     const beda = pick([2,3,4,5,6,7,-2,-3,-4]);
     for(let i=0;i<5;i++) seq.push(start+beda*i);
@@ -703,16 +776,35 @@ function genDeret(){
     const rasio = pick([2,3]);
     for(let i=0;i<5;i++) seq.push(start*Math.pow(rasio,i));
     ans = start*Math.pow(rasio,5);
-  } else {
-    const beda0 = rnd(1,4);
-    let cur=start, d=beda0;
+  } else if(type==='kuadrat'){
+    let cur=start, d=rnd(1,4);
     for(let i=0;i<5;i++){ seq.push(cur); cur+=d; d+=1; }
     ans = cur;
+  } else if(type==='fibonacci'){
+    let a=rnd(2,6), b=rnd(2,8);
+    seq=[a,b];
+    for(let i=2;i<6;i++){ seq.push(seq[i-2]+seq[i-1]); }
+    ans = seq[4]+seq[5];
+    seq = seq.slice(0,5);
+  } else {
+    const formula = pick(['+1,*2','*2,+1','+2,*3','-1,*2']);
+    let cur=rnd(2,5);
+    seq=[cur];
+    for(let i=0;i<5;i++){
+      if(formula==='+1,*2'){ cur=cur+1; cur=cur*2; }
+      else if(formula==='*2,+1'){ cur=cur*2; cur=cur+1; }
+      else if(formula==='+2,*3'){ cur=cur+2; cur=cur*3; }
+      else { cur=cur-1; cur=cur*2; }
+      seq.push(cur);
+    }
+    ans=seq[seq.length-1];
+    seq=seq.slice(0,6);
   }
-  text = seq.join(", ")+", ...";
-  const opts = shuffle([ans, ans+rnd(2,8), Math.max(1,ans-rnd(2,8)), ans+rnd(9,16)]);
-  return {q:"Lanjutkan deret angka berikut:\n"+text, opts:opts.map(String), a:opts.indexOf(ans)};
+  const text = seq.join(", ")+", ...";
+  const opts = shuffle([ans, ans+rnd(2,8), Math.max(1,ans-rnd(2,8)), ans+rnd(9,16), Math.max(1,ans-rnd(9,16))]);
+  return {q:"Lanjutkan deret angka berikut:\n"+text, opts:opts.map(String), a:opts.indexOf(ans), tag:'Numerik (Deret Angka)',type:'single'};
 }
+
 function genPerbandingan(){
   const senilai = Math.random()<0.5;
   if(senilai){
@@ -721,11 +813,11 @@ function genPerbandingan(){
     const total = pekerja1*hari1;
     const hari2 = Math.round(total/pekerja2);
     const ans = hari2;
-    const q = `Suatu pekerjaan dapat diselesaikan ${pekerja1} orang pekerja dalam ${hari1} hari. Jika pekerja ditambah menjadi ${pekerja2} orang dengan kecepatan kerja sama, pekerjaan tersebut selesai dalam ... hari (berbalik nilai, bulatkan ke bilangan bulat terdekat).`;
-    const opts = shuffle([ans, ans+rnd(1,4), Math.max(1,ans-rnd(1,4)), ans+rnd(5,8)]);
-    return {q, opts:opts.map(String), a:opts.indexOf(ans)};
+    const q = `Suatu pekerjaan dapat diselesaikan ${pekerja1} orang pekerja dalam ${hari1} hari. Jika pekerja ditambah menjadi ${pekerja2} orang dengan kecepatan kerja sama, pekerjaan tersebut selesai dalam ... hari.`;
+    const opts = shuffle([ans, ans+rnd(1,4), Math.max(1,ans-rnd(1,4)), ans+rnd(5,8), Math.max(1,ans-rnd(3,6))]);
+    return {q, opts:opts.map(String), a:opts.indexOf(ans), tag:'Numerik (Perbandingan)',type:'single'};
   } else {
-    const skala = pick([100,200,250,500]);
+    const skala = pick([100,200,250,500,1000]);
     const jarakPeta = rnd(2,15);
     const jarakAsli = jarakPeta*skala;
     const jarakAsliKm = jarakAsli/100000;
@@ -734,11 +826,13 @@ function genPerbandingan(){
     const wrong1 = (Math.round((jarakAsliKm+rnd(1,4))*100)/100).toString();
     const wrong2 = (Math.round(Math.max(0.1,(jarakAsliKm-rnd(1,3)))*100)/100).toString();
     const wrong3 = (Math.round((jarakAsliKm*2)*100)/100).toString();
-    const opts = shuffle([ansStr, wrong1, wrong2, wrong3]);
-    return {q, opts, a:opts.indexOf(ansStr)};
+    const wrong4 = (Math.round((jarakAsliKm/2)*100)/100).toString();
+    const opts = shuffle([ansStr, wrong1, wrong2, wrong3, wrong4]);
+    return {q, opts, a:opts.indexOf(ansStr), tag:'Numerik (Perbandingan)',type:'single'};
   }
 }
-function genSoalCeritaKecepatan(){
+
+function genKecepatan(){
   const kecepatan = pick([40,45,50,60,65,70,75,80]);
   const waktu = pick([2,3,4,5,6]);
   const jarak = kecepatan*waktu;
@@ -746,32 +840,34 @@ function genSoalCeritaKecepatan(){
   if(askWhat==='jarak'){
     const q = `Sebuah kendaraan melaju dengan kecepatan rata-rata ${kecepatan} km/jam selama ${waktu} jam. Jarak yang ditempuh kendaraan tersebut adalah ... km.`;
     const ans = jarak;
-    const opts = shuffle([ans, ans+rnd(10,30), Math.max(10,ans-rnd(10,30)), ans+rnd(40,60)]);
-    return {q, opts:opts.map(String), a:opts.indexOf(ans)};
+    const opts = shuffle([ans, ans+rnd(10,30), Math.max(10,ans-rnd(10,30)), ans+rnd(40,60), Math.max(5,ans-rnd(40,60))]);
+    return {q, opts:opts.map(String), a:opts.indexOf(ans), tag:'Numerik (Kecepatan)',type:'single'};
   } else if(askWhat==='kecepatan'){
     const q = `Sebuah kendaraan menempuh jarak ${jarak} km dalam waktu ${waktu} jam. Kecepatan rata-rata kendaraan tersebut adalah ... km/jam.`;
     const ans = kecepatan;
-    const opts = shuffle([ans, ans+rnd(5,15), Math.max(5,ans-rnd(5,15)), ans+rnd(16,25)]);
-    return {q, opts:opts.map(String), a:opts.indexOf(ans)};
+    const opts = shuffle([ans, ans+rnd(5,15), Math.max(5,ans-rnd(5,15)), ans+rnd(16,25), Math.max(5,ans-rnd(10,20))]);
+    return {q, opts:opts.map(String), a:opts.indexOf(ans), tag:'Numerik (Kecepatan)',type:'single'};
   } else {
     const q = `Sebuah kendaraan menempuh jarak ${jarak} km dengan kecepatan rata-rata ${kecepatan} km/jam. Waktu yang dibutuhkan adalah ... jam.`;
     const ans = waktu;
-    const opts = shuffle([ans, ans+1, Math.max(1,ans-1), ans+2]);
-    return {q, opts:opts.map(String), a:opts.indexOf(ans)};
+    const opts = shuffle([ans, ans+1, Math.max(1,ans-1), ans+2, Math.max(1,ans-2)]);
+    return {q, opts:opts.map(String), a:opts.indexOf(ans), tag:'Numerik (Kecepatan)',type:'single'};
   }
 }
+
 function genUntungRugi(){
-  const hargaBeli = pick([20000,25000,30000,40000,50000,75000,100000]);
+  const hargaBeli = pick([20000,25000,30000,40000,50000,75000,100000,150000,200000]);
   const persen = pick([10,15,20,25,30]);
   const untung = Math.random()<0.5;
   const selisih = Math.round(hargaBeli*persen/100);
   const hargaJual = untung ? hargaBeli+selisih : hargaBeli-selisih;
   const q = `Seorang pedagang membeli barang seharga Rp${hargaBeli.toLocaleString('id-ID')} kemudian menjual dengan ${untung?'untung':'rugi'} sebesar ${persen}%. Harga jual barang tersebut adalah...`;
   const ansNum = hargaJual;
-  const optsNum = shuffle([ansNum, ansNum+rnd(1000,5000), Math.max(1000,ansNum-rnd(1000,5000)), ansNum+rnd(6000,10000)]);
+  const optsNum = shuffle([ansNum, ansNum+rnd(1000,5000), Math.max(1000,ansNum-rnd(1000,5000)), ansNum+rnd(6000,10000), Math.max(1000,ansNum-rnd(6000,10000))]);
   const idx = optsNum.indexOf(ansNum);
-  return {q, opts:optsNum.map(x=>'Rp'+x.toLocaleString('id-ID')), a:idx};
+  return {q, opts:optsNum.map(x=>'Rp'+x.toLocaleString('id-ID')), a:idx, tag:'Numerik (Untung-Rugi)',type:'single'};
 }
+
 function genRataRata(){
   const n = rnd(4,6);
   const nums = [];
@@ -779,20 +875,71 @@ function genRataRata(){
   const sum = nums.reduce((a,b)=>a+b,0);
   const ans = Math.round(sum/n*100)/100;
   const q = `Rata-rata dari bilangan ${nums.join(', ')} adalah ...`;
-  const opts = shuffle([ans, Math.round((ans+rnd(2,6))*100)/100, Math.max(0,Math.round((ans-rnd(2,6))*100)/100), Math.round((ans+rnd(7,12))*100)/100]);
-  return {q, opts:opts.map(String), a:opts.indexOf(ans)};
+  const opts = shuffle([ans, Math.round((ans+rnd(2,6))*100)/100, Math.max(0,Math.round((ans-rnd(2,6))*100)/100), Math.round((ans+rnd(7,12))*100)/100, Math.max(0,Math.round((ans-rnd(5,10))*100)/100)]);
+  return {q, opts:opts.map(String), a:opts.indexOf(ans), tag:'Numerik (Statistika)',type:'single'};
 }
-const NUMERIK_GENERATORS = [genArithmetic, genPercent, genDeret, genPerbandingan, genSoalCeritaKecepatan, genUntungRugi, genRataRata];
+
+function genPecahan(){
+  const type = pick(['tambah','kurang','kali']);
+  let a,b,ansNum,ansDen,text;
+  if(type==='tambah'){
+    a=[rnd(1,5),rnd(2,8)]; b=[rnd(1,5),rnd(2,8)];
+    ansNum = a[0]*b[1]+b[0]*a[1]; ansDen = a[1]*b[1];
+    text = `${a[0]}/${a[1]} + ${b[0]}/${b[1]} = ...`;
+  } else if(type==='kurang'){
+    a=[rnd(3,8),rnd(3,8)]; b=[rnd(1,a[0]-1),rnd(2,a[1])];
+    ansNum = a[0]*b[1]-b[0]*a[1]; ansDen = a[1]*b[1];
+    text = `${a[0]}/${a[1]} \u2212 ${b[0]}/${b[1]} = ...`;
+  } else {
+    a=[rnd(1,5),rnd(2,6)]; b=[rnd(1,5),rnd(2,6)];
+    ansNum = a[0]*b[0]; ansDen = a[1]*b[1];
+    text = `${a[0]}/${a[1]} \u00d7 ${b[0]}/${b[1]} = ...`;
+  }
+  const ans = `${ansNum}/${ansDen}`;
+  const wrong1 = `${ansNum+rnd(1,3)}/${ansDen}`;
+  const wrong2 = `${ansNum}/${ansDen+rnd(1,3)}`;
+  const wrong3 = `${ansNum-rnd(1,2)}/${ansDen}`;
+  const wrong4 = `${ansNum+rnd(2,4)}/${ansDen+rnd(1,2)}`;
+  const opts = shuffle([ans, wrong1, wrong2, wrong3, wrong4]);
+  return {q:"Hitunglah hasil operasi pecahan berikut:\n"+text, opts, a:opts.indexOf(ans), tag:'Numerik (Pecahan)',type:'single'};
+}
+
+function genBangunDatar(){
+  const type = pick(['persegi','persegiPanjang','segitiga','lingkaran']);
+  let ans,text;
+  if(type==='persegi'){
+    const s = rnd(5,20);
+    ans = s*s;
+    text = `Luas persegi dengan sisi ${s} cm adalah ... cm\u00b2`;
+  } else if(type==='persegiPanjang'){
+    const p=rnd(6,20), l=rnd(4,15);
+    ans = p*l;
+    text = `Luas persegi panjang dengan panjang ${p} cm dan lebar ${l} cm adalah ... cm\u00b2`;
+  } else if(type==='segitiga'){
+    const a=rnd(6,20), t=rnd(4,15);
+    ans = Math.round(a*t/2*100)/100;
+    text = `Luas segitiga dengan alas ${a} cm dan tinggi ${t} cm adalah ... cm\u00b2`;
+  } else {
+    const r=rnd(5,14);
+    ans = Math.round(Math.PI*r*r*100)/100;
+    text = `Luas lingkaran dengan jari-jari ${r} cm (\u03c0 = 3,14) adalah ... cm\u00b2`;
+  }
+  const opts = shuffle([ans, Math.round((ans+rnd(5,20))*100)/100, Math.max(1,Math.round((ans-rnd(5,15))*100)/100), Math.round((ans+rnd(20,40))*100)/100, Math.max(1,Math.round((ans-rnd(15,30))*100)/100)]);
+  return {q:text, opts:opts.map(String), a:opts.indexOf(ans), tag:'Numerik (Bangun Datar)',type:'single'};
+}
+
+const NUMERIK_GENERATORS = [genArithmetic, genPercent, genDeret, genPerbandingan, genKecepatan, genUntungRugi, genRataRata, genPecahan, genBangunDatar];
+
 function generateNumerikSet(n){
   const out=[];
   const order = shuffle(NUMERIK_GENERATORS);
-  for(let i=0;i<n;i++){
-    out.push(order[i % order.length]());
-  }
+  for(let i=0;i<n;i++) out.push(order[i % order.length]());
   return out;
 }
 
-/* ============ TIU FIGURAL: GENERATOR SVG DINAMIS ============ */
+/* ================================================================
+   TIU FIGURAL: GENERATOR SVG DINAMIS (5 tipe)
+   ================================================================ */
 function svgShape(sides, rotation, fill){
   const size=64, cx=size/2, cy=size/2, r=size/2-8;
   let pts=[];
@@ -814,6 +961,16 @@ function svgShapeScaled(sides,scale,fill){
 function svgArrow(rotation){
   return `<svg width="56" height="56" viewBox="0 0 64 64"><g transform="rotate(${rotation} 32 32)"><polygon points="32,10 46,42 32,34 18,42" fill="#1C2A44"/></g></svg>`;
 }
+function svgCirclePattern(dots){
+  const size=64, cx=32, cy=32, r=20;
+  let circles='';
+  for(let i=0;i<dots;i++){
+    const angle=(Math.PI*2*i/dots)-Math.PI/2;
+    circles+=`<circle cx="${(cx+r*Math.cos(angle)).toFixed(1)}" cy="${(cy+r*Math.sin(angle)).toFixed(1)}" r="5" fill="#1C2A44"/>`;
+  }
+  return `<svg width="56" height="56" viewBox="0 0 ${size} ${size}">${circles}</svg>`;
+}
+
 function genFiguralDeret(){
   const startSides = rnd(3,4);
   const seqSides = [startSides, startSides+1, startSides+2, startSides+3];
@@ -822,18 +979,15 @@ function genFiguralDeret(){
   const q = 'Perhatikan pola gambar berikut, lalu tentukan gambar selanjutnya:' + seqHtml;
   const candidates = new Set([ansSides]);
   let guard=0;
-  while(candidates.size<4 && guard<20){
-    const d = ansSides + pick([-2,-1,1,2,3]);
-    if(d>=3 && d<=10) candidates.add(d);
-    guard++;
-  }
+  while(candidates.size<5 && guard<30){ const d=ansSides+pick([-2,-1,1,2,3]);if(d>=3&&d<=10)candidates.add(d);guard++; }
   const opts = shuffle(Array.from(candidates)).map(s=>svgShape(s,0,'#1C2A44'));
   const ansSvg = svgShape(ansSides,0,'#1C2A44');
-  return {q, opts, a:opts.indexOf(ansSvg)};
+  return {q, opts, a:opts.indexOf(ansSvg), tag:'Figural (Deret)',type:'single'};
 }
+
 function genFiguralRotasi(){
   const step = pick([30,45,60,90]);
-  const start = pick([0,15,30]);
+  const start = pick([0,15,30,45]);
   const seq = [start, start+step, start+step*2, start+step*3];
   const ans = start+step*4;
   const seqHtml = '<div class="fig-row">' + seq.map(r=>svgArrow(r)).join('') + '<div class="fig-qmark">?</div></div>';
@@ -841,24 +995,22 @@ function genFiguralRotasi(){
   const candidateSet = new Set([ans]);
   const offsets = [-2*step,-step,step,Math.round(step/2),step*2];
   let oi=0;
-  while(candidateSet.size<4 && oi<offsets.length){
-    candidateSet.add(ans+offsets[oi]); oi++;
-  }
+  while(candidateSet.size<5 && oi<offsets.length){ candidateSet.add(ans+offsets[oi]); oi++; }
   const opts = shuffle(Array.from(candidateSet)).map(r=>svgArrow(r));
-  return {q, opts, a: opts.indexOf(svgArrow(ans))};
+  return {q, opts, a: opts.indexOf(svgArrow(ans)), tag:'Figural (Rotasi)',type:'single'};
 }
+
 function genFiguralOddOneOut(){
   const sides = pick([3,4,5,6]);
   const baseFill = '#1C2A44';
   const oddFill = '#9A2E20';
-  const oddIndex = rnd(0,3);
+  const oddIndex = rnd(0,4);
   const shapes = [];
-  for(let i=0;i<4;i++){
-    shapes.push(svgShape(sides,0, i===oddIndex?oddFill:baseFill));
-  }
+  for(let i=0;i<5;i++) shapes.push(svgShape(sides,0, i===oddIndex?oddFill:baseFill));
   const q = 'Manakah gambar yang berbeda sendiri di antara gambar-gambar berikut?';
-  return {q, opts:shapes, a:oddIndex};
+  return {q, opts:shapes, a:oddIndex, tag:'Figural (Odd One Out)',type:'single'};
 }
+
 function genFiguralAnalogi(){
   const shapesPool = [3,4,5,6];
   const picked = shuffle(shapesPool).slice(0,2);
@@ -874,25 +1026,78 @@ function genFiguralAnalogi(){
   const q = 'Tentukan gambar yang tepat melengkapi analogi berikut (perhatikan hubungan ukurannya):'+seqHtml;
   const wrongSidesCArr = shapesPool.filter(s=>s!==sidesA && s!==sidesB);
   const wrongSidesC = wrongSidesCArr[rnd(0,wrongSidesCArr.length-1)];
-  const opts = shuffle([smallB, bigB, smallA, svgShapeScaled(wrongSidesC,0.55,fill)]);
-  return {q, opts, a: opts.indexOf(smallB)};
+  const opts = shuffle([smallB, bigB, smallA, svgShapeScaled(wrongSidesC,0.55,fill), svgShapeScaled(sidesA,0.8,fill)]);
+  return {q, opts, a: opts.indexOf(smallB), tag:'Figural (Analogi)',type:'single'};
 }
-const FIGURAL_GENERATORS = [genFiguralDeret, genFiguralRotasi, genFiguralOddOneOut, genFiguralAnalogi];
+
+function genFiguralDots(){
+  const seqDots = [rnd(2,3), rnd(3,5), rnd(4,6), rnd(5,7)];
+  const ansDots = seqDots[3]+(seqDots[1]-seqDots[0]);
+  const seqHtml = '<div class="fig-row">' + seqDots.map(d=>svgCirclePattern(d)).join('') + '<div class="fig-qmark">?</div></div>';
+  const q = 'Perhatikan pola titik berikut, lalu tentukan gambar selanjutnya:' + seqHtml;
+  const candidates = new Set([ansDots]);
+  let g=0;
+  while(candidates.size<5 && g<30){ const d=ansDots+pick([-2,-1,1,2]);if(d>=2&&d<=10)candidates.add(d);g++; }
+  const opts = shuffle(Array.from(candidates)).map(d=>svgCirclePattern(d));
+  const ansSvg = svgCirclePattern(ansDots);
+  return {q, opts, a:opts.indexOf(ansSvg), tag:'Figural (Pola Titik)',type:'single'};
+}
+
+const FIGURAL_GENERATORS = [genFiguralDeret, genFiguralRotasi, genFiguralOddOneOut, genFiguralAnalogi, genFiguralDots];
+
 function generateFiguralSet(n){
   const out=[];
   const order = shuffle(FIGURAL_GENERATORS);
-  for(let i=0;i<n;i++){
-    out.push(order[i % order.length]());
-  }
+  for(let i=0;i<n;i++) out.push(order[i % order.length]());
   return out;
 }
 
-/* ============ STATE ============ */
+/* ================================================================
+   APPLICATION STATE & LOGIC
+   ================================================================ */
 let selectedCats = new Set(['TWK','TIU','TKP']);
 let countPerCat = 10;
-let session = { questions: [], answers: [] , idx:0 };
+let quizMode = 'custom'; // 'custom' | 'simulation'
+let session = { questions: [], answers: [], bookmarks: [], idx:0 };
+let timerSeconds = 0;
+let timerInterval = null;
+let timerRunning = false;
+
+// Simulation mode config (real CPNS)
+const SIM_CONFIG = { TWK:30, TIU:35, TKP:45, totalTime: 100*60 }; // 100 menit
+const SIM_PASSING = { TWK:65, TIU:80, TKP:166 };
 
 /* ============ BUILD SETUP UI ============ */
+const modeSelect = document.getElementById('modeSelect');
+const customOptions = document.getElementById('customOptions');
+const footNote = document.getElementById('footNote');
+
+function buildModeSelect(){
+  modeSelect.innerHTML = '';
+  [
+    {code:'custom',name:'Kustom',desc:'Pilih sendiri kategori dan jumlah soal'},
+    {code:'simulation',name:'Simulasi Penuh',desc:'110 soal, 100 menit, passing grade asli'}
+  ].forEach(m=>{
+    const div = document.createElement('div');
+    div.className = 'mode-btn'+(quizMode===m.code?' active':'');
+    div.innerHTML = `<b>${m.name}</b><span>${m.desc}</span>`;
+    div.addEventListener('click',()=>{
+      quizMode = m.code;
+      document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active'));
+      div.classList.add('active');
+      if(quizMode==='simulation'){
+        customOptions.classList.add('hidden');
+        footNote.textContent = 'Simulasi 110 soal (TWK 30, TIU 35, TKP 45) · 100 menit · Passing grade: TWK 65, TIU 80, TKP 166';
+      } else {
+        customOptions.classList.remove('hidden');
+        footNote.textContent = 'TWK & TIU: benar +5, salah/kosong 0 — TKP: setiap jawaban bernilai 1–5';
+      }
+    });
+    modeSelect.appendChild(div);
+  });
+}
+buildModeSelect();
+
 const catGrid = document.getElementById('catGrid');
 CATEGORIES.forEach(c=>{
   const div = document.createElement('div');
@@ -908,7 +1113,7 @@ CATEGORIES.forEach(c=>{
 });
 
 const countRow = document.getElementById('countRow');
-[5,10,15,20].forEach(n=>{
+[5,10,15,20,30].forEach(n=>{
   const b = document.createElement('div');
   b.className = 'count-btn'+(n===10?' active':'');
   b.textContent = n+' soal/kategori';
@@ -923,8 +1128,7 @@ const countRow = document.getElementById('countRow');
 document.getElementById('startBtn').addEventListener('click', startSession);
 
 /* ============ SESSION BUILD ============ */
-function buildQuestionsForCat(code){
-  const n = countPerCat;
+function buildQuestionsForCat(code, n){
   if(code==='TWK'){
     return shuffle(TWK_BANK).slice(0,Math.min(n,TWK_BANK.length)).map(x=>({...x,cat:'TWK',type:'single'}));
   }
@@ -938,7 +1142,7 @@ function buildQuestionsForCat(code){
     let nNumerik = n - nVerbal - nLogika - nFigural;
     if(nNumerik<1){ nNumerik=1; }
 
-    const verbal = shuffle(VERBAL_BANK).slice(0,Math.min(nVerbal,VERBAL_BANK.length)).map(x=>({...x,cat:'TIU',tag:'Verbal',type:'single'}));
+    const verbal = shuffle(VERBAL_BANK).slice(0,Math.min(nVerbal,VERBAL_BANK.length)).map(x=>({...x,cat:'TIU',tag:x.tag||'Verbal',type:'single'}));
 
     const staticLogikaCount = Math.min(Math.ceil(nLogika/2), LOGIKA_BANK.length);
     const genLogikaCount = nLogika - staticLogikaCount;
@@ -949,8 +1153,8 @@ function buildQuestionsForCat(code){
       logikaGen.push({...gen,cat:'TIU',tag:'Logika (Silogisme)',type:'single'});
     }
 
-    const numerik = generateNumerikSet(nNumerik).map(x=>({...x,cat:'TIU',tag:'Numerik',type:'single'}));
-    const figural = generateFiguralSet(nFigural).map(x=>({...x,cat:'TIU',tag:'Figural',type:'single'}));
+    const numerik = generateNumerikSet(nNumerik).map(x=>({...x,cat:'TIU',tag:x.tag||'Numerik',type:'single'}));
+    const figural = generateFiguralSet(nFigural).map(x=>({...x,cat:'TIU',tag:x.tag||'Figural',type:'single'}));
 
     return shuffle([...verbal,...logikaStatic,...logikaGen,...numerik,...figural]);
   }
@@ -959,11 +1163,19 @@ function buildQuestionsForCat(code){
 
 function startSession(){
   let all = [];
-  CATEGORIES.forEach(c=>{
-    if(selectedCats.has(c.code)){
-      all = all.concat(buildQuestionsForCat(c.code));
-    }
-  });
+  if(quizMode==='simulation'){
+    selectedCats = new Set(['TWK','TIU','TKP']);
+    timerSeconds = SIM_CONFIG.totalTime;
+    CATEGORIES.forEach(c=>{
+      all = all.concat(buildQuestionsForCat(c.code, SIM_CONFIG[c.code]));
+    });
+  } else {
+    timerSeconds = countPerCat * selectedCats.size * 60; // ~1 menit per soal
+    CATEGORIES.forEach(c=>{
+      if(selectedCats.has(c.code)) all = all.concat(buildQuestionsForCat(c.code, countPerCat));
+    });
+  }
+
   all = all.map(q=>{
     if(q.type==='single'){
       const optsWithIdx = q.opts.map((o,i)=>({o,correct:i===q.a}));
@@ -973,56 +1185,132 @@ function startSession(){
     return q;
   });
 
-  session = { questions: all, answers: new Array(all.length).fill(null), idx:0 };
+  session = { questions: all, answers: new Array(all.length).fill(null), bookmarks: new Array(all.length).fill(false), idx:0 };
   document.getElementById('setupScreen').classList.add('hidden');
   document.getElementById('quizScreen').classList.remove('hidden');
   document.getElementById('resultScreen').classList.add('hidden');
+  renderNavGrid();
   renderQuestion();
+  startTimer();
 }
+
+/* ============ TIMER ============ */
+function startTimer(){
+  timerRunning = true;
+  updateTimerDisplay();
+  timerInterval = setInterval(()=>{
+    if(timerSeconds>0){
+      timerSeconds--;
+      updateTimerDisplay();
+    } else {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      finishSession();
+    }
+  },1000);
+}
+
+function updateTimerDisplay(){
+  const m = Math.floor(timerSeconds/60);
+  const s = timerSeconds%60;
+  const display = document.getElementById('timerDisplay');
+  display.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  if(timerSeconds<=300) display.classList.add('warning');
+  else display.classList.remove('warning');
+}
+
+/* ============ NAVIGATION GRID ============ */
+function renderNavGrid(){
+  const grid = document.getElementById('navGrid');
+  grid.innerHTML = '';
+  session.questions.forEach((q,i)=>{
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot';
+    if(i===session.idx) dot.classList.add('current');
+    if(session.answers[i]!==null) dot.classList.add('answered');
+    if(session.bookmarks[i]) dot.classList.add('bookmarked');
+    dot.textContent = i+1;
+    dot.addEventListener('click',()=>{ session.idx=i; renderNavGrid(); renderQuestion(); });
+    grid.appendChild(dot);
+  });
+}
+
+document.getElementById('navGridToggle').addEventListener('click',function(){
+  const grid = document.getElementById('navGrid');
+  grid.classList.toggle('open');
+  this.textContent = grid.classList.contains('open') ? 'Sembunyikan navigasi ▴' : 'Tampilkan navigasi soal ▾';
+});
 
 /* ============ QUIZ RENDER ============ */
 const qText = document.getElementById('qText');
 const qOptions = document.getElementById('qOptions');
 const qTag = document.getElementById('qTag');
+const qPembahasan = document.getElementById('qPembahasan');
 const quizCounter = document.getElementById('quizCounter');
 const quizCatLabel = document.getElementById('quizCatLabel');
 const progressFill = document.getElementById('progressFill');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
+const bookmarkBtn = document.getElementById('bookmarkBtn');
 
 function renderQuestion(){
   const q = session.questions[session.idx];
-  qTag.textContent = q.cat+' \u2014 '+q.tag;
+  qTag.innerHTML = `${q.cat} — ${q.tag}`;
   quizCatLabel.textContent = q.cat;
   quizCounter.textContent = (session.idx+1)+' / '+session.questions.length;
   progressFill.style.width = Math.round(((session.idx+1)/session.questions.length)*100)+'%';
   qText.innerHTML = q.q;
+  qPembahasan.classList.add('hidden');
+  qPembahasan.textContent = '';
+
+  // Show pembahasan inline if already answered
+  if(session.answers[session.idx]!==null && q.pembahasan){
+    qPembahasan.textContent = '💡 ' + q.pembahasan;
+    qPembahasan.classList.remove('hidden');
+  }
+
   qOptions.innerHTML='';
   const letters = ['A','B','C','D','E'];
+
   q.opts.forEach((opt,i)=>{
     const div = document.createElement('div');
-    div.className = 'option'+(session.answers[session.idx]===i?' selected':'');
+    let cls = 'option';
+    if(session.answers[session.idx]===i) cls += ' selected';
+    div.className = cls;
     div.innerHTML = `<div class="bubble">${letters[i]}</div><div class="opt-label">${opt}</div>`;
     div.addEventListener('click',()=>{
       session.answers[session.idx]=i;
+      renderNavGrid();
       renderQuestion();
     });
     qOptions.appendChild(div);
   });
+
   prevBtn.disabled = session.idx===0;
-  nextBtn.textContent = (session.idx===session.questions.length-1) ? 'Selesai & Lihat Nilai' : 'Berikutnya \u2192';
+  nextBtn.textContent = (session.idx===session.questions.length-1) ? 'Selesai & Lihat Nilai' : 'Berikutnya →';
+
+  // Bookmark
+  bookmarkBtn.textContent = session.bookmarks[session.idx] ? '★' : '☆';
+  bookmarkBtn.className = 'bookmark-btn'+(session.bookmarks[session.idx]?' active':'');
+  bookmarkBtn.onclick = ()=>{
+    session.bookmarks[session.idx] = !session.bookmarks[session.idx];
+    renderNavGrid();
+    renderQuestion();
+  };
 }
 
 prevBtn.addEventListener('click',()=>{
-  if(session.idx>0){ session.idx--; renderQuestion(); }
+  if(session.idx>0){ session.idx--; renderNavGrid(); renderQuestion(); }
 });
 nextBtn.addEventListener('click',()=>{
-  if(session.idx<session.questions.length-1){ session.idx++; renderQuestion(); }
+  if(session.idx<session.questions.length-1){ session.idx++; renderNavGrid(); renderQuestion(); }
   else { finishSession(); }
 });
 
 /* ============ SCORING ============ */
 function finishSession(){
+  if(timerInterval){ clearInterval(timerInterval); timerRunning = false; }
+
   const perCat = {};
   CATEGORIES.forEach(c=>{ perCat[c.code] = {score:0,max:0,correct:0,total:0,isTKP:c.code==='TKP'}; });
 
@@ -1032,10 +1320,7 @@ function finishSession(){
     if(q.type==='tkp'){
       c.total++;
       c.max += 5;
-      if(ans!==null){
-        const score = 5-ans;
-        c.score += score;
-      }
+      if(ans!==null){ const score = 5-ans; c.score += score; }
     } else {
       c.total++;
       c.max += 5;
@@ -1044,11 +1329,10 @@ function finishSession(){
   });
 
   let totalScore = 0, totalMax = 0;
-  CATEGORIES.forEach(c=>{
-    if(selectedCats.has(c.code)){
-      totalScore += perCat[c.code].score;
-      totalMax += perCat[c.code].max;
-    }
+  const catsDone = quizMode==='simulation' ? ['TWK','TIU','TKP'] : Array.from(selectedCats);
+  catsDone.forEach(code=>{
+    totalScore += perCat[code].score;
+    totalMax += perCat[code].max;
   });
 
   document.getElementById('quizScreen').classList.add('hidden');
@@ -1056,20 +1340,30 @@ function finishSession(){
 
   const stampEl = document.getElementById('stampEl');
   const passRatio = totalMax>0 ? totalScore/totalMax : 0;
-  stampEl.className = 'stamp'+(passRatio>=0.65 ? ' pass':'');
+  let allPass = true;
+
+  if(quizMode==='simulation'){
+    allPass = perCat['TWK'].score >= SIM_PASSING.TWK && perCat['TIU'].score >= SIM_PASSING.TIU && perCat['TKP'].score >= SIM_PASSING.TKP;
+  }
+
+  stampEl.className = 'stamp'+(quizMode==='simulation'?(allPass?' pass':''):(passRatio>=0.65?' pass':''));
   document.getElementById('stampScore').textContent = totalScore;
-  document.getElementById('stampLabel').textContent = passRatio>=0.65 ? 'Nilai Baik' : 'Total Nilai';
-  document.getElementById('resultSummary').textContent = `Skor total ${totalScore} dari maksimal ${totalMax} poin \u00b7 ${session.questions.length} soal dikerjakan`;
+  document.getElementById('stampLabel').textContent = quizMode==='simulation'?(allPass?'LULUS':'TIDAK LULUS'):(passRatio>=0.65?'Nilai Baik':'Total Nilai');
+  document.getElementById('resultSummary').textContent = `Skor total ${totalScore} dari maksimal ${totalMax} poin · ${session.questions.length} soal dikerjakan`;
 
   const scoreCard = document.getElementById('scoreCard');
   scoreCard.innerHTML = '<h2>Rincian Nilai per Kategori</h2>';
-  CATEGORIES.forEach(c=>{
-    if(!selectedCats.has(c.code)) return;
-    const d = perCat[c.code];
+  catsDone.forEach(code=>{
+    const d = perCat[code];
+    if(d.total===0) return;
     const row = document.createElement('div');
     row.className = 'score-row';
     const sub = d.isTKP ? `${d.total} soal dijawab` : `${d.correct} dari ${d.total} benar`;
-    row.innerHTML = `<div class="label"><b>${c.code} \u2014 ${c.name}</b><span>${sub}</span></div><div class="val">${d.score}</div>`;
+    let passClass = '';
+    if(quizMode==='simulation' && SIM_PASSING[code]){
+      passClass = d.score >= SIM_PASSING[code] ? 'pass' : 'fail';
+    }
+    row.innerHTML = `<div class="label"><b>${code} — ${CATEGORIES.find(c=>c.code===code).name}</b><span>${sub}${quizMode==='simulation'&&SIM_PASSING[code]?' · Passing: '+SIM_PASSING[code]:''}</span></div><div class="val ${passClass}">${d.score}</div>`;
     scoreCard.appendChild(row);
   });
 
@@ -1080,19 +1374,22 @@ function finishSession(){
     const ans = session.answers[i];
     const item = document.createElement('div');
     item.className='review-item';
-    let body = `<div class="qtag">${q.cat} \u2014 ${q.tag}</div><div class="review-q">${q.q}</div>`;
+    let body = `<div class="qtag">${q.cat} — ${q.tag}</div><div class="review-q">${q.q}</div>`;
     if(q.type==='tkp'){
-      body += `<div class="review-ans correct">Jawaban Anda: ${ans!==null? letters[ans]+'. '+q.opts[ans]+' (skor '+(5-ans)+')' : 'tidak dijawab'}</div>`;
+      body += `<div class="review-ans correct">Jawaban Anda: ${ans!==null? letters[ans]+'. '+q.opts[ans]+' (skor '+(5-ans)+')' : 'tidak dijawab (skor 0)'}</div>`;
     } else {
       if(ans===null){
         body += `<div class="review-ans wrong">Tidak dijawab</div>`;
         body += `<div class="review-ans right-answer">Jawaban benar: ${letters[q.a]}. ${q.opts[q.a]}</div>`;
       } else if(ans===q.a){
-        body += `<div class="review-ans correct">Jawaban Anda: ${letters[ans]}. ${q.opts[ans]} \u2713</div>`;
+        body += `<div class="review-ans correct">Jawaban Anda: ${letters[ans]}. ${q.opts[ans]} ✓</div>`;
       } else {
         body += `<div class="review-ans wrong">Jawaban Anda: ${letters[ans]}. ${q.opts[ans]}</div>`;
         body += `<div class="review-ans right-answer">Jawaban benar: ${letters[q.a]}. ${q.opts[q.a]}</div>`;
       }
+    }
+    if(q.pembahasan){
+      body += `<div class="review-pembahasan">💡 ${q.pembahasan}</div>`;
     }
     item.innerHTML = body;
     reviewCard.appendChild(item);
@@ -1102,12 +1399,33 @@ function finishSession(){
 document.getElementById('toggleReview').addEventListener('click',function(){
   const rc = document.getElementById('reviewCard');
   rc.classList.toggle('hidden');
-  this.textContent = rc.classList.contains('hidden') ? 'Lihat pembahasan jawaban \u2193' : 'Sembunyikan pembahasan \u2191';
+  this.textContent = rc.classList.contains('hidden') ? 'Lihat pembahasan jawaban ↓' : 'Sembunyikan pembahasan ↑';
 });
 
 document.getElementById('restartBtn').addEventListener('click',()=>{
   document.getElementById('resultScreen').classList.add('hidden');
   document.getElementById('setupScreen').classList.remove('hidden');
+  if(quizMode==='simulation'){
+    customOptions.classList.add('hidden');
+  } else {
+    customOptions.classList.remove('hidden');
+  }
+});
+
+/* ============ KEYBOARD NAVIGATION ============ */
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('quizScreen').classList.contains('hidden')) return;
+  const key = e.key.toLowerCase();
+  if(key==='arrowleft' || key==='a'){ e.preventDefault(); prevBtn.click(); }
+  if(key==='arrowright' || key==='d'){ e.preventDefault(); nextBtn.click(); }
+  if(key>='1' && key<='5'){ e.preventDefault();
+    const idx = parseInt(key)-1;
+    if(idx < session.questions[session.idx].opts.length){
+      session.answers[session.idx]=idx;
+      renderNavGrid(); renderQuestion();
+    }
+  }
+  if(key==='b'){ e.preventDefault(); bookmarkBtn.click(); }
 });
 </script>
 </body>
