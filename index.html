@@ -8,6 +8,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--paper:#F6F2E8;--paper2:#EFE9DA;--ink:#1C2A44;--ink2:#42506A;--brass:#A9782F;--brass2:#C79A4B;--stamp:#9A2E20;--line:#D8CFB8;--green:#3E6B4F;--white:#FFFDF8;--alert:#CC3A20;--blue:#2E5A88;--gold:#D4A017;--radius:3px;--shadow:0 8px 22px -14px rgba(28,42,68,.35);}
+.dark{--paper:#1a1a2e;--paper2:#16213e;--ink:#e0e0e0;--ink2:#a0a0b0;--brass:#D4A017;--brass2:#C79A4B;--stamp:#e74c3c;--line:#2a2a4a;--green:#2ecc71;--white:#1e1e3a;--alert:#e74c3c;--blue:#5dade2;--gold:#D4A017;--shadow:0 8px 22px -14px rgba(0,0,0,.5);}
+.dark body{background:#0f0f23;background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);}
+.dark .card{background:var(--white);border-color:var(--line);}
+.dark .option{background:var(--paper);}.dark .option:hover{background:var(--paper2);}
+.dark .qcard{background:var(--white);}
+.dark input,.dark select{background:var(--white);color:var(--ink);border-color:var(--line);}
+.dm-toggle{position:fixed;bottom:16px;right:16px;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--brass);background:var(--white);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:50;box-shadow:var(--shadow);transition:all .2s;}.dm-toggle:hover{background:var(--paper2);}
 *{box-sizing:border-box;}html,body{margin:0;padding:0;}body{background:var(--paper);background-image:radial-gradient(circle at 1px 1px, rgba(28,42,68,0.06) 1px, transparent 0);background-size:22px 22px;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;min-height:100vh;padding:0 0 60px 0;}
 .wrap{max-width:780px;margin:0 auto;padding:20px 18px;}
 header.top{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;}
@@ -344,7 +351,8 @@ function enforceTier(){
   const footNote=document.getElementById('footNote');
   const attempts=getAttempts();
   if(!isPremium()){
-    if(attempts.count>=FREE_MAX){
+    if(hasFreeTrial()&&attempts.count>=FREE_MAX){attemptInfo.innerHTML=`<div class="attempt-bar" style="background:#FFF3E0;border:1px solid var(--gold)">🎁 Trial simulasi: 1x gratis! <a href="javascript:startTrialSimulation()" style="color:var(--brass);font-weight:700">Coba Sekarang →</a></div>`;}
+    else if(attempts.count>=FREE_MAX){
       attemptInfo.innerHTML=`<div class="attempt-bar warning">⚠️ Kuota gratis hari ini habis (${attempts.count}/${FREE_MAX}). <a href="javascript:showScreen('payment')" style="color:var(--stamp);font-weight:700">Upgrade Premium →</a></div>`;
       startBtn.disabled=true;startBtn.textContent='Kuota Habis — Upgrade Premium';startBtn.onclick=()=>showScreen('payment');
       premiumUpsell.classList.remove('hidden');
@@ -371,6 +379,14 @@ function enforceTier(){
 }
 
 function buildSetup(){enforceTier();}
+
+// Trial simulation for free users
+function startTrialSimulation(){
+  useFreeTrial();
+  quizMode='simulation';countPerCat=30;
+  selectedCats=new Set(['TWK','TIU','TKP']);
+  startSession();
+}
 function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -979,6 +995,9 @@ function finishSession(){
   document.getElementById('stampScore').textContent=totalScore;
   document.getElementById('stampLabel').textContent=quizMode==='simulation'?(allPass?'LULUS':'TIDAK LULUS'):(passRatio>=0.65?'Nilai Baik':'Total Nilai');
   document.getElementById('resultSummary').textContent=`Skor total ${totalScore} dari maksimal ${totalMax} poin · ${session.questions.length} soal dikerjakan`;
+  // Add share button
+  const shareHtml=`<div style="text-align:center;margin:12px 0"><button class="btn btn-outline btn-sm" onclick="shareResults(${totalScore},${totalMax},${quizMode==='simulation'?allPass:passRatio>=0.65})">📤 Bagikan Hasil</button></div>`;
+  document.getElementById('resultSummary').insertAdjacentHTML('afterend',shareHtml);
   const scoreCard=document.getElementById('scoreCard');scoreCard.innerHTML='<h2>Rincian Nilai per Kategori</h2>';
   catsDone.forEach(code=>{const d=perCat[code];if(d.total===0)return;const row=document.createElement('div');row.className='score-row';const sub=d.isTKP?`${d.total} soal dijawab`:`${d.correct} dari ${d.total} benar`;let passClass='';if(quizMode==='simulation'&&SIM_PASSING[code]){passClass=d.score>=SIM_PASSING[code]?'pass':'fail';}row.innerHTML=`<div class="label"><b>${code} — ${CATEGORIES.find(c=>c.code===code).name}</b><span>${sub}${quizMode==='simulation'&&SIM_PASSING[code]?' · Passing: '+SIM_PASSING[code]:''}</span></div><div class="val ${passClass}">${d.score}</div>`;scoreCard.appendChild(row);});
   const reviewCard=document.getElementById('reviewCard');reviewCard.innerHTML='';const letters=['A','B','C','D','E'];
@@ -992,6 +1011,20 @@ document.getElementById('restartBtn').addEventListener('click',()=>{document.get
 
 document.addEventListener('keydown',e=>{if(document.getElementById('quizScreen').classList.contains('hidden'))return;const key=e.key.toLowerCase();if(key==='arrowleft'||key==='a'){e.preventDefault();prevBtn.click();}if(key==='arrowright'||key==='d'){e.preventDefault();nextBtn.click();}if(key>='1'&&key<='5'){e.preventDefault();const idx=parseInt(key)-1;if(idx<session.questions[session.idx].opts.length){session.answers[session.idx]=idx;renderNavGrid();renderQuestion();}}if(key==='b'){e.preventDefault();bookmarkBtn.click();}});
 initAuth();
+// Dark mode toggle
+(function(){const dm=document.createElement('div');dm.className='dm-toggle';dm.textContent='🌙';dm.title='Dark Mode';dm.onclick=function(){document.body.classList.toggle('dark');dm.textContent=document.body.classList.contains('dark')?'☀️':'🌙';localStorage.setItem('cpns_dark',document.body.classList.contains('dark')?'1':'0');};document.body.appendChild(dm);if(localStorage.getItem('cpns_dark')==='1'){document.body.classList.add('dark');dm.textContent='☀️';}})();
+
+// Free trial simulation — 1x for free users
+function hasFreeTrial(){try{return localStorage.getItem('cpns_trial')==='1';}catch(e){return false;}}
+function useFreeTrial(){localStorage.setItem('cpns_trial','1');}
+
+// Share results
+function shareResults(score,total,passed){
+  const text=passed?`🎉 Aku LULUS Simulasi CPNS! Skor: ${score}/${total} 🔥`:`📚 Lagi latihan CPNS nih. Skor: ${score}/${total}. Semangat! 💪`;
+  const url='https://irgirival.github.io/test-cpns/';
+  if(navigator.share){navigator.share({title:'Hasil Tryout CPNS',text,url}).catch(()=>{});}
+  else{navigator.clipboard.writeText(text+' '+url).then(()=>toast('Hasil dicopy!','success')).catch(()=>{});}
+}
 </script>
 </body>
 </html>

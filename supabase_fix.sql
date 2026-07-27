@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY,
   name TEXT NOT NULL,
   premium BOOLEAN DEFAULT false,
+  attempt_count INTEGER DEFAULT 0,
+  attempt_date TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
