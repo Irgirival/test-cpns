@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#F6F2E8;--paper2:#EFE9DA;--ink:#1C2A44;--ink2:#42506A;--brass:#A9782F;--brass2:#C79A4B;--stamp:#9A2E20;--line:#D8CFB8;--green:#3E6B4F;--white:#FFFDF8;--alert:#CC3A20;--blue:#2E5A88;--radius:3px;--shadow:0 8px 22px -14px rgba(28,42,68,.35);}
+:root{--paper:#F6F2E8;--paper2:#EFE9DA;--ink:#1C2A44;--ink2:#42506A;--brass:#A9782F;--brass2:#C79A4B;--stamp:#9A2E20;--line:#D8CFB8;--green:#3E6B4F;--white:#FFFDF8;--alert:#CC3A20;--blue:#2E5A88;--gold:#D4A017;--radius:3px;--shadow:0 8px 22px -14px rgba(28,42,68,.35);}
 *{box-sizing:border-box;}html,body{margin:0;padding:0;}body{background:var(--paper);background-image:radial-gradient(circle at 1px 1px, rgba(28,42,68,0.06) 1px, transparent 0);background-size:22px 22px;color:var(--ink);font-family:'IBM Plex Sans',sans-serif;min-height:100vh;padding:0 0 60px 0;}
 .wrap{max-width:780px;margin:0 auto;padding:20px 18px;}
 header.top{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;}
@@ -59,10 +59,10 @@ header.top{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:
 .toggle-review{text-align:center;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--brass);cursor:pointer;text-decoration:underline;}
 .restart-btn{display:block;width:100%;margin-top:20px;padding:14px;background:var(--white);border:1.5px solid var(--ink);border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;}.restart-btn:hover{background:var(--paper2);}
 .hidden{display:none !important;}.foot-note{text-align:center;font-size:11px;color:var(--ink2);margin-top:26px;font-family:'IBM Plex Mono',monospace;}
-.btn{display:inline-block;padding:10px 20px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:all .15s;}
-.btn-primary{background:var(--ink);color:var(--white);}.btn-primary:hover{background:var(--stamp);}
+.btn{display:inline-block;padding:10px 20px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:all .15s;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
+.btn-primary{background:var(--ink);color:var(--white);}.btn-primary:hover{background:var(--stamp);transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,0.2);}
 .btn-outline{border:1.5px solid var(--ink);background:var(--white);color:var(--ink);}.btn-outline:hover{background:var(--paper2);}
-.btn-gold{background:var(--gold);color:var(--white);font-size:14px;padding:12px 24px;}.btn-gold:hover{background:var(--brass);}
+.btn-gold{background:linear-gradient(135deg,#D4A017,#B8860B);color:#fff;font-size:14px;padding:12px 24px;font-weight:700;}.btn-gold:hover{background:linear-gradient(135deg,#C49A0C,#A0750A);transform:translateY(-1px);box-shadow:0 3px 10px rgba(212,160,23,0.4);}
 .btn-sm{padding:6px 12px;font-size:11px;}
 .btn-danger{background:var(--alert);color:var(--white);}
 .pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
@@ -157,7 +157,7 @@ function updateHeader(){
   const badge=document.getElementById('userBadge');
   if(currentUser){
     const cls=isPremium()?'premium':'';
-    badge.innerHTML=`<span class="user-badge ${cls}" onclick="showScreen('dashboard')">${isPremium()?'⭐ ':''}${currentUser.name||currentUser.email} ${isPremium()?'PREMIUM':''}</span>`;
+    badge.innerHTML=`<span class="user-badge ${cls}" onclick="showScreen('dashboard')">${isPremium()?'⭐ ':''}${currentUser.name||currentUser.email} ${isPremium()?'PREMIUM':''}</span> <span class="user-badge" onclick="doLogout()" style="color:var(--alert);cursor:pointer" title="Logout">🚪</span>`;
   }else{
     badge.innerHTML=`<span class="user-badge" onclick="showScreen('login')">Masuk/Daftar</span>`;
   }
@@ -191,6 +191,7 @@ function doRegister(){
   currentUser={email,name,premium:false,createdAt:acc.createdAt};saveUser();
   toast('Pendaftaran berhasil!','success');showScreen('dashboard');
 }
+function doLogout(){currentUser=null;localStorage.removeItem('cpns_user');updateHeader();showScreen('landing');toast('Logout berhasil','success');}
 function redeemKey(){
   const key=document.getElementById('premiumKey').value.trim().toUpperCase(),errEl=document.getElementById('keyError');
   if(!key){errEl.textContent='Masukkan kode premium';errEl.classList.remove('hidden');return;}
